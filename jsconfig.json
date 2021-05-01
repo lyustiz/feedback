@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "baseUrl": ".",
+      "paths": {
+        "vue$": ["vue/dist/vue.esm.js"],
+        "~/*": ["./resources/js/*"],
+        "@components/*": ["./resources/js/components/*"],
+        "@store/*": ["./resources/js/store/*"],
+        "@mixins/*": ["./resources/js/mixins/*"],
+        "@views/*": ["./resources/js/views/*"],
+        "@images/*": ["./resources/js/assets/img/*"],
+      }
+    },
+    "include": ["resources/js/**/*", "resources/css/**/*", "resources/sass/**/*"]
+  }
