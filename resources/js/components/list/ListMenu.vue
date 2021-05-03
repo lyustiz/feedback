@@ -14,10 +14,11 @@
                 :key="i"
                 tile
                 @click="$emit('onMenu', { action: menu.action, item })"
+                :class="menu.class"
             >
                 <v-list-item-action>
                     <v-btn class="grey lighten-4" icon @click="$emit('onMenu', { action: menu.action, item })">
-                        <v-icon color="indigo">{{menu.icon}}</v-icon>
+                        <v-icon :color="menu.iconColor || 'indigo'" >{{menu.icon}}</v-icon>
                     </v-btn>
                 </v-list-item-action>
 

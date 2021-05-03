@@ -11,7 +11,8 @@
     },
     "dependencies": {
         "@mdi/font": "^5.8.55",
-        "register-service-worker": "^1.7.1"
+        "register-service-worker": "^1.7.1",
+        "vue-custom-scrollbar": "^1.4.0"
     },
     "devDependencies": {
         "axios": "^0.21",

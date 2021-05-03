@@ -1,17 +1,17 @@
 <template>
   <v-card dark class="rounded-lg " color="rgba(0,0,0,0.4)">
-    <v-subheader>Perfiles</v-subheader>
-    <v-card-text class="pt-0">
+    <v-subheader class="title">Perfiles</v-subheader>
+    <v-card-text class="pt-0 accounts-container custom-scroll">
       <v-list subheader two-line dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
-        <v-list-item v-for="cliente in clientes" :key="cliente.id" > 
-          <v-list-item-avatar color="blue" size="81">
-              <v-icon color="" size="75">mdi-account</v-icon>
+        <v-list-item v-for="profile in profiles" :key="profile.id" > 
+          <v-list-item-avatar color="blue" size="60">
+            <v-img :src="`/images/profiles/${profile.photo || 'nophoto'}.80x80.thumb-fd`" ></v-img>
           </v-list-item-avatar>
           <v-list-item-content>
               <v-list-item-title>
               <v-row no-gutters>
                   <v-col cols="auto">
-                  {{ cliente.day }}  /  {{ cliente.month}}
+                  {{ profile.day || 0 }}  /  {{ profile.month || 0}}
                   </v-col>
                   <v-spacer></v-spacer>
                   <v-col cols="auto">
@@ -21,7 +21,7 @@
               <v-row no-gutters>
                   <v-col>
                   <v-progress-linear
-                  :value="cliente.day*100/cliente.month"
+                  :value="profile.day*100/profile.month || 50"
                   color="blue"
                   height="8"
                   class="mb-2 mt-1"
@@ -32,12 +32,12 @@
               </v-list-item-title>
               <v-list-item-subtitle class="pt-2">
               <v-row>
-                  <v-col>{{cliente.name}}</v-col>
+                  <v-col>{{profile.name}}</v-col>
                   <v-col>
                   <v-rating
                       full-icon="mdi-circle-off-outline"
-                      :value="cliente.fault"
-                      :length="cliente.fault"
+                      :value="profile.fault || 2"
+                      :length="profile.fault || 2"
                       color="red"
                       background-color="grey lighten-1"
                       small
@@ -57,15 +57,27 @@
 </template>
 
 <script>
+import AppData from '@mixins/AppData';
 export default {
- data: () => ({
-    clientes:[
-       { id: 1, name: 'Luis Jose', month: 330, day: 30, fault: 2},
-       { id: 2, name: 'Roberto Marques', month: 530, day: 21, fault: 4} ,
-       { id: 3, name: 'Raul Garcia', month: 830, day: 100, fault: 1} ,
-       { id: 4, name: 'Laura Miranda', month: 230, day: 15, fault: 0} 
-    ]
+
+  mixins: [AppData],
+
+  created() {
+    this.list()
+  },
+
+  data: () => ({
+    profiles: []
   }),
+
+  methods: {
+
+    list() {
+        this.getResource('profile').then( data => {
+          this.profiles = data
+        })
+    }
+  }
 }
 </script>
 

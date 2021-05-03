@@ -5,7 +5,7 @@
       <v-row dense> 
 
         <v-col>
-          <v-card color="rgba(0,0,0,0.4)" class="rounded-lg">
+          <v-card color="rgba(0,0,0,0.4)" class="rounded-lg " height="90vh">
             <v-card-text>
             <v-row>
               <v-col>

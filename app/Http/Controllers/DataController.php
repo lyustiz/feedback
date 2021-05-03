@@ -27,7 +27,27 @@ class DataController extends Controller
         // perfiles segun curador https://api.amolatina.com/users/hierarchy/80810380031
         // write of periodo  https://api.amolatina.com/credits/commissions/79602433731?from=2021-04-01T00%3A00%3A00.000Z&omit=0&positive=false&select=51&to=2021-04-30T00%3A00%3A00.000Z
         // write of resumen  https://api.amolatina.com/credits/commissions/79602433731?from=2021-04-01T00%3A00%3A00.000Z&positive=false&to=2021-04-30T00%3A00%3A00.000Z
-        
+        // https://api.amolatina.com/credits/commissions/79602433731?from=2021-02-01&grouping%5B0%5D=curatorId&grouping%5B1%5D=positive&positive=null&to=2021-03-01
+        /*  from: 2021-02-01
+            grouping[0]: curatorId
+            grouping[1]: positive
+            positive: null
+            to: 2021-03-01
+        */
+        /*
+        https://api.amolatina.com/credits/commissions/79602433731?from=2021-05-01T00%3A00%3A00.000Z&grouping%5B0%5D=userId&grouping%5B1%5D=positive&positive=true&to=2021-05-02T20%3A39%3A55.434Z
+            from: 2021-05-01T00:00:00.000Z
+            grouping[0]: userId
+            grouping[1]: positive
+            positive: true
+            to: 2021-05-02T20:39:55.434Z
+        https://api.amolatina.com/credits/commissions/79602433731?from=2021-05-01T00%3A00%3A00.000Z&omit=0&positive=true&select=51&to=2021-05-02T20%3A39%3A55.434Z
+            from: 2021-05-01T00:00:00.000Z
+            omit: 0
+            positive: true
+            select: 51
+            to: 2021-05-02T20:39:55.434Z
+        */
         $response = $this->getDataUrl($url);
 
         return $response;
@@ -35,20 +55,16 @@ class DataController extends Controller
 
     public function dataProfiles()
     {
+        set_time_limit ( 600 );
         $url = 'https://api.amolatina.com/users/hierarchy/79602433731/descendants?filter.suspended=false&filter.tags=%2Bp&omit=0&select=50';
        
-       /*  $profiles    =  $this->getDataUrl($url)['users']; */
-        $profiles = ["81845317731","81844657031","81844510331","81844280731","81832271631","81734119331","81550121431","81549954531","81541406531","81527386731"];
-         $profiles = ["81527557431","81448319831","81447572131","80309295631","80838501431","81197226731","80726737331","80114266731","81042199831","81005418931"];
-        $profiles = ["81042647431","81016012231","80913239131","80894256231","80116520431","80430501631","80708684631","80732570431","80725437431"];
-        $profiles = ["80708093931","80704639831","80681441931","80400401731","80344861531","80311032931","80313661531","80705017431","80699856631","80314532931"];
-        $profiles = ["80312622531","80178950831","80112244731","79863139131","79826006531","79734315931"]; /**/
+        $profiles    =  $this->getDataUrl($url)['users']; 
+     
         $dataProfile = [];
 
         foreach ($profiles as $profile) {
-            //$userId =  $profile['user-id'];
-            $url    = "https://api.amolatina.com/users/$profile?include=goods";
-            $dataProfile[] = $this->getDataUrl($url);
+            $userId =  $profile['user-id'];
+            $dataProfile[] = $this->dataProfile($userId);
         }
 
         return $dataProfile;
@@ -57,7 +73,7 @@ class DataController extends Controller
 
     public function dataProfile($profileId)
     {
-        $url   = "https://api.amolatina.com/users/$profileId?include=goods";
+        $url   = "https://api.amolatina.com/users/$profileId";
         return $this->getDataUrl($url);
     }
 
@@ -119,10 +135,10 @@ class DataController extends Controller
     use Illuminate\Http\Client\Pool;
     use Illuminate\Support\Facades\Http;
 
-   use Illuminate\Http\Client\Pool;
-use Illuminate\Support\Facades\Http;
+    use Illuminate\Http\Client\Pool;
+    use Illuminate\Support\Facades\Http;
 
-$responses = Http::pool(fn (Pool $pool) => [
+    $responses = Http::pool(fn (Pool $pool) => [
     $pool->as('first')->get('http://localhost/first'),
     $pool->as('second')->get('http://localhost/second'),
     $pool->as('third')->get('http://localhost/third'),

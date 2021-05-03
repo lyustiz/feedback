@@ -1,4 +1,4 @@
-<td class="text-xs-left">
+<td>
                             <status-switch 
                                 :loading="loading" 
                                 :resource="resource" 

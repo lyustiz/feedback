@@ -15,8 +15,8 @@ class TipoSuscripcion extends Model
 	 	 	 	 	 	 	'tx_icono',
 	 	 	 	 	 	 	'tx_color',
 	 	 	 	 	 	 	'tx_observaciones',
-	 	 	 	 	 	 	'id_status',
-	 	 	 	 	 	 	'id_usuario'
+	 	 	 	 	 	 	'status_id',
+	 	 	 	 	 	 	'user_id'
                             ]; 
     
     protected $hidden     = [
@@ -26,7 +26,7 @@ class TipoSuscripcion extends Model
 
     public function scopeActivo($query, $activo = true)
     {
-        return  ($activo) ? $query->where('id_status', 1) : $query ;
+        return  ($activo) ? $query->where('status_id', 1) : $query ;
     }
 
     public function scopeComboData($query, $combo = true)
@@ -36,12 +36,12 @@ class TipoSuscripcion extends Model
 
     public function status()
     {
-        return $this->BelongsTo('App\Models\Status', 'id_status');
+        return $this->BelongsTo('App\Models\Status', 'status_id');
     }
                            
-    public function usuario()
+    public function user()
     {
-        return $this->BelongsTo('App\Models\Usuario', 'id_usuario');
+        return $this->BelongsTo('App\Models\User', 'user_id');
     }
 
     public function suscripcion()

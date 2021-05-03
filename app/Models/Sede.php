@@ -17,8 +17,8 @@ class Sede extends Model
 	 	 	 	 	 	 	'tx_telefono',
 	 	 	 	 	 	 	'tx_whatsapp',
 	 	 	 	 	 	 	'tx_observaciones',
-	 	 	 	 	 	 	'id_status',
-	 	 	 	 	 	 	'id_usuario'
+	 	 	 	 	 	 	'status_id',
+	 	 	 	 	 	 	'user_id'
                             ]; 
     
     protected $hidden     = [
@@ -30,7 +30,7 @@ class Sede extends Model
 
     public function scopeActivo($query)
     {
-        return $query->where('id_status', 1);
+        return $query->where('status_id', 1);
     }
 
     public function scopeComboData($query)
@@ -40,12 +40,12 @@ class Sede extends Model
 
     public function status()
     {
-        return $this->BelongsTo('App\Models\Status', 'id_status');
+        return $this->BelongsTo('App\Models\Status', 'status_id');
     }
                            
-    public function usuario()
+    public function user()
     {
-        return $this->BelongsTo('App\Models\Usuario', 'id_usuario');
+        return $this->BelongsTo('App\Models\User', 'user_id');
     }
 
     public function foto()

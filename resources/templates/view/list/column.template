@@ -1,1 +1,1 @@
-<td class="text-xs-left">{{ item.{{columnName}} }}</td>
+<td>{{ item.{{columnName}} }}</td>

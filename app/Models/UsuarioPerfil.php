@@ -9,11 +9,11 @@ class UsuarioPerfil extends Model
     protected $table 	  = 'usuario_perfil';
 
     protected $fillable   = [
-                            'id_usuario',
+                            'user_id',
 	 	 	 	 	 	 	'id_perfil',
 	 	 	 	 	 	 	'tx_observaciones',
-	 	 	 	 	 	 	'id_status',
-	 	 	 	 	 	 	'id_usuario_ed'
+	 	 	 	 	 	 	'status_id',
+	 	 	 	 	 	 	'user_id_ed'
                             ]; 
     
     protected $hidden     = [
@@ -25,7 +25,7 @@ class UsuarioPerfil extends Model
 
     public function scopeActivo($query)
     {
-        return $query->where('id_status', 1);
+        return $query->where('status_id', 1);
 	}
 
 	public function scopeComboData($query)
@@ -35,12 +35,12 @@ class UsuarioPerfil extends Model
     
     public function status()
     {
-        return $this->BelongsTo('App\Models\Status', 'id_status')->where('co_grupo', 'GRAL');
+        return $this->BelongsTo('App\Models\Status', 'status_id')->where('co_grupo', 'GRAL');
     }
                            
-    public function usuario()
+    public function user()
     {
-        return $this->BelongsTo('App\Models\Usuario', 'id_usuario');
+        return $this->BelongsTo('App\Models\User', 'user_id');
     }
 
     public function perfil()

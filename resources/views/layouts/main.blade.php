@@ -79,7 +79,7 @@
 
     
 </head>
-<body>
+<body class="custom-scroll">
     <div id="app">
 	
 	<v-app v-cloak>

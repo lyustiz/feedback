@@ -18,7 +18,7 @@ class Status extends Model
 	 	 	 	 	 	 	'id_padre',
 	 	 	 	 	 	 	'tx_observaciones',
 	 	 	 	 	 	 	'bo_activo',
-	 	 	 	 	 	 	'id_usuario'
+	 	 	 	 	 	 	'user_id'
                             ]; 
     
     protected $hidden     = [
@@ -28,7 +28,7 @@ class Status extends Model
                            
     public function scopeActivo($query, $activo = true)
     {
-        return  ($activo) ? $query->where('id_status', 1) : $query ;
+        return  ($activo) ? $query->where('status_id', 1) : $query ;
     }
 
     public function scopeComboData($query, $combo = true)
@@ -39,12 +39,12 @@ class Status extends Model
     
     public function status()
     {
-        return $this->BelongsTo('App\Models\Status', 'id_status')->where('co_grupo', 'GRAL');
+        return $this->BelongsTo('App\Models\Status', 'status_id')->where('co_grupo', 'GRAL');
     }
                            
-    public function usuario()
+    public function user()
     {
-        return $this->BelongsTo('App\Models\Usuario', 'id_usuario');
+        return $this->BelongsTo('App\Models\User', 'user_id');
     }
 
                            

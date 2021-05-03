@@ -41,36 +41,40 @@ Route::apiResource('/foto',                      'FotoController');
 Route::get('/foto/tipoFoto/{tipoFoto}',          'FotoController@fotoTipo');
 //Route::apiResource('/tipoFoto',                 'TipoFotoController');
 
-Route::apiResource('/sede',                       'SedeController');
+Route::apiResource('/sede',                      'SedeController');
 
 Route::put('/status/resource',                  'StatusController@updateResource');
 
-Route::apiResource('/status',           'StatusController');
-Route::apiResource('/suscripcion',     'SuscripcionController');
+Route::apiResource('/status',                   'StatusController');
+Route::apiResource('/suscripcion',              'SuscripcionController');
 Route::put('/suscripcion/{suscripcion}/observaciones',     'SuscripcionController@updateObservaciones');
 
-Route::apiResource('/suscriptor',      'SuscriptorController');
-Route::apiResource('/tipoSuscripcion', 'TipoSuscripcionController');
-Route::apiResource('/vendedor',        'VendedorController');
-Route::apiResource('/agency',     'AgencyController');
-Route::apiResource('/agencyProgress',     'AgencyProgressController');
-Route::apiResource('/bonus',     'BonusController');
-Route::apiResource('/bonusType',     'BonusTypeController');
-Route::apiResource('/config',     'ConfigController');
-Route::apiResource('/failedJobs',     'FailedJobsController');
-Route::apiResource('/freeDay',     'FreeDayController');
-Route::apiResource('/missedDay',     'MissedDayController');
-Route::apiResource('/payment',     'PaymentController');
-Route::apiResource('/paymentClass',     'PaymentClassController');
-Route::apiResource('/paymentType',     'PaymentTypeController');
-Route::apiResource('/penalty',     'PenaltyController');
-Route::apiResource('/penaltyType',     'PenaltyTypeController');
-Route::apiResource('/profile',     'ProfileController');
-Route::apiResource('/profileProgress',     'ProfileProgressController');
-Route::apiResource('/role',     'RoleController');
-Route::apiResource('/status',     'StatusController');
-Route::apiResource('/user',     'UserController');
-Route::apiResource('/userProgress',     'UserProgressController');
-Route::apiResource('/writeoffType',     'WriteoffTypeController');
+Route::apiResource('/suscriptor',               'SuscriptorController');
+Route::apiResource('/tipoSuscripcion',          'TipoSuscripcionController');
+Route::apiResource('/vendedor',                 'VendedorController');
+Route::apiResource('/agency',                   'AgencyController');
+Route::apiResource('/agencyProgress',           'AgencyProgressController');
+Route::apiResource('/bonus',                    'BonusController');
+Route::apiResource('/bonusType',                'BonusTypeController');
+Route::apiResource('/config',                   'ConfigController');
+Route::apiResource('/failedJobs',               'FailedJobsController');
+Route::apiResource('/freeDay',                  'FreeDayController');
+Route::apiResource('/missedDay',                'MissedDayController');
+Route::apiResource('/payment',                  'PaymentController');
+Route::apiResource('/paymentClass',             'PaymentClassController');
+Route::apiResource('/paymentType',              'PaymentTypeController');
+Route::apiResource('/penalty',                  'PenaltyController');
+Route::apiResource('/penaltyType',              'PenaltyTypeController');
+Route::apiResource('/profile',                  'ProfileController');
+Route::apiResource('/profileProgress',          'ProfileProgressController');
+Route::apiResource('/role',                     'RoleController');
+Route::apiResource('/status',                   'StatusController');
+
+Route::apiResource('/userProgress',             'UserProgressController');
+Route::apiResource('/writeoffType',             'WriteoffTypeController');
+
+Route::get('/user/list/',                        'UserController@list');
+
+Route::apiResource('/user',                      'UserController');
 //newRoutes
 });

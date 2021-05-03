@@ -15,8 +15,8 @@ class TipoFoto extends Model
 	 	 	 	 	 	 	'tx_base_path',
 	 	 	 	 	 	 	'tx_grupo',
 	 	 	 	 	 	 	'tx_observaciones',
-	 	 	 	 	 	 	'id_status',
-	 	 	 	 	 	 	'id_usuario'
+	 	 	 	 	 	 	'status_id',
+	 	 	 	 	 	 	'user_id'
                             ]; 
     
     protected $hidden     = [
@@ -26,7 +26,7 @@ class TipoFoto extends Model
 
     public function scopeActivo($query)
     {
-        return $query->where('id_status', 1);
+        return $query->where('status_id', 1);
 	}
 
 	public function scopeComboData($query)
@@ -36,11 +36,11 @@ class TipoFoto extends Model
     
     public function status()
     {
-        return $this->BelongsTo('App\Models\Status', 'id_status')->where('co_grupo', 'GRAL');
+        return $this->BelongsTo('App\Models\Status', 'status_id')->where('co_grupo', 'GRAL');
     }
                            
-    public function usuario()
+    public function user()
     {
-        return $this->BelongsTo('App\Models\Usuario', 'id_usuario');
+        return $this->BelongsTo('App\Models\User', 'user_id');
     }
 }

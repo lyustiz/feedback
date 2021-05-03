@@ -8,18 +8,23 @@ class DummyClass extends Pivot
 {
     //
 
-    public function scopeActivo($query)
+    public function scopeActive($query, $active = false)
     {
-        return $query->where('id_status', 1);
+        return ($active) ?  $query->where('status_id', 1) : $query;
+    }
+
+    public function scopeComboData($query)
+    {
+        return $query->addSelect('id', 'name');
     }
 
     public function status()
     {
-        return $this->BelongsTo('App\Models\Status', 'id_status')->where('co_grupo', 'GRAL');
+        return $this->BelongsTo('App\Models\Status', 'status_id');
     }
                            
-    public function usuario()
+    public function user()
     {
-        return $this->BelongsTo('App\Models\Usuario', 'id_usuario');
+        return $this->BelongsTo('App\Models\User', 'user_id');
     }
 }

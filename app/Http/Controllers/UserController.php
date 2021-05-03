@@ -19,6 +19,12 @@ class UserController extends Controller
                     ->get();
     }
 
+    public function list(Request $request)
+    {
+        return User::with([])
+                    ->get();
+    }
+
     /**
      * Store a newly created resource in storage.
      *

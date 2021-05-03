@@ -93,4 +93,41 @@ export default {
         cursor: pointer;
     }
 
+    .custom-scroll::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-track {
+        background: rgba(18, 41, 67, 0.8);
+        /* border-radius: 7px; */
+        border: 0.5px solid rgb(10, 23, 36);
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb {
+        background: rgb(10, 23, 36);
+        border-radius: 7px;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+        background: black;
+    }
+
+    .custom-scroll-dark::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .custom-scroll-dark::-webkit-scrollbar-track {
+        background: #202020;
+        border-left: 1px solid #2c2c2c;
+    }
+
+    .custom-scroll-dark::-webkit-scrollbar-thumb {
+        background: #3e3e3e;
+        border: solid 3px #202020;
+        border-radius: 7px;
+    }
+
+    .custom-scroll-dark::-webkit-scrollbar-thumb:hover {
+        background: white;
+    }
 </style>

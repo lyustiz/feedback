@@ -29,8 +29,8 @@ class Usuario extends Authenticatable implements MustVerifyEmail
 	 	 	 	 	 	 	'email_verified_at',
 	 	 	 	 	 	 	'remember_token',
 	 	 	 	 	 	 	'api_token',
-	 	 	 	 	 	 	'id_status',
-	 	 	 	 	 	 	'id_usuario',
+	 	 	 	 	 	 	'status_id',
+	 	 	 	 	 	 	'user_id',
 	 	 	 	 	 	 	'created_at',
 	 	 	 	 	 	 	'updated_at'
 							]; 
@@ -40,7 +40,7 @@ class Usuario extends Authenticatable implements MustVerifyEmail
 		'verification',
 		'email_verified_at', 
 		'remember_token', 
-		'id_usuario', 
+		'user_id', 
 		'api_token', 
 		'created_at', 
 		'updated_at'];
@@ -51,7 +51,7 @@ class Usuario extends Authenticatable implements MustVerifyEmail
 	
 	public function scopeActivo($query)
     {
-        return $query->where('id_status', 1);
+        return $query->where('status_id', 1);
 	}
 
 	public function scopeComboData($query)
@@ -61,12 +61,12 @@ class Usuario extends Authenticatable implements MustVerifyEmail
 
 	public function status()
 	{
-        return $this->belongsTo('App\Models\Status', 'id_status');
+        return $this->belongsTo('App\Models\Status', 'status_id');
     }
                            
-	public function usuario()
+	public function user()
 	{
-        return $this->belongsTo('App\Models\Usuario', 'id_usuario');
+        return $this->belongsTo('App\Models\User', 'user_id');
 	}
 
 	public function colegio()
@@ -76,7 +76,7 @@ class Usuario extends Authenticatable implements MustVerifyEmail
 	
 	public function perfil()
 	{
-        return $this->belongsToMany('App\Models\Perfil', 'usuario_perfil', 'id_usuario', 'id_perfil');
+        return $this->belongsToMany('App\Models\Perfil', 'usuario_perfil', 'user_id', 'id_perfil');
 	}
 	
 	public function foto()
@@ -104,14 +104,14 @@ class Usuario extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo('App\Models\Empleado',  'id_origen');
 	}
 
-	public function tipoUsuario()
+	public function tipouser()
     {
         return $this->belongsTo('App\Models\TipoUsuario',  'id_tipo_usuario');
 	}
 
 	public function notificacion()
     {
-        return $this->HasMany('App\Models\Notificacion',  'id_usuario', 'id_destinatario');
+        return $this->HasMany('App\Models\Notificacion',  'user_id', 'id_destinatario');
 	}
 
 

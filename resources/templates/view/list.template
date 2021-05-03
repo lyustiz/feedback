@@ -70,10 +70,10 @@
 </template>
 
 <script>
-import listHelper from '@mixins/Applist';
+import Applist from '@mixins/Applist';
 import {{instanceName}}Form  from './{{instanceName}}Form';
 export default {
-    mixins:     [ listHelper],
+    mixins:     [ Applist],
     components: { '{{slugName}}-form': {{instanceName}}Form },
     data () {
     return {

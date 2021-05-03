@@ -18,8 +18,8 @@ class Permiso extends Model
 	 	 	 	 	 	 	'bo_admin',
 	 	 	 	 	 	 	'bo_default',
 	 	 	 	 	 	 	'tx_observaciones',
-	 	 	 	 	 	 	'id_status',
-	 	 	 	 	 	 	'id_usuario'
+	 	 	 	 	 	 	'status_id',
+	 	 	 	 	 	 	'user_id'
                             ]; 
     
     protected $hidden     = [
@@ -29,17 +29,17 @@ class Permiso extends Model
 
     public function scopeActivo($query)
     {
-        return $query->where('id_status', 1);
+        return $query->where('status_id', 1);
 	}
     
     public function status()
     {
-        return $this->BelongsTo('App\Models\Status', 'id_status')->where('co_grupo', 'GRAL');
+        return $this->BelongsTo('App\Models\Status', 'status_id')->where('co_grupo', 'GRAL');
     }
                            
-    public function usuario()
+    public function user()
     {
-        return $this->BelongsTo('App\Models\Usuario', 'id_usuario');
+        return $this->BelongsTo('App\Models\User', 'user_id');
     }
 
     public function perfil()

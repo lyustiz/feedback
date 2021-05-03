@@ -25,7 +25,7 @@ class MissedDay extends Model
 
     public function scopeActivo($query)
     {
-        return $query->where('id_status', 1);
+        return $query->where('status_id', 1);
     }
 
     public function scopeComboData($query)
@@ -35,11 +35,11 @@ class MissedDay extends Model
 
     public function status()
     {
-        return $this->BelongsTo('App\Models\Status', 'id_status');
+        return $this->BelongsTo('App\Models\Status', 'status_id');
     }
                            
-    public function usuario()
+    public function user()
     {
-        return $this->BelongsTo('App\Models\Usuario', 'id_usuario');
+        return $this->BelongsTo('App\Models\User', 'user_id');
     }
 }
