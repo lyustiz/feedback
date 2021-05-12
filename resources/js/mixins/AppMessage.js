@@ -54,6 +54,10 @@ export default {
                     msj = error.response.data
                     break;
 
+                    case 419:
+                        msj = 'token de autenticacion invalido intente nuevamente'
+                    break;
+
                     case 401:
                         msj = 'Session finalizada favor Ingresar nuevamente '
                         this.showMsjBar(msj, 'error')

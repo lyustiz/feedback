@@ -24,14 +24,14 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    // use AuthenticatesUsers;
 
     /**
      * Where to redirect users after login.
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    //protected $redirectTo = RouteServiceProvider::HOME;
 
 
     public function username()
@@ -65,17 +65,19 @@ class LoginController extends Controller
 
             if($user->status_id == 1) 
             {
-                $request->session()->regenerate();
+                // $request->session()->regenerate();
 
                 $user->load(['agency:id,name,amolatina_id,token' ]);
                 $role  = $user->role; 
                 $menu  = $role->menu; 
 
-                return [ 
+                response()->json([ 
                     'user' => $user,
                     'role' => $role,
                     'menu' => $menu
-                ]; 
+                ], 200 );
+
+               /*  return ;  */
             }
 
             throw ValidationException::withMessages(['userInactive' => "Usuario Inactivo consulte con el Administrador"]);
