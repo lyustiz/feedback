@@ -202,10 +202,6 @@ export default {
         setPhoto(photoSrc) {
             this.form.photo = photoSrc
         },
-
-        /* store() {
-            if (!this.$refs.form.validate())  return 
-        } */
     }
 }
 </script>
