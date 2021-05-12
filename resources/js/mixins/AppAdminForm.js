@@ -29,7 +29,7 @@ export default
     data() 
     {
         return {
-            idUser:     this.$store.getters.idUser,
+            userId:     this.$store.getters.userId,
             valid:      true,
             calendar:   false,
             dates:      {},
@@ -170,7 +170,7 @@ export default
                     this.$refs.form.reset();
                 }
             }
-            this.form.id_usuario = this.idUser
+            this.form.user_id = this.userId
             
         },
 		

@@ -37,8 +37,8 @@ class VendedorController extends Controller
 			'tx_telefono2'      => 	'nullable|string|max:255',
 			'tx_direccion'      => 	'nullable|string|max:150',
 			'tx_observaciones'  => 	'nullable|string|max:100',
-			'id_status'         => 	'required|integer|max:999999999',
-			'id_usuario'        => 	'required|integer|max:999999999',
+			'status_id'         => 	'required|integer|max:999999999',
+			'user_id'        => 	'required|integer|max:999999999',
         ]);
 
         $request->merge(['nb_vendedor' => ucwords($request->nb_vendedor) ]);
@@ -75,8 +75,8 @@ class VendedorController extends Controller
 			'tx_telefono2'      => 	'nullable|string|max:255',
 			'tx_direccion'      => 	'nullable|string|max:150',
 			'tx_observaciones'  => 	'nullable|string|max:100',
-			'id_status'         => 	'required|integer|max:999999999',
-			'id_usuario'        => 	'required|integer|max:999999999',
+			'status_id'         => 	'required|integer|max:999999999',
+			'user_id'        => 	'required|integer|max:999999999',
         ]);
 
         $request->merge(['nb_vendedor' => ucwords($request->nb_vendedor) ]);

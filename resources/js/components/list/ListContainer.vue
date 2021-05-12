@@ -1,14 +1,14 @@
 <template>
 
-    <v-container fluid class="rounded-b-xl white"  >
+    <v-container fluid class="white"  >
 
             <v-row >
 
                 <v-flex xs12>
 
-                        <v-card min-height="89vh" :class="`mx-2 list-container ${(inDialog) ? 'rounded-xl' : null }`" :flat="inDialog">
+                        <v-card min-height="92vh" :class="`mx-1 mt-1 list-container ${(inDialog) ? 'rounded-xl' : null }`" :flat="inDialog">
 
-                            <v-toolbar flat dense :class="headColor" v-if="!inDialog">
+                            <v-toolbar flat dense v-if="!inDialog" height="40" class="main-color" dark>
 
                                 <v-toolbar-title v-text="title"></v-toolbar-title>
 
@@ -16,11 +16,11 @@
 
                                 <slot name="HeadTools"></slot>
 
-                                <list-menu :itemsMenu="itemsMenu" @onMenu="$emit('onMenu', $event)"></list-menu>
+                                <list-menu color="white" :itemsMenu="itemsMenu" @onMenu="$emit('onMenu', $event)"></list-menu>
 
                             </v-toolbar>
 
-                            <v-card-text>
+                            <v-card-text class="my-0">
                                 <slot></slot>
                             </v-card-text>
 

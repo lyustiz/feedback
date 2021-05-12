@@ -9,7 +9,7 @@
             :true-value="trueValue"
             :false-value="falseValue"
             :color="color"
-            :input-value="item.id_status"
+            :input-value="item.status_id"
             @change="changeStatus($event)">
         </v-switch>
 
@@ -55,12 +55,12 @@ export default {
         return{
             apiUrl:  this.$App.apiUrl,
             idUser:  1, //this.$store.getters.getUserid,
-            status:  this.item.id_status,
+            status:  this.item.status_id,
             form: {
                 resource:   null,
                 id:         null,
-                id_status:  null,
-                id_usuario: null
+                status_id:  null,
+                user_id: null
             },
             trueValue:  1,
             falseValue: 2,
@@ -80,8 +80,8 @@ export default {
         {
             this.form.resource   = this.resource
             this.form.id         = this.item.id            
-            this.form.id_status  = status
-            this.form.id_usuario = this.idUser
+            this.form.status_id  = status
+            this.form.user_id = this.idUser
 
             this.$emit('onStatusChanging', { id: this.item.id, status: status })
 

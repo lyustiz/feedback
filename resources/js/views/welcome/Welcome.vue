@@ -4,30 +4,34 @@
     <v-container fluid class="mt-n12">
       <v-row dense> 
 
-        <v-col>
-          <v-card color="rgba(0,0,0,0.4)" class="rounded-lg " height="90vh">
-            <v-card-text>
-            <v-row>
-              <v-col>
-                <AppUser></AppUser>
-              </v-col>
-            </v-row>
-            <v-row>
-              <v-col>
-                <AppDashBoard></AppDashBoard>
-              </v-col>
-            </v-row>
-            </v-card-text>
+        <v-col class="text-center">
+
+          <v-card>
+            <v-card-title >
+
+              <v-row>
+                <v-col cols="auto"> 
+                  <v-avatar
+                size="avatarSize"
+                color="red"
+              >
+                <v-icon size="110">mdi-bitcoin</v-icon>
+              </v-avatar>
+                  
+                </v-col>
+                <v-col class="display-4">
+                  CriptoWeb
+                </v-col>
+              </v-row>
+
+              
+              
+            </v-card-title>
           </v-card>
+      
         </v-col>
 
-        <v-col>
-            <AppOperatos></AppOperatos>
-        </v-col>
-
-        <v-col>
-            <AppProfile></AppProfile>
-        </v-col>
+       
 
       </v-row>
     </v-container>
@@ -37,20 +41,10 @@
 
 <script>
 
-import AppUser from './components/AppUser'
-import AppDashBoard from './components/AppDashBoard'
-import AppOperatos from './components/AppOperatos'
-import AppProfile from './components/AppProfile'
 
 export default {
   name: 'Welcome',
 
-  components:{
-    AppUser,
-    AppDashBoard,
-    AppOperatos,
-    AppProfile,
-  },
   
   data: () => ({
     clientes:[

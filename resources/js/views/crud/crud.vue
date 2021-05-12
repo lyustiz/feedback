@@ -92,9 +92,9 @@
 
 <script>
 
-import formHelper from '~/mixins/Appform';
+import AppForm from '~/mixins/AppForm';
  export default {
-  mixins: [formHelper],
+  mixins: [AppForm],
     created()
     {
  this.listsLoader()
@@ -117,7 +117,7 @@ import formHelper from '~/mixins/Appform';
     methods: { 
         listsLoader()
         {
-            axios.get('/api/' + 'crud/' + 'schemas')
+            axios.get('/api/v1/' + 'crud/' + 'schemas')
                     .then(response => {
                         this.lists.schemas = response.data.schemas;
                     })
@@ -128,7 +128,7 @@ import formHelper from '~/mixins/Appform';
 
         getTables()
         {
-            axios.post('/api/' + 'crud/' + 'tables', this.form)
+            axios.post('/api/v1/' + 'crud/' + 'tables', this.form)
             .then(response => {
                 this.tables = response.data;
                 this.IsLoading = false
@@ -142,7 +142,7 @@ import formHelper from '~/mixins/Appform';
         {
             if (this.$refs.form.validate()) 
             {
-                axios.post('/api/' + 'crud/' + 'generate',this.form)
+                axios.post('/api/v1/' + 'crud/' + 'generate',this.form)
                 .then(respuesta => {
 
                     console.log(respuesta.data);

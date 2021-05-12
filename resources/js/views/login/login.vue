@@ -86,7 +86,7 @@
                     label="Usuario"
                     hint="Indique el usuario"
                     type="text"
-                    v-model="form.nb_usuario"
+                    v-model="form.email"
                     :rules="[rules.required]"
                     filled
                     rounded
@@ -117,8 +117,8 @@
                   <v-btn block dark color="deep-orange" :loading="loading" @click="login()">Ingresar</v-btn>
               </v-col>
               <v-col cols="12">
-                <v-btn block text color="deep-orange" :disabled="loading" @click="navigateToName('welcome')">
-                    volver a Inicio
+                <v-btn block text color="deep-orange" :disabled="loading">
+                    recuperar Contraseña
                 </v-btn>
               </v-col>
             </v-row>
@@ -150,8 +150,8 @@ export default {
 	{
         return {
             form:{
-                nb_usuario: '',
-                password  :   '',
+                email: '',
+                password  : '',
             },
             show: false,
             loading: false,
@@ -166,23 +166,17 @@ export default {
         login()
         {
             if (!this.$refs.registerForm.validate())  return 
+            this.loading = true
             
-            
-
-            axios.get('/sanctum/csrf-cookie').then(response => {
-                 
-                 this.loading = false
-                 // Login...
-            });
-            
-           /*  this.$store.dispatch('login', this.form)
+           this.$store.dispatch('login', this.form)
             .then(response => {
               
                 if(response.status == 200)
                 {
+                    this.showMessage('Autenticacion Correcta');
                     this.$refs.registerForm.reset();
 
-                    this.redirectTo(response)
+                    this.navigateToName(response.path)
                 }
 
             }).catch(error =>
@@ -191,19 +185,25 @@ export default {
                 {
                     if(error.response.status == 403 && error.response.data.verification)
                     {                        
-                        this.showError('Usuario Inactivo, Favor ingrese a su corrreo para activarlo');
+                        this.showError('Usuario Inactivo');
                         this.emailResend = true
                         this.hash = error.response.data.verification
                         return
                     }
+                    if(error.response.status == 419)
+                    {
+                        location.reload();
+                    }
+                    
                 }                
                 this.showError(error);
+                
             })
             .then(() => 
             {
                 this.loading = false
             })
- */
+
         },
 
         resendEmail()

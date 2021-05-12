@@ -4,20 +4,28 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+/* Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
-});
+}); */
 
-Route::get('/crud/schemas',   'Crud@schemas');
-Route::post('/crud/tables',   'Crud@tables');
-Route::post('/crud/generate', 'Crud@generate');
+Route::post('/login',            'Auth\LoginController@login')->name('login');;
+Route::post('/logout',            'Auth\LoginController@logout');
 
-Route::group(['prefix'=>'v1'], function() 
+
+//
+Route::middleware(['auth:sanctum'])->prefix('v1')->group( function() 
 {
+ Route::get('/data/card',          'DataController@sendCard');
+
+ Route::get('/data/comissions',          'DataController@comissions');
  Route::get('/data/profiles',            'DataController@dataProfiles');
  Route::get('/data/profile/{profileId}', 'DataController@dataProfile');
  Route::apiResource('/data',             'DataController');
  
+
+Route::get('/crud/schemas',   'Crud@schemas');
+Route::post('/crud/tables',   'Crud@tables');
+Route::post('/crud/generate', 'Crud@generate');
 
 // -- FOTOS / ARCHIVOS -- //
 /* Route::apiResource('/tipoUsuario',              'TipoUsuarioController'); 
@@ -37,17 +45,9 @@ Route::get('/menu/combo',                       'MenuController@combo');
 Route::apiResource('/menu',                     'MenuController');
 */
 // -- FOTOS / ARCHIVOS -- //
-Route::apiResource('/foto',                      'FotoController');
-Route::get('/foto/tipoFoto/{tipoFoto}',          'FotoController@fotoTipo');
-//Route::apiResource('/tipoFoto',                 'TipoFotoController');
 
-Route::apiResource('/sede',                      'SedeController');
 
 Route::put('/status/resource',                  'StatusController@updateResource');
-
-Route::apiResource('/status',                   'StatusController');
-Route::apiResource('/suscripcion',              'SuscripcionController');
-Route::put('/suscripcion/{suscripcion}/observaciones',     'SuscripcionController@updateObservaciones');
 
 Route::apiResource('/suscriptor',               'SuscriptorController');
 Route::apiResource('/tipoSuscripcion',          'TipoSuscripcionController');
@@ -65,16 +65,42 @@ Route::apiResource('/paymentClass',             'PaymentClassController');
 Route::apiResource('/paymentType',              'PaymentTypeController');
 Route::apiResource('/penalty',                  'PenaltyController');
 Route::apiResource('/penaltyType',              'PenaltyTypeController');
+
+// user
+Route::get('/user/list',                        'UserController@list');
+Route::apiResource('/user',                     'UserController');
+Route::apiResource('/userProgress',             'UserProgressController');
+
+Route::get('/userProfile/assing/{user}/{agency}',  'UserProfileController@assing');
+Route::apiResource('/userProfile',              'UserProfileController');
+
+
+Route::get('/profile/user/{user}',              'ProfileController@profileUser');
 Route::apiResource('/profile',                  'ProfileController');
+
 Route::apiResource('/profileProgress',          'ProfileProgressController');
+
+
 Route::apiResource('/role',                     'RoleController');
+Route::apiResource('/menu',                     'MenuController');
+Route::apiResource('/permission',               'PermissionController');
+
+
 Route::apiResource('/status',                   'StatusController');
 
-Route::apiResource('/userProgress',             'UserProgressController');
 Route::apiResource('/writeoffType',             'WriteoffTypeController');
+Route::apiResource('/spending',                 'SpendingController');
+Route::apiResource('/present',                  'PresentController');
+Route::apiResource('/turn',                     'TurnController');
+Route::apiResource('/table',                    'TableController');
+Route::apiResource('/curator',                  'CuratorController');
+Route::apiResource('/spending',                 'SpendingController');
 
-Route::get('/user/list/',                        'UserController@list');
 
-Route::apiResource('/user',                      'UserController');
+
+Route::apiResource('/comission',                'ComissionController');
+Route::apiResource('/table',     'TableController');
+Route::apiResource('/group',     'GroupController');
+Route::apiResource('/country',     'CountryController');
 //newRoutes
 });

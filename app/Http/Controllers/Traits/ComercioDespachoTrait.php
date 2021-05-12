@@ -20,8 +20,8 @@ trait ComercioDespachoTrait
             'id_comercio'       => 'required|integer',
             'id_zona'           => 'required|integer',
             'tx_observaciones'  => 'nullable',
-            'id_status'         => 'required|integer',
-            'id_usuario'        => 'required|integer',
+            'status_id'         => 'required|integer',
+            'user_id'        => 'required|integer',
 
         ])->validate();
 
@@ -48,8 +48,8 @@ trait ComercioDespachoTrait
                 'id_comercio'       => $data['id_comercio'],
                 'id_zona'           => $id_zona,
                 'tx_observaciones'  => null,
-                'id_status'         => 1,
-                'id_usuario'        => $data['id_usuario'],
+                'status_id'         => 1,
+                'user_id'        => $data['user_id'],
             ]);
 
             $despachos[] = $despacho['comercioDespacho'];
@@ -73,8 +73,8 @@ trait ComercioDespachoTrait
             'id_comercio'       => 'required|integer',
             'id_zona'           => 'required|integer',
             'tx_observaciones'  => 'nullable',
-            'id_status'         => 'required|integer',
-            'id_usuario'        => 'required|integer',
+            'status_id'         => 'required|integer',
+            'user_id'        => 'required|integer',
 
         ]);
         

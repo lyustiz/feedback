@@ -6,9 +6,9 @@ export default
     
     computed: 
     {
-        idUser()
+        userId()
         {
-            return 1//this.$store.getters['getUserid']
+            return this.$store.getters['getUserid']
         },
         
         fullUrl() 
@@ -296,7 +296,7 @@ export default
                 this.form[key]  =  this.default[key];
             }
 
-            if(this.form)  this.form.id_usuario = this.idUser
+            if(this.form)  this.form.user_id = this.userId
         },
 
         clear()
@@ -313,7 +313,7 @@ export default
 
             this.$refs.form.resetValidation();
 
-            this.form.id_usuario = this.idUser
+            this.form.user_id = this.userId
         },
 
         

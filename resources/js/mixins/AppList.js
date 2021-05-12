@@ -9,7 +9,7 @@ export default
         return {
 
             apiUrl:    this.$App.apiUrl,
-            idUser:    1, //this.$store.getters['getUserid'],
+            userId:    this.$store.getters['getUserid'],
             loading:   true,
             modal:     false,
             items:     [],

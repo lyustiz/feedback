@@ -36,8 +36,8 @@ class TipoFotoController extends Controller
 			'tx_base_path'      => 	'required|string|max:80',
 			'tx_grupo'          => 	'nullable|string|max:20',
 			'tx_observaciones'  => 	'nullable|string|max:100',
-			'id_status'         => 	'required|integer',
-			'id_usuario'        => 	'required|integer',
+			'status_id'         => 	'required|integer',
+			'user_id'        => 	'required|integer',
         ]);
 
         $tipoFoto = tipoFoto::create($request->all());
@@ -72,8 +72,8 @@ class TipoFotoController extends Controller
 			'tx_base_path'      => 	'required|string|max:80',
 			'tx_grupo'          => 	'nullable|string|max:20',
 			'tx_observaciones'  => 	'nullable|string|max:100',
-			'id_status'         => 	'required|integer',
-			'id_usuario'        => 	'required|integer',
+			'status_id'         => 	'required|integer',
+			'user_id'        => 	'required|integer',
         ]);
 
         $tipoFoto = $tipoFoto->update($request->all());

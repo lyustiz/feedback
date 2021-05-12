@@ -98,10 +98,10 @@
 
 <script>
 
-import Appform from '@mixins/Appform';
+import AppForm from '@mixins/AppForm';
 
 export default {
-    mixins: [Appform],
+    mixins: [AppForm],
     data() {
         return {
             resource: 'tipoSuscripcion',
@@ -122,8 +122,8 @@ export default {
 				tx_icono: 	null,
 				tx_color: 	null,
 				tx_observaciones: 	null,
-				id_status: 	null,
-				id_usuario: 	null,
+				status_id: 	null,
+				user_id: 	null,
             },
 
         }

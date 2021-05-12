@@ -64,7 +64,7 @@ export default {
                 tx_src      : this.rawImg,
                 id_tipo_foto: this.tipoFoto,
                 id_origen   : this.origen,
-                id_usuario  : this.idUser,
+                user_id  : this.idUser,
             }
 
             this.storeResource('foto', this.image).then( (data) =>  

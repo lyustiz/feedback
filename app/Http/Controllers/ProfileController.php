@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Profile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
+
 
 class ProfileController extends Controller
 {
@@ -17,6 +19,14 @@ class ProfileController extends Controller
     {
         return Profile::with([])
                     ->get();
+    }
+
+    public function profileUser($userId)
+    {
+        return Profile::with([])
+                ->whereHas('user', function (Builder $query) use($userId) {
+                    $query->where('user.id', $userId);
+                })->get();
     }
 
     /**

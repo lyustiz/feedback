@@ -37,8 +37,8 @@ trait ArchivoTrait
             'tx_path'           => 	'required|string|max:255',
             'tx_mimetype'       => 	'required|string|max:30',
 			'tx_observaciones'  => 	'nullable|string|max:100',
-			'id_status'         => 	'required|integer|max:999999999',
-            'id_usuario'        => 	'required|integer|max:999999999',
+			'status_id'         => 	'required|integer|max:999999999',
+            'user_id'        => 	'required|integer|max:999999999',
             'tx_file_source'    => 	'required|string',
         ]);
 

@@ -20,8 +20,8 @@ trait ComercioCategoriaTrait
             'id_comercio'       => 'required',
             'id_categoria'      => 'required',
             'tx_observaciones'  => 'nullable|max:100',
-            'id_status'         => 'required',
-            'id_usuario'        => 'required',
+            'status_id'         => 'required',
+            'user_id'        => 'required',
 
         ])->validate();
 
@@ -48,8 +48,8 @@ trait ComercioCategoriaTrait
                 'id_comercio'       => $data['id_comercio'],
                 'id_categoria'      => $id_categoria,
                 'tx_observaciones'  => null,
-                'id_status'         => 1,
-                'id_usuario'        => $data['id_usuario'],
+                'status_id'         => 1,
+                'user_id'        => $data['user_id'],
             ]);
 
             $categorias[] = $categoria['categoria'];
@@ -75,8 +75,8 @@ trait ComercioCategoriaTrait
             'tx_icono'          => 'required',
             'tx_foto'           => 'required',
             'tx_observaciones'  => 'required',
-            'id_status'         => 'required',
-            'id_usuario'        => 'required',
+            'status_id'         => 'required',
+            'user_id'        => 'required',
 
         ]);
         

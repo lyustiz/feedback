@@ -28,18 +28,24 @@
 
                 <template v-slot:item="{ item }">
                     <tr>
-                        <td class="text-xs-left">{{ item.user_id }}</td>
-						<td class="text-xs-left">{{ item.progress_day }}</td>
-						<td class="text-xs-left">{{ item.progress_month }}</td>
-						<td class="text-xs-left">{{ item.progress_total }}</td>
-						<td class="text-xs-left">{{ item.progress_max_day }}</td>
-						<td class="text-xs-left">{{ item.progress_max_month }}</td>
-						<td class="text-xs-left">{{ item.rank }}</td>
-						<td class="text-xs-left">{{ item.milestone_day }}</td>
-						<td class="text-xs-left">{{ item.milestone_month }}</td>
-						<td class="text-xs-left">{{ item.comments }}</td>
-						<td class="text-xs-left">{{ item.status_id }}</td>
-						<td class="text-xs-left">{{ item.user_id_ed }}</td>
+                        <td>{{ item.progress_day }}</td>
+						<td>{{ item.progress_month }}</td>
+						<td>{{ item.progress_total }}</td>
+						<td>{{ item.progress_max_day }}</td>
+						<td>{{ item.progress_max_month }}</td>
+						<td>{{ item.rank }}</td>
+						<td>{{ item.milestone_day }}</td>
+						<td>{{ item.milestone_month }}</td>
+						<td>{{ item.comments }}</td>
+						<td>
+                            <status-switch 
+                                :loading="loading" 
+                                :resource="resource" 
+                                :item="item" 
+                                @onChangeStatus="changeStatus($event)">
+                            </status-switch>
+                        </td>
+						<td>{{ item.user_id_ed }}</td>
                         
                         <td class="text-xs-left">
                             <list-buttons 
@@ -81,18 +87,17 @@
 </template>
 
 <script>
-import listHelper from '@mixins/Applist';
+import Applist from '@mixins/Applist';
 import userProgressForm  from './userProgressForm';
 export default {
-    mixins:     [ listHelper],
+    mixins:     [ Applist],
     components: { 'user-progress-form': userProgressForm },
     data () {
     return {
         title:    'UserProgress',
         resource: 'userProgress',
         headers: [
-            { text: 'User Id',   value: 'user_id' },
-			{ text: 'Progress Day',   value: 'progress_day' },
+            { text: 'Progress Day',   value: 'progress_day' },
 			{ text: 'Progress Month',   value: 'progress_month' },
 			{ text: 'Progress Total',   value: 'progress_total' },
 			{ text: 'Progress Max Day',   value: 'progress_max_day' },

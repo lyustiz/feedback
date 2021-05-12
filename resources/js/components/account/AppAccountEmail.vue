@@ -78,7 +78,7 @@ export default {
             form: {
                 tx_email:      '',
                 tx_new_email:  '',
-                id_usuario:    ''
+                user_id:    ''
             },
             valid: true
            
@@ -91,7 +91,7 @@ export default {
             if (!this.$refs.form.validate())  return 
 
             this.loading = true
-            this.form.id_usuario = this.user.id
+            this.form.user_id = this.user.id
 
             this.$store.dispatch('updateEmail', this.form)
             .then(response => {

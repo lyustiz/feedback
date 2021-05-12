@@ -28,15 +28,15 @@
 
                 <template v-slot:item="{ item }">
                     <tr>
-                        <td class="text-xs-left">{{ item.name }}</td>
-						<td class="text-xs-left">{{ item.type }}</td>
-						<td class="text-xs-left">{{ item.group }}</td>
-						<td class="text-xs-left">{{ item.value }}</td>
-						<td class="text-xs-left">{{ item.start_at }}</td>
-						<td class="text-xs-left">{{ item.end_at }}</td>
-						<td class="text-xs-left">{{ item.comments }}</td>
-						<td class="text-xs-left">{{ item.active }}</td>
-						<td class="text-xs-left">{{ item.user_id }}</td>
+                        <td>{{ item.name }}</td>
+						<td>{{ item.type }}</td>
+						<td>{{ item.group }}</td>
+						<td>{{ item.value }}</td>
+						<td>{{ item.start_at }}</td>
+						<td>{{ item.end_at }}</td>
+						<td>{{ item.comments }}</td>
+						<td>{{ item.active }}</td>
+						<td>{{ item.user_id }}</td>
                         
                         <td class="text-xs-left">
                             <list-buttons 
@@ -78,10 +78,10 @@
 </template>
 
 <script>
-import listHelper from '@mixins/Applist';
+import Applist from '@mixins/Applist';
 import configForm  from './configForm';
 export default {
-    mixins:     [ listHelper],
+    mixins:     [ Applist],
     components: { 'config-form': configForm },
     data () {
     return {

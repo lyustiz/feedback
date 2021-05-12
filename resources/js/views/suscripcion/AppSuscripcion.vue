@@ -271,13 +271,11 @@ export default {
 
         updateObservaciones(item)
         {
-            console.log(item ,this.idUser)
+            console.log(item ,this.userId)
             
             this.loading = true;
 
-            this.idUser =  1 //TODO
-
-            let form = { id_usuario: this.idUser, tx_observaciones: item.tx_observaciones, ddd:1}
+            let form = { user_id: this.userId, tx_observaciones: item.tx_observaciones, ddd:1}
             
             axios.put(`${this.apiUrl}suscripcion/${item.id}/observaciones`, form)
             .then(response => 

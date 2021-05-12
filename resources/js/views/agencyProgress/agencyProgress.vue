@@ -28,19 +28,25 @@
 
                 <template v-slot:item="{ item }">
                     <tr>
-                        <td class="text-xs-left">{{ item.agency_id }}</td>
-						<td class="text-xs-left">{{ item.day_positive }}</td>
-						<td class="text-xs-left">{{ item.day_negative }}</td>
-						<td class="text-xs-left">{{ item.month_positive }}</td>
-						<td class="text-xs-left">{{ item.month_negative }}</td>
-						<td class="text-xs-left">{{ item.total_positive }}</td>
-						<td class="text-xs-left">{{ item.total_negative }}</td>
-						<td class="text-xs-left">{{ item.task_mails }}</td>
-						<td class="text-xs-left">{{ item.task_photos }}</td>
-						<td class="text-xs-left">{{ item.task_videos }}</td>
-						<td class="text-xs-left">{{ item.comments }}</td>
-						<td class="text-xs-left">{{ item.status_id }}</td>
-						<td class="text-xs-left">{{ item.user_id }}</td>
+                        <td>{{ item.agency_id }}</td>
+						<td>{{ item.day_positive }}</td>
+						<td>{{ item.day_negative }}</td>
+						<td>{{ item.month_positive }}</td>
+						<td>{{ item.month_negative }}</td>
+						<td>{{ item.total_positive }}</td>
+						<td>{{ item.total_negative }}</td>
+						<td>{{ item.task_mails }}</td>
+						<td>{{ item.task_photos }}</td>
+						<td>{{ item.task_videos }}</td>
+						<td>{{ item.comments }}</td>
+						<td>
+                            <status-switch 
+                                :loading="loading" 
+                                :resource="resource" 
+                                :item="item" 
+                                @onChangeStatus="changeStatus($event)">
+                            </status-switch>
+                        </td>
                         
                         <td class="text-xs-left">
                             <list-buttons 
@@ -82,10 +88,10 @@
 </template>
 
 <script>
-import listHelper from '@mixins/Applist';
+import Applist from '@mixins/Applist';
 import agencyProgressForm  from './agencyProgressForm';
 export default {
-    mixins:     [ listHelper],
+    mixins:     [ Applist],
     components: { 'agency-progress-form': agencyProgressForm },
     data () {
     return {
@@ -104,7 +110,6 @@ export default {
 			{ text: 'Task Videos',   value: 'task_videos' },
 			{ text: 'Comments',   value: 'comments' },
 			{ text: 'Status Id',   value: 'status_id' },
-			{ text: 'User Id',   value: 'user_id' },
             { text: 'Acciones', value: 'actions', sortable: false, filterable: false },
         ],
     }

@@ -46,7 +46,7 @@ class StatusController extends Controller
 			'id_padre'          => 	'required|integer',
 			'tx_observaciones'  => 	'nullable|string|max:200',
 			'bo_activo'         => 	'required|boolean',
-			'id_usuario'        => 	'required|integer',
+			'user_id'        => 	'required|integer',
         ]);
 
         $status = status::create($request->all());
@@ -84,7 +84,7 @@ class StatusController extends Controller
 			'id_padre'          => 	'required|integer',
 			'tx_observaciones'  => 	'nullable|string|max:200',
 			'bo_activo'         => 	'required|boolean',
-			'id_usuario'        => 	'required|integer',
+			'user_id'        => 	'required|integer',
         ]);
 
         $status = $status->update($request->all());
@@ -106,8 +106,8 @@ class StatusController extends Controller
             
             'resource'          => 	'required|string|max:64',
             'id'                => 	'required|integer|max:999999999',
-            'id_status'         => 	'required|integer|max:999999999',
-            'id_usuario'        => 	'required|integer|max:999999999',
+            'status_id'         => 	'required|integer|max:999999999',
+            'user_id'        => 	'required|integer|max:999999999',
             
         ]);
 
@@ -116,17 +116,17 @@ class StatusController extends Controller
         $updated = \DB::table($tableName)
                     ->where('id', $request->id)
                     ->update([
-                                'id_status'  => $request->id_status,
-                                'id_usuario' => $request->id_usuario
+                                'status_id'  => $request->status_id,
+                                'user_id' => $request->user_id
                                 ]);
 
         $resourceName = ucwords(implode(' ',preg_split('/(?=[A-Z])/', $request->resource)));
         
         if($updated)   
         {
-            $status   =  Status::select('nb_status')->find($request->id_status);
+            $status   =  Status::select('name')->find($request->status_id);
             
-            return [ 'msj' => "$resourceName $status->nb_status" , 'updated' => $updated]; 
+            return [ 'msj' => "$resourceName $status->name" , 'updated' => $updated]; 
 
         } else {
 

@@ -1,9 +1,9 @@
 <template>
 
-    <v-tooltip bottom>
+    <v-tooltip bottom color="sucess">
         <template v-slot:activator="{ on }">
-            <v-btn icon dark small v-on="on" @click="insItem()" :class="innerClass" :loading="loading">
-                <v-icon size="38" color="success" >mdi-plus-circle</v-icon>
+            <v-btn icon dark x-small v-on="on" @click="insItem()" :class="innerClass" :loading="loading">
+                <v-icon dark size="32" color="green" >mdi-plus-circle-outline</v-icon>
             </v-btn>
         </template>
         <span>{{ label }}</span>

@@ -17,7 +17,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 class UsuarioController extends Controller
 {
-    use UsuarioTrait, HasApiTokens, HasFactory, Notifiable;
+    use UsuarioTrait, HasFactory, Notifiable;
     
     /**
      * Display a listing of the resource.
@@ -54,12 +54,15 @@ class UsuarioController extends Controller
             'tx_observaciones'  => 'required',
             'remember_token'    => 'required',
             'id_tipo_usuario'   => 'required',
-            'id_status'         => 'required',
-            'id_usuarioe'       => 'required',
+            'status_id'         => 'required',
+            'user_ide'          => 'required',
             
         ]);
+        $nbUsuario   = UsuarioTrait::makeUsername($data);
 
         $usuario = Usuario::create($request->all());
+
+        
 
         return [ 'msj' => 'Registro Agregado Correctamente', compact('usuario') ];
     }
@@ -90,7 +93,7 @@ class UsuarioController extends Controller
         
         foreach ($dataUsuarios as $key => $data) 
         {
-            $idColegio   = ($idColegio == null) ?  Usuario::find($data->id_usuario)->id_colegio : $idColegio;
+            $idColegio   = ($idColegio == null) ?  Usuario::find($data->user_id)->id_colegio : $idColegio;
             
             $nbUsuario   = UsuarioTrait::makeNbUsuario($data);
 
@@ -101,16 +104,16 @@ class UsuarioController extends Controller
                 'tx_email'        => $data->tx_email,
                 'id_tipo_usuario' => $idTipoUsuario,
                 'id_origen'       => $data->id,
-                'id_usuario'      => $data->id_usuario, //TODO
+                'user_id'      => $data->user_id, //TODO
             ];
 
             $usuario = UsuarioTrait::store($dataUsuario);
 
             $perfil  = UsuarioPerfil::create([
-                        'id_usuario'     => $usuario->id,
+                        'user_id'     => $usuario->id,
                         'id_perfil'      => $idPerfil,
-                        'id_status'      => 1,
-                        'id_usuario_ed'  => $data->id_usuario
+                        'status_id'      => 1,
+                        'user_id_ed'  => $data->user_id
                         ]);
 
             $usuarios[] = $usuario;
@@ -143,7 +146,7 @@ class UsuarioController extends Controller
 
             'tx_email'        => 'required',
             'tx_password'     => 'required',
-            'id_usuario'      => 'required',
+            'user_id'      => 'required',
         ]);
 
         if($usuario->id_tipo_usuario = 1)
@@ -154,7 +157,7 @@ class UsuarioController extends Controller
         $usuario  = $usuario->update([
             'tx_email'      => $request->tx_email,
             'tx_password'   => Hash::make($request->tx_password),
-            'id_usuario'    => $request->id_usuario,
+            'user_id'    => $request->user_id,
         ]);
         
 
@@ -167,12 +170,12 @@ class UsuarioController extends Controller
         $validate = request()->validate([
             'tx_email'      => 'required',
             'tx_new_email'  => 'required',
-            'id_usuario'    => 'required',
+            'user_id'    => 'required',
         ]);
 
         $usuario  = $usuario->update([
             'tx_email'      => $request->input('tx_new_email'),
-            'id_usuario'    => $request->input('id_usuario'),
+            'user_id'    => $request->input('user_id'),
         ]);
 
         return [ 'msj' => 'Correo Actualizado' , compact('usuario')];
@@ -184,7 +187,7 @@ class UsuarioController extends Controller
             
             'tx_password'   => 'required',
             'tx_new_pass'   => 'required',
-            'id_usuario'    => 'required',
+            'user_id'    => 'required',
         ],
         [
             'tx_password.required' => 'el password es obligatorio'
@@ -194,7 +197,7 @@ class UsuarioController extends Controller
             
             $usuario  = $usuario->update([
                 'tx_password'   => Hash::make($request->tx_new_pass),
-                'id_usuario'    => $request->input('id_usuario'),
+                'user_id'    => $request->input('user_id'),
             ]);
 
             return [ 'msj' => 'Password Actualizado' , compact('usuario')];
@@ -208,14 +211,14 @@ class UsuarioController extends Controller
     public function resetPassword(Request $request, Usuario $usuario)
     {
         $validate = request()->validate([
-            'id_usuario'    => 'required',
+            'user_id'    => 'required',
         ]);
         
         $password = '12345678';
 
         $usuario  = $usuario->update([
             'tx_password' => Hash::make($password),
-            'id_usuario'  => $request->input('id_usuario'),
+            'user_id'  => $request->input('user_id'),
         ]);
 
         return [ 'msj' => 'Password Reiniciado' , compact('usuario')];
@@ -277,7 +280,7 @@ class UsuarioController extends Controller
 
         if ($usuario)
         {
-            $usuario->id_status     = 1;
+            $usuario->status_id     = 1;
             $usuario->verification  = null;
             $usuario->save();
 
@@ -306,7 +309,7 @@ class UsuarioController extends Controller
         $nb_usuario   = $hash['usuario'];
 
         $usuario = Usuario::where('nb_usuario'  , $nb_usuario)
-                           ->where('id_status'  , 2)
+                           ->where('status_id'  , 2)
                            ->first();
 
         $msj     = 'Enlace de confirmacion inválido';

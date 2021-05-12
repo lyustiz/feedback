@@ -40,8 +40,8 @@ class SuscripcionController extends Controller
 			'nu_monto'          => 	'required|numeric|max:999999999',
 			'fe_vencimiento'    => 	'required|date|after:fe_suscripcion',
 			'tx_observaciones'  => 	'nullable|string|max:100',
-			'id_status'         => 	'required|integer|max:999999999',
-			'id_usuario'        => 	'required|integer|max:999999999',
+			'status_id'         => 	'required|integer|max:999999999',
+			'user_id'        => 	'required|integer|max:999999999',
         ]);
 
         $suscripcion = suscripcion::create($request->all());
@@ -78,8 +78,8 @@ class SuscripcionController extends Controller
 			'nu_monto'          => 	'required|numeric|max:999999999',
 			'fe_vencimiento'    => 	'required|date|after:fe_suscripcion',
 			'tx_observaciones'  => 	'nullable|string|max:100',
-			'id_status'         => 	'required|integer|max:999999999',
-			'id_usuario'        => 	'required|integer|max:999999999',
+			'status_id'         => 	'required|integer|max:999999999',
+			'user_id'        => 	'required|integer|max:999999999',
         ]);
 
         $suscripcion = $suscripcion->update($request->all());
@@ -91,7 +91,7 @@ class SuscripcionController extends Controller
     {
         $validate = request()->validate([
 			'tx_observaciones'  => 	'nullable|string|max:100',
-			'id_usuario'        => 	'required|integer|max:999999999',
+			'user_id'        => 	'required|integer|max:999999999',
         ]);
 
         $suscripcion = $suscripcion->update($request->all());

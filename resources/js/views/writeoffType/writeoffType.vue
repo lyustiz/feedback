@@ -28,14 +28,20 @@
 
                 <template v-slot:item="{ item }">
                     <tr>
-                        <td class="text-xs-left">{{ item.name }}</td>
-						<td class="text-xs-left">{{ item.traslate }}</td>
-						<td class="text-xs-left">{{ item.ammount }}</td>
-						<td class="text-xs-left">{{ item.icon }}</td>
-						<td class="text-xs-left">{{ item.color }}</td>
-						<td class="text-xs-left">{{ item.comments }}</td>
-						<td class="text-xs-left">{{ item.status_id }}</td>
-						<td class="text-xs-left">{{ item.user_id }}</td>
+                        <td>{{ item.name }}</td>
+						<td>{{ item.traslate }}</td>
+						<td>{{ item.ammount }}</td>
+						<td>{{ item.icon }}</td>
+						<td>{{ item.color }}</td>
+						<td>{{ item.comments }}</td>
+						<td>
+                            <status-switch 
+                                :loading="loading" 
+                                :resource="resource" 
+                                :item="item" 
+                                @onChangeStatus="changeStatus($event)">
+                            </status-switch>
+                        </td>
                         
                         <td class="text-xs-left">
                             <list-buttons 
@@ -77,10 +83,10 @@
 </template>
 
 <script>
-import listHelper from '@mixins/Applist';
+import Applist from '@mixins/Applist';
 import writeoffTypeForm  from './writeoffTypeForm';
 export default {
-    mixins:     [ listHelper],
+    mixins:     [ Applist],
     components: { 'writeoff-type-form': writeoffTypeForm },
     data () {
     return {
@@ -94,7 +100,6 @@ export default {
 			{ text: 'Color',   value: 'color' },
 			{ text: 'Comments',   value: 'comments' },
 			{ text: 'Status Id',   value: 'status_id' },
-			{ text: 'User Id',   value: 'user_id' },
             { text: 'Acciones', value: 'actions', sortable: false, filterable: false },
         ],
     }

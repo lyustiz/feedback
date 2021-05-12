@@ -287,6 +287,11 @@ class Meta
 
     public function getPrefix($columnName)
     {
-        return substr($columnName, 0, 2);
+        return substr($columnName, 0, -2);
+    }
+
+    public function getSufix($columnName)
+    {
+        return substr($columnName, 0, -2);
     }
 }

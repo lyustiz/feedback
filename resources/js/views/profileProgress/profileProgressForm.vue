@@ -141,7 +141,7 @@
                   
         <v-col cols="12" md="6">
             <v-text-field
-                :rules="[rules.required]"
+                :rules="[rules.max(80)]"
                 v-model="form.comments"
                 label="Comments"
                 placeholder="Indique Comments"
@@ -197,10 +197,10 @@
 
 <script>
 
-import Appform from '@mixins/Appform';
+import AppForm from '@mixins/AppForm';
 
 export default {
-    mixins: [Appform],
+    mixins: [AppForm],
     data() {
         return {
             resource: 'profile_progress',

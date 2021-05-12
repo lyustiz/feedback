@@ -54,7 +54,7 @@ export default
             time: 0,
             timer: null,
             form: {
-                id_usuario: this.IdUser
+                user_id: this.userId
             }
         }
     },

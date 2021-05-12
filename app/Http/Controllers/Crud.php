@@ -24,6 +24,7 @@ class Crud extends Controller
 
     public function tables(Request $request)
     {
+        set_time_limit ( 300 );
         $validate = request()->validate([
             'schema'          => 'required',
         ]);

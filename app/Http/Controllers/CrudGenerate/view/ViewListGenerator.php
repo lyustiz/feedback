@@ -110,7 +110,7 @@ class ViewListGenerator
     {
         $headers = [];
         
-        $exceptions = array_merge($this->hiddenCols, ['id', 'id_usuario', $this->table->primaryKey]);
+        $exceptions = array_merge($this->hiddenCols, ['id', 'user_id', $this->table->primaryKey]);
 
         foreach ($this->columns as $column) 
         {
@@ -127,13 +127,13 @@ class ViewListGenerator
     {
         $listColumns = [];
 
-        $exceptions = array_merge($this->hiddenCols, ['id', 'id_usuario', $this->table->primaryKey]);
+        $exceptions = array_merge($this->hiddenCols, ['id', 'user_id', $this->table->primaryKey]);
         
         foreach ($this->columns as $column) 
         {
             if(!in_array($column->name, $exceptions))
             {
-                if($column->name == 'id_status')
+                if($column->name == 'status_id')
                 {
                     $listColumns[] = $this->listSwitchTemplate($column);
                 }

@@ -153,7 +153,7 @@
 
 <script>
 
-import Appform from '@mixins/Appform';
+import AppForm from '@mixins/AppForm';
 import AppSuscriptorForm from '@views/suscriptor/AppSuscriptorForm'
 
 export default {
@@ -162,7 +162,7 @@ export default {
         AppSuscriptorForm
     },
 
-    mixins: [Appform],
+    mixins: [AppForm],
 
     data() {
         return {
@@ -188,8 +188,8 @@ export default {
 				nu_monto: 	         null,
 				fe_vencimiento: 	 null,
 				tx_observaciones: 	 null,
-				id_status: 	         null,
-				id_usuario: 	     null,
+				status_id: 	         null,
+				user_id: 	     null,
             },
             selects:
             {

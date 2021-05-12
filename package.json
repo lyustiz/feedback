@@ -12,6 +12,7 @@
     "dependencies": {
         "@mdi/font": "^5.8.55",
         "register-service-worker": "^1.7.1",
+        "vue-advanced-cropper": "^1.5.2",
         "vue-custom-scrollbar": "^1.4.0"
     },
     "devDependencies": {

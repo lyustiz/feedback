@@ -37,8 +37,8 @@ class SuscriptorController extends Controller
 			'tx_telefono2'      => 	'nullable|string|max:255',
 			'tx_direccion'      => 	'nullable|string|max:150',
 			'tx_observaciones'  => 	'nullable|string|max:100',
-			'id_status'         => 	'required|integer|max:999999999',
-			'id_usuario'        => 	'required|integer|max:999999999',
+			'status_id'         => 	'required|integer|max:999999999',
+			'user_id'        => 	'required|integer|max:999999999',
         ]);
         $request->nb_subscriptor = ucwords( strtolower($request->nb_subscriptor));
         $suscriptor = suscriptor::create($request->all());
@@ -73,8 +73,8 @@ class SuscriptorController extends Controller
 			'tx_telefono2'      => 	'nullable|string|max:255',
 			'tx_direccion'      => 	'nullable|string|max:150',
 			'tx_observaciones'  => 	'nullable|string|max:100',
-			'id_status'         => 	'required|integer|max:999999999',
-			'id_usuario'        => 	'required|integer|max:999999999',
+			'status_id'         => 	'required|integer|max:999999999',
+			'user_id'        => 	'required|integer|max:999999999',
         ]);
 
         $request->merge(['nb_suscriptor' => ucwords($request->nb_suscriptor) ]);

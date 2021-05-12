@@ -54,7 +54,7 @@ class FotoController extends Controller
 			'tx_src'       =>  'required|string',
 			'id_tipo_foto' =>  'required|integer',
 			'id_origen'    =>  'required|integer',
-			'id_usuario'   =>  'required|integer',
+			'user_id'   =>  'required|integer',
         ]);
 
         $tipoFoto    = TipoFoto::where('id', $request->id_tipo_foto)->first();
@@ -75,7 +75,7 @@ class FotoController extends Controller
         $request->merge([
             'tx_src'       =>  $imgName,
             'nb_foto'      =>  "$tipoFoto->tx_origen $sufix",
-            'id_status'    =>  1
+            'status_id'    =>  1
         ]);
 
         $foto = foto::create($request->all());
@@ -120,8 +120,8 @@ class FotoController extends Controller
 			'id_tipo_foto'      => 	'required|integer',
 			'id_origen'        => 	'required|integer',
 			'tx_observaciones'  => 	'nullable|string|max:100',
-			'id_status'         => 	'required|integer',
-			'id_usuario'        => 	'required|integer',
+			'status_id'         => 	'required|integer',
+			'user_id'        => 	'required|integer',
         ]);
 
         $foto = $foto->update($request->all());

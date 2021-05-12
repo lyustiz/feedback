@@ -103,7 +103,7 @@ export default {
 			{ text: 'Monto',   value: 'nu_monto' },
 			{ text: 'Vencimiento',   value: 'fe_vencimiento' },
 			{ text: 'Observaciones',   value: 'tx_observaciones' },
-			{ text: 'Status',   value: 'id_status' },
+			{ text: 'Status',   value: 'status_id' },
             { text: 'Acciones', value: 'actions', sortable: false, filterable: false },
         ],
     }

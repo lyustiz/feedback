@@ -5,34 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- SEO -->
-    <meta name="description" content="AmoLatina"/>
-    <meta name="keywords" content="AmoLatina,, bingo, telebingo, linea">
+    <meta name="description" content="criptoweb"/>
+    <meta name="keywords" content="criptoweb,, bingo, telebingo, linea">
     <meta name="robots" content="index,follow"/>
     <meta name="googlebot" content="index,follow"/>
     <meta name="googlebot-video" content="index,follow"/>
     <meta name="googlebot-image" content="index,follow"/>
     <meta name="author" content="">
-    <meta name="owner" content="AmoLatina">
-    <meta name="copyright" content="AmoLatina" />
+    <meta name="owner" content="criptoweb">
+    <meta name="copyright" content="criptoweb" />
 
     <!-- Schema.org Google -->
-    <meta itemprop="name" content="AmoLatina">
-    <meta itemprop="description" content="AmoLatina.">
-    <meta itemprop="image" content="https://AmoLatinacom/images/logo.jpg">
+    <meta itemprop="name" content="criptoweb">
+    <meta itemprop="description" content="criptoweb.">
+    <meta itemprop="image" content="https://criptowebcom/images/logo.jpg">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="AmoLatina">
-    <meta name="twitter:description" content="AmoLatina.">
-    <meta name="twitter:site" content="@AmoLatina">
-    <meta name="twitter:image:src" content="https://AmoLatina.com/images/logo.jpg">
+    <meta name="twitter:title" content="criptoweb">
+    <meta name="twitter:description" content="criptoweb.">
+    <meta name="twitter:site" content="@criptoweb">
+    <meta name="twitter:image:src" content="https://criptoweb.com/images/logo.jpg">
 
     <!-- Facebook, -->
-    <meta name="og:title" content="AmoLatina">
-    <meta name="og:description" content="AmoLatina.">
-    <meta name="og:image" content="https://AmoLatina.com/images/logo.jpg">
-    <meta name="og:url" content="https://AmoLatina.com/">
-    <meta name="og:site_name" content="AmoLatina">
+    <meta name="og:title" content="criptoweb">
+    <meta name="og:description" content="criptoweb.">
+    <meta name="og:image" content="https://criptoweb.com/images/logo.jpg">
+    <meta name="og:url" content="https://criptoweb.com/">
+    <meta name="og:site_name" content="criptoweb">
     <meta name="og:locale" content="es_Ve">
     <meta name="og:type" content="app">
 
@@ -42,7 +42,6 @@
 
      <!-- Material Icons -->
     <link rel="stylesheet" href="/assets/googlefonts/css/css.css">
-    <link href="https://fonts.cdnfonts.com/css/komika-axis" rel="stylesheet">
 	
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -80,15 +79,13 @@
     
 </head>
 <body class="custom-scroll">
-    <div id="app">
 	
-	<v-app v-cloak>
+	<v-app id="app" v-cloak>
 
 	  @yield('content')
 	
 	</v-app>
 	
-	</div>
      
 	<!-- Scripts Principal -->
     <script src="{{ mix('js/app.js') }}" defer></script>

@@ -5,44 +5,47 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 export default {
     created()
     {
-      //this.$route.name = 'welcome';
-      /*   let auth     = localStorage.getItem('auth');
-        let token    = localStorage.getItem('token');
-        let user     = localStorage.getItem('user');
-        let expire   = localStorage.getItem('expire');
-        let profiles = localStorage.getItem('profiles');
-        let modules  = localStorage.getItem('modules');
+        console.log(this.$route.name)
+        
+        let auth            = localStorage.getItem('auth');
+        let user            = localStorage.getItem('user');
+        let role            = localStorage.getItem('role');
+        let menu            = localStorage.getItem('menu');
+        let agency          = localStorage.getItem('agency');
+        let amolatina_token = localStorage.getItem('amolatina_token');
         
         if(auth==='true') // TODO:check expire
         {
-            console.log('log')
             const data ={
                             user: JSON.parse(user),
-                            token,
-                            expire,
-                            profiles: JSON.parse(profiles),
+                            role: JSON.parse(role),
+                            menu: JSON.parse(menu),
+                            agency: JSON.parse(agency),
+                            amolatina_token: amolatina_token
                         };
             
             this.$store.dispatch('autenticate', data)
+            if(this.$route.name == 'login')
+            {
+                this.navigateToName('home');
+            } 
         }
         else
         {
             this.$store.dispatch('unatenticate')
-            this.navegateTo('/')
-        }*/
+        }
         
     },
     computed: 
     {
         layout()
         {
-           if(this.$route.name == 'admin')
+           if(this.$route.name ==  'welcome')
            {
-               return 'main-layout'
+               return 'welcome-layout'
            }
 
            if(this.$route.name == 'login')
@@ -50,7 +53,7 @@ export default {
                return 'login-layout'
            }
 
-           return 'welcome-layout'
+           return 'main-layout'
            
 
           /*  return this.$store.getters['getLayout'] */
@@ -86,9 +89,15 @@ export default {
     .v-btn--floating .v-btn__content {
         flex: 1 0 auto;
     }
-    .v-application {
-        background-color: var(--v-background-base) !important;
+
+    .main-color{
+        background: linear-gradient(107deg, rgb(37, 96, 159) 0%, rgb(20, 37, 54) 100%);
+        }
+
+    .v-application{
+        background: linear-gradient(107deg, rgb(37, 96, 159) 0%, rgb(20, 37, 54) 100%) !important;
     }
+    
     .pointer{
         cursor: pointer;
     }

@@ -41,7 +41,7 @@ class HomeController extends Controller
 
     public function getData()
     {
-        $foto = Foto::select('nb_foto', 'tx_src','id_tipo_foto','id_origen','id_status')
+        $foto = Foto::select('nb_foto', 'tx_src','id_tipo_foto','id_origen','status_id')
                     ->with(['sede:id,nb_sede'])
                     ->activo()
                     ->orderBy('id_origen', 'asc')
@@ -55,7 +55,7 @@ class HomeController extends Controller
                              'tx_foto',
                              'tx_telefono',
                              'tx_whatsapp',
-                             'id_status')
+                             'status_id')
                         ->with(['foto:nb_foto,tx_src,id_tipo_foto,id_origen'])
                         ->activo()
                         ->orderBy('id', 'asc')
@@ -64,7 +64,7 @@ class HomeController extends Controller
         $enlace = Enlace::select('nb_enlace',
                                  'id_tipo_enlace',
                                  'tx_url',
-                                 'id_status')
+                                 'status_id')
                         ->activo()
                         ->get();
 

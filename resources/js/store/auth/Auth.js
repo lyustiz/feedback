@@ -2,39 +2,37 @@ export default
 {
 	state(){
 		return{
-			token:  	null,
-			expire:     null,
-			auth: 		false,
-			user: 		null,
-			userid: 	1,
-			username: 	null,
-			profile:	null,
-			profiles: 	[],
-			modulos:    [],
-			menus:    [],
+			token:  		null,
+			amolatinaToken: null,
+			expire:     	null,
+			auth: 			false,
+			user: 			null,
+			userid: 		null,
+			username: 		null,
+			name:       	null,
+			role:			null,
+			modules:    	[],
+			menu:       	[],
+			agency:     	null,
 		}
 	},
 
 	getters:
 	{
 		getToken:   	    state => state.token,
+		getAmolatinaToken:  state => state.token,
 		getExpire:   	    state => state.expire,
 		getAuth: 		    state => state.auth,
 		getUser:  		    state => state.user,
 		getUserid:  	    state => state.userid,
 		getUsername:  	    state => state.username,
-		getProfile:   	    state => state.profile,
-		getProfiles:   	    state => state.profiles,
-		getFoto:   	        state => state.user.foto,
-		getAlumno:   	    state => state.user.alumno,
-		getAlumnoGrado:     state => state.user.alumno.grado,
-		getAlumnoGrupo:     state => state.user.alumno.grupo,
-		getDocente:	        state => state.user.docente,
-		getDocenteMateria:  state => state.user.docente.materia,
-		getPariente:   	    state => state.user.pariente,
-		getParienteAlumno:  state => state.user.pariente.alumno,
-		getEmpleado:   	    state => state.user.empleado,
-		getModules:   	    state => state.user.modules,
+		getName:  	        state => state.name,
+		getRole:   	        state => state.role,
+		getUserPhoto:   	state => (state.user) ? state.user.photo : null,
+		getModules:   	    state => state.modules,
+		getMenu:   	    	state => state.menu,
+		getAgency:   	    state => state.agency,
+		
 	},
 
 	mutations:
@@ -43,6 +41,12 @@ export default
         {
 			state.token		= token
 			localStorage.setItem("token", 	token)
+		},
+
+		setAmolatinaToken (state, token)
+        {
+			state.token		= token
+			localStorage.setItem("amolatina_token", 	token)
 		},
 
 		setExpire (state, expire)
@@ -59,44 +63,36 @@ export default
 		
 		setUser(state, user)
 		{
-			state.user  	= user
-			state.userid   	= user.id
-			state.username 	= user.nb_usuario
+			state.user  	=  user
+			state.userid   	= (user) ? user.id : null
+			state.username 	= (user) ? user.username : null 
+			state.name 	    = (user) ? user.name : null
+			state.photo     = (user) ? user.photo : null
 			localStorage.setItem("user", (user)  ? JSON.stringify(user): null)			
 		},
 
-		setUserid(state, userid)
-		{
-			state.userid   = userid
-		},
-
-		setUsername(state, username)
-		{
-			state.username = username
-		},
-
-		setProfile (state, profile)
+		setRole (state, role)
         {
-			state.profile  = profile
+			state.role  = role
+			localStorage.setItem("role", (role)  ? JSON.stringify(role): null)
 		},
 
-		setProfiles (state, profiles)
-        {
-			state.profiles	= profiles
-			state.profile   = profiles[0]
-			localStorage.setItem("profiles", (profiles)  ? JSON.stringify(profiles): null	)
-		},
-
-		setFoto (state, foto)
+		setPhoto (state, foto)
 		{
 			state.user.foto  = foto
 			localStorage.setItem("user", state.user)
 		},
 
-		setModules (state, modules)
+		setMenu (state, menu)
         {
-			state.modules	= modules
-			localStorage.setItem("modules", (modules)  ? JSON.stringify(modules): null	)
+			state.menu	= menu
+			localStorage.setItem("menu", (menu)  ? JSON.stringify(menu): [])
+		},
+
+		setAgency (state, agency)
+        {
+			state.agency	= agency
+			localStorage.setItem("agency", (agency)  ? JSON.stringify(agency): [])
 		},
 
     },
@@ -107,38 +103,39 @@ export default
 		{
 			return new Promise((resolve, reject) => 
 			{
-				axios.get('/sanctum/csrf-cookie').then(response => {
-					axios.post('/api/' + 'login', credentials)
-				.then(response => 
-				{
-					if (response.status == 200)
-					{
-						const 	data = {
-									user: 	  response.data.user,
-									token: 	  response.data.auth,
-									expire:   response.data.expires_in,
-									profiles: response.data.profiles,
-								};
+				document.cookie = "XSRF-TOKEN= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+				axios.get('/sanctum/csrf-cookie').then((tokenresp) => {
+					console.log('sactum', tokenresp)
+						axios.post('/api/' + 'login', credentials).then(response => 
+							{
+								console.log('login',response)
+								if (response.status == 200)
+								{
+									const data = {
+										user: response.data.user,
+										role: response.data.role,
+										menu: response.data.menu,
+										agency: response.data.user.agency
+									};
+	
+									dispatch('autenticate', data)
+									resolve( { status: 200, path: response.data.role.path } )
+								}
+								else{
+	
+									dispatch('unatenticate')
+									reject(response)
+								}
+								
+							})
+							.catch(error => 
+							{
+								dispatch('unatenticate')
+								reject(error)
+							})
 
-						dispatch('autenticate', data)
-						resolve( { status: 200, userType: response.data.user.id_tipo_usuario } )
-					}
-					else{
-
-						dispatch('unatenticate')
-						reject(response)
-					}
 					
-				})
-				.catch(error => 
-				{
-					dispatch('unatenticate')
-					reject(error)
-				})
 				});
-				
-				
-				
 			})
         },
 		
@@ -230,7 +227,7 @@ export default
 		{
 			return new Promise((resolve, reject) => 
 			{
-				axios.put(`/api/v1/usuario/${form.id_usuario}/email` , form) 
+				axios.put(`/api/v1/usuario/${form.user_id}/email` , form) 
 				.then( response =>
 				{
 					let user      =  JSON.parse(JSON.stringify(state.user));
@@ -248,35 +245,25 @@ export default
 			})
 		},
 
-		autenticate({ commit, dispatch }, data)
+		autenticate({ commit }, data)
 		{
-			commit('setUser'  	 , data.user);
-			commit('setToken' 	 , data.token);
-			commit('setExpire'   , data.expire);
-			commit('setProfiles' , data.profiles);
-			commit('setAuth'  	 , true);
-
-			commit('setColegio'       , data.user.colegio )
-			commit('setCalendario'    , data.user.colegio.calendario )
-			commit('setPeriodoActivo' , data.user.colegio.calendario.periodo_activo )
+			commit('setUser'  	 		, data.user);
+			commit('setRole'  	 		, data.role);
+			commit('setMenu'  	 		, data.menu);
+			commit('setAgency'   		, data.agency);
+			commit('setAmolatinaToken'  , data.agency.token);
+			commit('setAuth'  	 		, true);
 		},
 
 		unatenticate({ commit })
 		{
-			commit('setUser'  	 , { id: null, nb_usuario: null } );
-			commit('setToken' 	 , null);
-			commit('setExpire'   , null);
-			commit('setProfiles' , []);
-			commit('setProfiles' , []);
+			commit('setUser'  	 , null);
 			commit('setAuth'  	 , false);
-
-			commit('setColegio'       , null )
-			commit('setCalendario'    , null )
-			commit('setPeriodoActivo' , null )
-
+			commit('setRole'  	 , null);
+			commit('setMenu'  	 , null);
+			commit('setAgency'   , null);
 			localStorage.clear()
 			localStorage.setItem("auth", 	false)
-			
 		}
 
     }

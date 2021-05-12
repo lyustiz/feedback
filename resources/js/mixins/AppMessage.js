@@ -55,7 +55,7 @@ export default {
                     break;
 
                     case 401:
-                        msj = 'Session invalida favor Ingresar nuevamente '
+                        msj = 'Session finalizada favor Ingresar nuevamente '
                         this.showMsjBar(msj, 'error')
                         setTimeout(() => {
                             axios.post('logout')
@@ -68,7 +68,7 @@ export default {
                             })
                             .catch(error =>
                             {
-                                this.mostrarBarraMsj( 'Error en LogOut', 'error')
+                                //this.mostrarBarraMsj( 'Error en LogOut', 'error')
                                 localStorage.removeItem("auth")
                                 window.location='/'
                             })

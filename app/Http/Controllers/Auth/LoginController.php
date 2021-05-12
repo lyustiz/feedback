@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
 class LoginController extends Controller
@@ -35,7 +36,7 @@ class LoginController extends Controller
 
     public function username()
     {
-        return 'nb_usuario';
+        return 'username';
     }
 
     
@@ -49,49 +50,44 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    public function authenticate(Request $request)
+    public function login(Request $request)
     {
         $request->validate([
-            'email'       => 'required|email',
-            'password'    => 'required',
-            'device_name' => 'required'
-        ]);
-
-        if(filter_var($request->nb_usuario, FILTER_VALIDATE_EMAIL))
-        {
-            $credentials = [
-                'tx_email' => $request->nb_usuario,
-                'password' => $request->password
-            ];
-        } 
-        
-        $credentials = $request->only(['nb_usuario', 'password']); 
-
-        $user = User::where('email', $request->email)->first();
-
-
-        $request->validate([
-            'email' => 'required|email',
+            'email'    => 'required',
             'password' => 'required',
-            'device_name' => 'required'
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $credentials = $request->only('email', 'password');
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
-            ]);
+        if (Auth::attempt($credentials)) {
+            
+            $user    = Auth::user();
+
+            if($user->status_id == 1) 
+            {
+                $request->session()->regenerate();
+
+                $user->load(['agency:id,name,amolatina_id,token' ]);
+                $role  = $user->role; 
+                $menu  = $role->menu; 
+
+                return [ 
+                    'user' => $user,
+                    'role' => $role,
+                    'menu' => $menu
+                ]; 
+            }
+
+            throw ValidationException::withMessages(['userInactive' => "Usuario Inactivo consulte con el Administrador"]);
         }
 
-        return $user->createToken($request->device_name)->plainTextToken;
+        return response('Usuario o Contraseña Invalida', 403) ;
 
-       
     }
 
     public function logout(Request $request)
     {
-        $request->user()->tokens()->delete();
+        Auth::guard('web')->logout();
     }
 
 

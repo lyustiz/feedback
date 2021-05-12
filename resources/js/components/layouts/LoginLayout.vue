@@ -3,8 +3,6 @@
 
 <v-container>
 
-    <v-btn fab absolute color="warning" left @click="navigateToName('welcome')"><v-icon>mdi-home</v-icon></v-btn>
-
     <v-row class="fill-height" >
 
           <v-main class="fill-height">

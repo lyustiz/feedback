@@ -4,7 +4,7 @@
         
         <template v-slot:activator="{ on }">
             <v-btn small class="ml-3" :color="iconColor" fab v-on="on" depressed>
-                <v-icon color="grey">mdi-dots-vertical</v-icon>
+                <v-icon color="white">mdi-dots-vertical</v-icon>
             </v-btn>
         </template>
 

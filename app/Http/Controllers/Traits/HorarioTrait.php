@@ -22,8 +22,8 @@ trait HorarioTrait
             'tx_entrada'        => 'nullable',
             'tx_salida'         => 'nullable',
             'tx_observaciones'  => 'nullable',
-            'id_status'         => 'required',
-            'id_usuario'        => 'required',
+            'status_id'         => 'required',
+            'user_id'        => 'required',
 
         ])->validate();
 
@@ -52,8 +52,8 @@ trait HorarioTrait
                 'tx_entrada'        => null,
                 'tx_salida'         => null,
                 'tx_observaciones'  => null,
-                'id_status'         => 1,
-                'id_usuario'        => $data['id_usuario'],
+                'status_id'         => 1,
+                'user_id'        => $data['user_id'],
             ]);
 
             $horarios[] = $horario['horario'];
@@ -78,8 +78,8 @@ trait HorarioTrait
             'tx_icono'          => 'required',
             'tx_foto'           => 'required',
             'tx_observaciones'  => 'required',
-            'id_status'         => 'required',
-            'id_usuario'        => 'required',
+            'status_id'         => 'required',
+            'user_id'        => 'required',
 
         ]);
         

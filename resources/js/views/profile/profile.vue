@@ -28,20 +28,26 @@
 
                 <template v-slot:item="{ item }">
                     <tr>
-                        <td class="text-xs-left">{{ item.amolatina_id }}</td>
-						<td class="text-xs-left">{{ item.name }}</td>
-						<td class="text-xs-left">{{ item.birthday }}</td>
-						<td class="text-xs-left">{{ item.age }}</td>
-						<td class="text-xs-left">{{ item.photo }}</td>
-						<td class="text-xs-left">{{ item.gender }}</td>
-						<td class="text-xs-left">{{ item.preference }}</td>
-						<td class="text-xs-left">{{ item.country }}</td>
-						<td class="text-xs-left">{{ item.city }}</td>
-						<td class="text-xs-left">{{ item.minage }}</td>
-						<td class="text-xs-left">{{ item.maxage }}</td>
-						<td class="text-xs-left">{{ item.comments }}</td>
-						<td class="text-xs-left">{{ item.status_id }}</td>
-						<td class="text-xs-left">{{ item.user_id }}</td>
+                        <td>{{ item.amolatina_id }}</td>
+						<td>{{ item.name }}</td>
+						<td>{{ item.birthday }}</td>
+						<td>{{ item.age }}</td>
+						<td>{{ item.photo }}</td>
+						<td>{{ item.gender }}</td>
+						<td>{{ item.preference }}</td>
+						<td>{{ item.country }}</td>
+						<td>{{ item.city }}</td>
+						<td>{{ item.minage }}</td>
+						<td>{{ item.maxage }}</td>
+						<td>{{ item.comments }}</td>
+						<td>
+                            <status-switch 
+                                :loading="loading" 
+                                :resource="resource" 
+                                :item="item" 
+                                @onChangeStatus="changeStatus($event)">
+                            </status-switch>
+                        </td>
                         
                         <td class="text-xs-left">
                             <list-buttons 
@@ -83,10 +89,10 @@
 </template>
 
 <script>
-import listHelper from '@mixins/Applist';
+import Applist from '@mixins/Applist';
 import profileForm  from './profileForm';
 export default {
-    mixins:     [ listHelper],
+    mixins:     [ Applist],
     components: { 'profile-form': profileForm },
     data () {
     return {
@@ -106,7 +112,6 @@ export default {
 			{ text: 'Maxage',   value: 'maxage' },
 			{ text: 'Comments',   value: 'comments' },
 			{ text: 'Status Id',   value: 'status_id' },
-			{ text: 'User Id',   value: 'user_id' },
             { text: 'Acciones', value: 'actions', sortable: false, filterable: false },
         ],
     }

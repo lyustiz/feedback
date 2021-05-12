@@ -28,12 +28,18 @@
 
                 <template v-slot:item="{ item }">
                     <tr>
-                        <td class="text-xs-left">{{ item.day }}</td>
-						<td class="text-xs-left">{{ item.penalty_type_id }}</td>
-						<td class="text-xs-left">{{ item.user_id }}</td>
-						<td class="text-xs-left">{{ item.comments }}</td>
-						<td class="text-xs-left">{{ item.status_id }}</td>
-						<td class="text-xs-left">{{ item.user_id_ed }}</td>
+                        <td>{{ item.day }}</td>
+						<td>{{ item.penalty_type_id }}</td>
+						<td>{{ item.comments }}</td>
+						<td>
+                            <status-switch 
+                                :loading="loading" 
+                                :resource="resource" 
+                                :item="item" 
+                                @onChangeStatus="changeStatus($event)">
+                            </status-switch>
+                        </td>
+						<td>{{ item.user_id_ed }}</td>
                         
                         <td class="text-xs-left">
                             <list-buttons 
@@ -75,10 +81,10 @@
 </template>
 
 <script>
-import listHelper from '@mixins/Applist';
+import Applist from '@mixins/Applist';
 import penaltyForm  from './penaltyForm';
 export default {
-    mixins:     [ listHelper],
+    mixins:     [ Applist],
     components: { 'penalty-form': penaltyForm },
     data () {
     return {
@@ -86,8 +92,7 @@ export default {
         resource: 'penalty',
         headers: [
             { text: 'Day',   value: 'day' },
-			{ text: 'Penalty Tyid',   value: 'penalty_type_id' },
-			{ text: 'User Id',   value: 'user_id' },
+			{ text: 'Penalty Type Id',   value: 'penalty_type_id' },
 			{ text: 'Comments',   value: 'comments' },
 			{ text: 'Status Id',   value: 'status_id' },
 			{ text: 'User Id Ed',   value: 'user_id_ed' },

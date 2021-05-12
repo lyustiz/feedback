@@ -28,26 +28,6 @@
                 dense
             ></v-text-field>
         </v-col>
-                  
-        <v-col cols="12" md="6">
-            <v-text-field
-                :rules="[rules.required]"
-                v-model="form.status_id"
-                label="Status Id"
-                placeholder="Indique Status Id"
-                dense
-            ></v-text-field>
-        </v-col>
-                  
-        <v-col cols="12" md="6">
-            <v-text-field
-                :rules="[rules.required]"
-                v-model="form.user_id"
-                label="User Id"
-                placeholder="Indique User Id"
-                dense
-            ></v-text-field>
-        </v-col>
                  
 
         </v-row>
@@ -77,10 +57,10 @@
 
 <script>
 
-import Appform from '@mixins/Appform';
+import AppForm from '@mixins/AppForm';
 
 export default {
-    mixins: [Appform],
+    mixins: [AppForm],
     data() {
         return {
             resource: 'role',

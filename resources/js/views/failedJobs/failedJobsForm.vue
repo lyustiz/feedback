@@ -110,10 +110,10 @@
 
 <script>
 
-import Appform from '@mixins/Appform';
+import AppForm from '@mixins/AppForm';
 
 export default {
-    mixins: [Appform],
+    mixins: [AppForm],
     data() {
         return {
             resource: 'failed_jobs',

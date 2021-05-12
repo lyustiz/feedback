@@ -6,16 +6,32 @@ use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
 {
-    //
+    protected $table 	  = 'group';
 
-    public function scopeActivo($query)
+    protected $fillable   = [
+                            'name',
+	 	 	 	 	 	 	'value',
+	 	 	 	 	 	 	'comments',
+	 	 	 	 	 	 	'status_id',
+	 	 	 	 	 	 	'manager_id',
+	 	 	 	 	 	 	'user_id'
+                            ]; 
+    
+    protected $hidden     = [
+                            'created_at',
+	 	 	 	 	 	 	'updated_at'
+                            ];
+
+
+
+    public function scopeActive($query, $active=false)
     {
-        return $query->where('status_id', 1);
+        return ($active) ?  $query->where('status_id', 1) : $query;
     }
 
     public function scopeComboData($query)
     {
-        return $query->addSelect('id', 'nb_');
+        return $query->addSelect('id', 'name');
     }
 
     public function status()

@@ -6,10 +6,9 @@
       color="rgba(0, 0, 0, 0.2)"
       dark
       flat
-      hide-on-scroll
       height="45"
     >
-      <v-avatar size="35" color="white" class="mr-2 pointer" @click="navigateToName('welcome')">
+      <v-avatar size="35" color="white" class="mr-2 pointer" @click="navigateToName('home')">
         <img src="/images/logo.jpg" alt="Bingolin">
       </v-avatar>
 
@@ -54,9 +53,8 @@
         Registro
       </v-btn>-->
 
-      <v-btn depressed small rounded color="success" @click="navigateToName('admin')">
-        <v-icon left>mdi-account</v-icon>
-        Login
+      <v-btn icon small color="red" @click="logout">
+        <v-icon left>mdi-export</v-icon>
       </v-btn> 
 
     
@@ -102,27 +100,43 @@
 </template>
 <script>
 
-    import { mapMutations } from 'vuex';
+    import AppData from '@mixins/AppData'
     export default {
+
+        mixins:[AppData], 
 
         computed: {
             auth()
             {
-                return 1 //return this.$store.getters['getAuth']
+                return this.$store.getters['getAuth']
             },
         },
 
         data(){
             return {
                 loading : false,
-                promocion: false,
-                 items: [
-        { title: 'Semanal' },
-        { title: 'Diario' },
-        { title: 'Especial Navideño' },
-      ],
             }
         },
+
+        methods: {
+          logout()
+          {
+            this.loading = true
+            this.showMessage('saliendo de la aplicacion');
+
+            this.$store.dispatch('logout', this.form)
+              .catch(error =>
+              {                
+                  console.log(error);
+              })
+              .then(() => 
+              {
+                  this.navigateToName('welcome')
+                  this.loading = false
+              })
+
+          },
+        }
 
     }
 </script>

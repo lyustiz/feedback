@@ -255,10 +255,10 @@ export default {
                         'cyan',
                         'red'
                     ],
-            sexoIcons: 
+            sexIcons: 
             [
-                {value: 'M', icon: 'mdi-human-male',   color: 'blue', label: 'Masculino'},
-                {value: 'F', icon: 'mdi-human-female', color: 'pink', label: 'Femenino'}
+                {value: 'mal', icon: 'mdi-human-male',   color: 'blue', label: 'Chico'},
+                {value: 'fem', icon: 'mdi-human-female', color: 'pink', label: 'Chica'}
             ],
             statusIcons:
             [

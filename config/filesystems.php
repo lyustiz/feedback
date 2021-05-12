@@ -42,10 +42,17 @@ return [
             'visibility' => 'public',
         ],
 
-        'foto' => [
+        'photo_operator' => [
             'driver' => 'local',
-            'root' => storage_path('app/public/foto'),
-            'url' => env('APP_URL').'/storage/foto',
+            'root' => storage_path('app/public/photo/operator'),
+            'url' => env('APP_URL').'/storage/photo/operator',
+            'visibility' => 'public',
+        ],
+
+        'photo_user' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/photo/user'),
+            'url' => env('APP_URL').'/storage/photo/user',
             'visibility' => 'public',
         ],
 

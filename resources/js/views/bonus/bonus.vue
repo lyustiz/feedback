@@ -28,16 +28,15 @@
 
                 <template v-slot:item="{ item }">
                     <tr>
-                        <td class="text-xs-left">{{ item.bonus_id }}</td>
-						<td class="text-xs-left">{{ item.service }}</td>
-						<td class="text-xs-left">{{ item.fact }}</td>
-						<td class="text-xs-left">{{ item.cllient_id }}</td>
-						<td class="text-xs-left">{{ item.profile_id }}</td>
-						<td class="text-xs-left">{{ item.points }}</td>
-						<td class="text-xs-left">{{ item.profit }}</td>
-						<td class="text-xs-left">{{ item.share }}</td>
-						<td class="text-xs-left">{{ item.comments }}</td>
-						<td class="text-xs-left">{{ item.user_id }}</td>
+                        <td>{{ item.bonus_id }}</td>
+						<td>{{ item.service }}</td>
+						<td>{{ item.fact }}</td>
+						<td>{{ item.cllient_id }}</td>
+						<td>{{ item.profile_id }}</td>
+						<td>{{ item.points }}</td>
+						<td>{{ item.profit }}</td>
+						<td>{{ item.share }}</td>
+						<td>{{ item.comments }}</td>
                         
                         <td class="text-xs-left">
                             <list-buttons 
@@ -79,10 +78,10 @@
 </template>
 
 <script>
-import listHelper from '@mixins/Applist';
+import Applist from '@mixins/Applist';
 import bonusForm  from './bonusForm';
 export default {
-    mixins:     [ listHelper],
+    mixins:     [ Applist],
     components: { 'bonus-form': bonusForm },
     data () {
     return {
@@ -98,7 +97,6 @@ export default {
 			{ text: 'Profit',   value: 'profit' },
 			{ text: 'Share',   value: 'share' },
 			{ text: 'Comments',   value: 'comments' },
-			{ text: 'User Id',   value: 'user_id' },
             { text: 'Acciones', value: 'actions', sortable: false, filterable: false },
         ],
     }

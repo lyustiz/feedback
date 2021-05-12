@@ -28,9 +28,9 @@ class NotificacionTrait
 			'id_destinatario'      => $data['id_destinatario'],
 			'tx_mensaje'           => $data['tx_mensaje'],
             'id_tipo_notificacion' => $data['id_tipo_notificacion'],
-            'id_usuario'           => $data['id_usuario'],
+            'user_id'           => $data['user_id'],
             'fe_notificacion'      => date('Y-m-d'), 
-            'id_status'            => 1 
+            'status_id'            => 1 
         ]);
     }
 
@@ -48,7 +48,7 @@ class NotificacionTrait
                 'id_destinatario'      => $acudiente->id,
                 'tx_mensaje'           => $mensaje,
                 'id_tipo_notificacion' => 4,
-                'id_usuario'           => $data['id_usuario'],
+                'user_id'           => $data['user_id'],
             ]);
         }
         return $notificacion;
@@ -70,7 +70,7 @@ class NotificacionTrait
                 'id_destinatario'      => $IdAlumnoid,
                 'tx_mensaje'           => $mensaje,
                 'id_tipo_notificacion' => $tipo,
-                'id_usuario'           => $data['id_usuario'],
+                'user_id'           => $data['user_id'],
             ]);
         }
         return $notificacion;
@@ -94,7 +94,7 @@ class NotificacionTrait
                 'id_destinatario'      => $alumno->id,
                 'tx_mensaje'           => $mensaje,
                 'id_tipo_notificacion' => $tipo,
-                'id_usuario'           => $data['id_usuario'],
+                'user_id'           => $data['user_id'],
             ]);
         }
         return $notificacion;
@@ -114,7 +114,7 @@ class NotificacionTrait
                 'id_destinatario'      => $alumno->id,
                 'tx_mensaje'           => $mensaje,
                 'id_tipo_notificacion' => $tipo,
-                'id_usuario'           => $data['id_usuario'],
+                'user_id'           => $data['user_id'],
             ]);
         }
         return $notificacion;

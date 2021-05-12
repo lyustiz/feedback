@@ -99,7 +99,7 @@ export default {
 			{ text: 'Icono',   value: 'tx_icono' },
 			{ text: 'Color',   value: 'tx_color' },
 			{ text: 'Observaciones',   value: 'tx_observaciones' },
-			{ text: 'Status',   value: 'id_status' },
+			{ text: 'Status',   value: 'status_id' },
             { text: 'Acciones', value: 'actions', sortable: false, filterable: false },
         ],
     }

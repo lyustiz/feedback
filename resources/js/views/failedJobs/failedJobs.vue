@@ -28,12 +28,12 @@
 
                 <template v-slot:item="{ item }">
                     <tr>
-                        <td class="text-xs-left">{{ item.uuid }}</td>
-						<td class="text-xs-left">{{ item.connection }}</td>
-						<td class="text-xs-left">{{ item.queue }}</td>
-						<td class="text-xs-left">{{ item.payload }}</td>
-						<td class="text-xs-left">{{ item.exception }}</td>
-						<td class="text-xs-left">{{ item.failed_at }}</td>
+                        <td>{{ item.uuid }}</td>
+						<td>{{ item.connection }}</td>
+						<td>{{ item.queue }}</td>
+						<td>{{ item.payload }}</td>
+						<td>{{ item.exception }}</td>
+						<td>{{ item.failed_at }}</td>
                         
                         <td class="text-xs-left">
                             <list-buttons 
@@ -75,10 +75,10 @@
 </template>
 
 <script>
-import listHelper from '@mixins/Applist';
+import Applist from '@mixins/Applist';
 import failedJobsForm  from './failedJobsForm';
 export default {
-    mixins:     [ listHelper],
+    mixins:     [ Applist],
     components: { 'failed-jobs-form': failedJobsForm },
     data () {
     return {

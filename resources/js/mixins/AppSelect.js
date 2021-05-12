@@ -10,19 +10,16 @@ export default {
     { 
         fillSelects()
         {
-            this.selectRequests(this.selects)
-            .then(
+            Promise.all(this.selectRequests(this.selects))
+            .then(results => {
                 
-                axios.spread( (...dataLists) => 
-                {
-                    let i = 0;
-                    for(var key in this.selects) 
-                    {
-                        this.selects[key] = dataLists[i].data
-                        i++;
-                    }
-                })
-            )
+                for (const select of Object.keys(this.selects)) {
+                    
+                    let response = results.find( result  => result.config.url.includes(select))
+
+                    this.selects[select] = response.data
+                }
+            })
             .catch(error =>{
             
                 this.showError(error);
@@ -31,7 +28,7 @@ export default {
             .finally( () =>
             {
                 this.loading = false;
-            });
+            }); 
         },
 
         selectRequests(selects) 
@@ -45,7 +42,7 @@ export default {
                 requests.push(axios.get(this.$App.apiUrl + select + param));
             }
 
-            return axios.all(requests)
+            return requests
             
         },
     } 

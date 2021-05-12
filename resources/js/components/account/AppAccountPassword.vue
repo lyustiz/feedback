@@ -76,7 +76,7 @@ export default {
             form: {
                 tx_password:  '',
                 tx_new_pass:  '',
-                id_usuario:   ''
+                user_id:   ''
             },
             rules: {
                 new_password: [

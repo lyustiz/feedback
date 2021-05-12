@@ -65,12 +65,12 @@ export default {
 				nb_suscriptor: 	  null,
 				tx_documento: 	  null,
 				tx_telefono: 	  null,
-				id_status: 	      null,
-				id_usuario: 	  null,
+				status_id: 	      null,
+				user_id: 	  null,
             },
             default:
             {
-                id_status: 1
+                status_id: 1
             }
         }
     },

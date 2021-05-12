@@ -3,12 +3,4 @@
     name: '{{instanceName}}',
     icon: 'bubble_chart',
     component: {{className}},
-    children:
-    [
-        {
-            path: 'form',
-            name: '{{instanceName}}Form',
-            component: {{className}}Form
-        }
-    ]
 },

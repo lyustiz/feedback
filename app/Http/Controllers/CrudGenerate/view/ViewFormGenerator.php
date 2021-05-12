@@ -69,7 +69,7 @@ class ViewFormGenerator
     {
         foreach ($this->columns as $column )
         {
-            if( $column->name != $this->table->primaryKey && !in_array($column->name, $this->hiddenCols) && $column->name != 'id_usuario')
+            if( $column->name != $this->table->primaryKey && !in_array($column->name, $this->hiddenCols) && $column->name != 'user_id' && $column->name != 'status_id')
             {
                 $this->definition .= $this->fieldTemplates($column);
             }
@@ -126,9 +126,9 @@ class ViewFormGenerator
                 
                 if($column->prefix =='id')
                 {
-                    $fkTableName     = str_replace( 'id_', '', $column->name );
+                    $fkTableName     = str_replace( '_id', '', $column->name );
 
-                    $fkColTableName  = str_replace( 'id_', 'nb_', $column->name );
+                    $fkColTableName  = str_replace( '_id', '', $column->name );
 
                     return $this->fieldTemplate('select', $column->name, $column->labelName, $fkTableName, $fkColTableName, 'id');
                 }
@@ -151,7 +151,7 @@ class ViewFormGenerator
 
     protected function fieldTemplate( $columnType, $columnName, $labelName, $fkTableName = null, $fkColTableName = null, $fkTableId = null )
     {
-        $fkColTableName = str_replace( 'id_', 'nb_', $fkColTableName );
+        $fkColTableName = str_replace( '_id', '', $fkColTableName );
 
         $fkInstanceName = Str::camel($fkTableName); 
         
@@ -215,9 +215,9 @@ class ViewFormGenerator
             foreach ($this->columns as $column) 
             {
                 
-                if($column->prefix =='id' && $column->name != 'id' && $column->name != 'id_usuario')
+                if($column->prefix =='id' && $column->name != 'id' && $column->name != 'user_id')
                 {
-                    $foreignTable  = str_replace( 'id_', '', $column->name );
+                    $foreignTable  = str_replace( '_id', '', $column->name );
 
                     $foreignTable  = Str::camel($foreignTable);
 

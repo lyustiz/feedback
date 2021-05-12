@@ -27,14 +27,19 @@ class Config extends Model
 
 
 
-    public function scopeActivo($query)
+    public function scopeActive($query, $active=false)
     {
-        return $query->where('status_id', 1);
+        return ($active) ?  $query->where('status_id', 1) : $query;
     }
 
     public function scopeComboData($query)
     {
-        return $query->addSelect('id', 'nb_');
+        return $query->addSelect('id', 'name');
+    }
+
+    public function scopeGroup($query, $group=false)
+    {
+        return ($group) ? $query->where('group', $group) : $query; 
     }
 
     public function status()

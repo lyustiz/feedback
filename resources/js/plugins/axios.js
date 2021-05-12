@@ -1,8 +1,11 @@
-window.axios = require('axios');
+const axios = require('axios');
 
-let apiToken = `Bearer ${localStorage.getItem("token")}`
+window.axios = axios.create();
+
+/* let apiToken = `Bearer ${localStorage.getItem("token")}`
             
-window.axios.defaults.headers.common['Authorization']= apiToken
+/* window.axios.defaults.headers.common['Authorization']= apiToken */ 
+
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
@@ -18,3 +21,6 @@ else
 {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
+
+
+window.axiosAmolatina = axios.create();

@@ -22,14 +22,14 @@ class Role extends Model
 
 
 
-    public function scopeActivo($query)
+    public function scopeActive($query, $active=false)
     {
-        return $query->where('status_id', 1);
+        return ($active) ?  $query->where('status_id', 1) : $query;
     }
 
     public function scopeComboData($query)
     {
-        return $query->addSelect('id', 'nb_');
+        return $query->addSelect('id', 'name');
     }
 
     public function status()
@@ -41,4 +41,22 @@ class Role extends Model
     {
         return $this->BelongsTo('App\Models\User', 'user_id');
     }
+
+    public function permission()
+	{
+		return $this->HasMany('App\Models\Permission', 'role_id');
+	}
+
+    public function menu()
+	{
+		return $this->hasManyThrough(
+			
+			'App\Models\Menu', //final
+            'App\Models\Permission', //intermedia
+            'role_id', // fk en intermedia
+            'id', // laocal en origen
+            'id', // local en final
+			'menu_id' // fk en intermedia
+		);
+	}
 }

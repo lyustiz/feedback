@@ -28,22 +28,28 @@
 
                 <template v-slot:item="{ item }">
                     <tr>
-                        <td class="text-xs-left">{{ item.username }}</td>
-						<td class="text-xs-left">{{ item.password }}</td>
-						<td class="text-xs-left">{{ item.name }}</td>
-						<td class="text-xs-left">{{ item.surname }}</td>
-						<td class="text-xs-left">{{ item.role_id }}</td>
-						<td class="text-xs-left">{{ item.agency_id }}</td>
-						<td class="text-xs-left">{{ item.group_id }}</td>
-						<td class="text-xs-left">{{ item.photo }}</td>
-						<td class="text-xs-left">{{ item.email }}</td>
-						<td class="text-xs-left">{{ item.verification }}</td>
-						<td class="text-xs-left">{{ item.email_verified_at }}</td>
-						<td class="text-xs-left">{{ item.remember_token }}</td>
-						<td class="text-xs-left">{{ item.api_token }}</td>
-						<td class="text-xs-left">{{ item.comments }}</td>
-						<td class="text-xs-left">{{ item.status_id }}</td>
-						<td class="text-xs-left">{{ item.user_id }}</td>
+                        <td>{{ item.username }}</td>
+						<td>{{ item.password }}</td>
+						<td>{{ item.name }}</td>
+						<td>{{ item.surname }}</td>
+						<td>{{ item.role_id }}</td>
+						<td>{{ item.agency_id }}</td>
+						<td>{{ item.group_id }}</td>
+						<td>{{ item.photo }}</td>
+						<td>{{ item.email }}</td>
+						<td>{{ item.verification }}</td>
+						<td>{{ item.email_verified_at }}</td>
+						<td>{{ item.remember_token }}</td>
+						<td>{{ item.api_token }}</td>
+						<td>{{ item.comments }}</td>
+						<td>
+                            <status-switch 
+                                :loading="loading" 
+                                :resource="resource" 
+                                :item="item" 
+                                @onChangeStatus="changeStatus($event)">
+                            </status-switch>
+                        </td>
                         
                         <td class="text-xs-left">
                             <list-buttons 
@@ -85,10 +91,10 @@
 </template>
 
 <script>
-import listHelper from '@mixins/Applist';
+import Applist from '@mixins/Applist';
 import userForm  from './userForm';
 export default {
-    mixins:     [ listHelper],
+    mixins:     [ Applist],
     components: { 'user-form': userForm },
     data () {
     return {
@@ -110,7 +116,6 @@ export default {
 			{ text: 'Api Token',   value: 'api_token' },
 			{ text: 'Comments',   value: 'comments' },
 			{ text: 'Status Id',   value: 'status_id' },
-			{ text: 'User Id',   value: 'user_id' },
             { text: 'Acciones', value: 'actions', sortable: false, filterable: false },
         ],
     }

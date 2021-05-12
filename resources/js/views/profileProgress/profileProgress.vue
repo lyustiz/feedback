@@ -28,22 +28,22 @@
 
                 <template v-slot:item="{ item }">
                     <tr>
-                        <td class="text-xs-left">{{ item.profile_id }}</td>
-						<td class="text-xs-left">{{ item.progress_day }}</td>
-						<td class="text-xs-left">{{ item.progress_month }}</td>
-						<td class="text-xs-left">{{ item.progress_total }}</td>
-						<td class="text-xs-left">{{ item.progress_max_day }}</td>
-						<td class="text-xs-left">{{ item.progress_max_month }}</td>
-						<td class="text-xs-left">{{ item.crowns }}</td>
-						<td class="text-xs-left">{{ item.hearts }}</td>
-						<td class="text-xs-left">{{ item.milestone_day }}</td>
-						<td class="text-xs-left">{{ item.milestone_month }}</td>
-						<td class="text-xs-left">{{ item.task_mails }}</td>
-						<td class="text-xs-left">{{ item.task_photos }}</td>
-						<td class="text-xs-left">{{ item.task_videos }}</td>
-						<td class="text-xs-left">{{ item.comments }}</td>
-						<td class="text-xs-left">{{ item.status_id }}</td>
-						<td class="text-xs-left">{{ item.user_id }}</td>
+                        <td>{{ item.profile_id }}</td>
+						<td>{{ item.progress_day }}</td>
+						<td>{{ item.progress_month }}</td>
+						<td>{{ item.progress_total }}</td>
+						<td>{{ item.progress_max_day }}</td>
+						<td>{{ item.progress_max_month }}</td>
+						<td>{{ item.crowns }}</td>
+						<td>{{ item.hearts }}</td>
+						<td>{{ item.milestone_day }}</td>
+						<td>{{ item.milestone_month }}</td>
+						<td>{{ item.task_mails }}</td>
+						<td>{{ item.task_photos }}</td>
+						<td>{{ item.task_videos }}</td>
+						<td>{{ item.comments }}</td>
+						<td>{{ item.status_id }}</td>
+						<td>{{ item.user_id }}</td>
                         
                         <td class="text-xs-left">
                             <list-buttons 
@@ -85,10 +85,10 @@
 </template>
 
 <script>
-import listHelper from '@mixins/Applist';
+import Applist from '@mixins/Applist';
 import profileProgressForm  from './profileProgressForm';
 export default {
-    mixins:     [ listHelper],
+    mixins:     [ Applist],
     components: { 'profile-progress-form': profileProgressForm },
     data () {
     return {

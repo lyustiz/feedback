@@ -113,7 +113,7 @@ export default {
 			{ text: 'Telefono',   value: 'tx_telefono' },
 			{ text: 'Telefono2',   value: 'tx_telefono2' },
 			{ text: 'Direccion',   value: 'tx_direccion' },
-			{ text: 'Status',   value: 'id_status' },
+			{ text: 'Status',   value: 'status_id' },
             { text: 'Acciones', value: 'actions', sortable: false, filterable: false },
         ],
     }

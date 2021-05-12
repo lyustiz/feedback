@@ -94,7 +94,7 @@
             :items="selects.status"
             item-text="nb_status"
             item-value="id"
-            v-model="form.id_status"
+            v-model="form.status_id"
             :rules="[rules.select]"
             label="Status"
             :loading="loading"
@@ -130,10 +130,10 @@
 
 <script>
 
-import Appform from '@mixins/Appform';
+import AppForm from '@mixins/AppForm';
 
 export default {
-    mixins: [Appform],
+    mixins: [AppForm],
     data() {
         return {
             resource: 'sede',
@@ -156,8 +156,8 @@ export default {
 				tx_telefono: 	null,
 				tx_whatsapp: 	null,
 				tx_observaciones: 	null,
-				id_status: 	null,
-				id_usuario: 	null,
+				status_id: 	null,
+				user_id: 	null,
             },
             selects:
             {

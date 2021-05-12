@@ -5,9 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\UserTrait;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+
 
 class UserController extends Controller
 {
+    use UserTrait;
+   
     /**
      * Display a listing of the resource.
      *
@@ -19,10 +26,35 @@ class UserController extends Controller
                     ->get();
     }
 
+    public function show(Request $request, User $user)
+    {
+        return $user->load( 'group', 'table.manager', 'table.coordinator', 'profile', 'role'); 
+    }
+
     public function list(Request $request)
     {
-        return User::with([])
-                    ->get();
+        $with = $this->userWiths($request);
+        return User::with($with)
+                    ->operator($request->boolean('operator'))
+                    ->get(); 
+    }
+
+    public function userWiths($request)
+    {
+        $withs = [];
+
+        if ($request->filled('with')) {
+            if(is_array($request->with))
+            {
+                foreach ($request->with as $input) {
+                    $withs[] = $input;
+                }
+            } else {
+                $withs[] = $request->with;
+            }
+        }
+
+        return $withs;
     }
 
     /**
@@ -34,38 +66,37 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validate = request()->validate([
-            'username'          => 	'nullable|string|max:50',
-			'password'          => 	'nullable|string|max:64',
+			'password'          => 	'required|string',
 			'name'              => 	'nullable|string|max:50',
 			'surname'           => 	'nullable|string|max:50',
 			'role_id'           => 	'required|integer|max:999999999',
+            'rolename'          => 	'required|string|max:30',
 			'agency_id'         => 	'required|integer|max:999999999',
 			'group_id'          => 	'required|integer|max:999999999',
-			'photo'             => 	'nullable|string|max:200',
+			'photo'             => 	'nullable|string',
 			'email'             => 	'nullable|string|max:100',
-			'verification'      => 	'nullable|string|max:64',
-			'email_verified_at' => 	'required|date',
-			'remember_token'    => 	'nullable|string|max:64',
-			'api_token'         => 	'nullable|string|max:64',
 			'comments'          => 	'nullable|string|max:100',
 			'status_id'         => 	'required|integer|max:999999999',
 			'user_id'           => 	'required|integer|max:999999999',
         ]);
 
-        $user = user::create($request->all());
+        $username  = UserTrait::makeUsername($request);
 
-        return [ 'msj' => 'User Agregado Correctamente', compact('user') ];
-    }
+        $password  = Hash::make($request->password);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\User  $user
-     * @return \Illuminate\Http\Response
-     */
-    public function show(User $user)
-    {
-        return $user;
+        $photoname =  $username . '.jpeg';
+
+        if($this->storeImage($request->photo, $photoname, $request->rolename))
+        {
+            $request-> merge (['username' => $username, 'password' => $password, 'photo' => $photoname ]);
+            $user = User::create($request->all());
+
+        } else {
+
+            throw ValidationException::withMessages(['photoError' => "No se crago la imagen"]);
+        }
+
+        return [ 'msj' => "$request->rolename Agregado Correctamente", compact('user') ];
     }
 
     /**
@@ -78,7 +109,6 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validate = request()->validate([
-            'username'          => 	'nullable|string|max:50',
 			'password'          => 	'nullable|string|max:64',
 			'name'              => 	'nullable|string|max:50',
 			'surname'           => 	'nullable|string|max:50',
@@ -87,10 +117,6 @@ class UserController extends Controller
 			'group_id'          => 	'required|integer|max:999999999',
 			'photo'             => 	'nullable|string|max:200',
 			'email'             => 	'nullable|string|max:100',
-			'verification'      => 	'nullable|string|max:64',
-			'email_verified_at' => 	'required|date',
-			'remember_token'    => 	'nullable|string|max:64',
-			'api_token'         => 	'nullable|string|max:64',
 			'comments'          => 	'nullable|string|max:100',
 			'status_id'         => 	'required|integer|max:999999999',
 			'user_id'           => 	'required|integer|max:999999999',
@@ -113,4 +139,16 @@ class UserController extends Controller
  
         return [ 'msj' => 'User Eliminado' , compact('user')];
     }
+
+    public function storeImage($imgSource, $imgName, $type)
+	{
+        $imgSource = substr($imgSource, strpos($imgSource, 'base64,') + 7);
+    
+        $imgSource = base64_decode($imgSource);
+
+        return Storage::disk( 'photo_'. $type )->put(  $imgName, $imgSource);
+    }
+
+  
+
 }

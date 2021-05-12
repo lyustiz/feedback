@@ -28,11 +28,20 @@
 
                 <template v-slot:item="{ item }">
                     <tr>
-                        <td class="text-xs-left">{{ item.name }}</td>
-						<td class="text-xs-left">{{ item.parent_id }}</td>
-						<td class="text-xs-left">{{ item.comments }}</td>
-						<td class="text-xs-left">{{ item.status_id }}</td>
-						<td class="text-xs-left">{{ item.user_id }}</td>
+                        <td>{{ item.name }}</td>
+						<td>{{ item.parent_id }}</td>
+						<td>{{ item.user }}</td>
+						<td>{{ item.password }}</td>
+						<td>{{ item.amolatina_id }}</td>
+						<td>{{ item.comments }}</td>
+						<td>
+                            <status-switch 
+                                :loading="loading" 
+                                :resource="resource" 
+                                :item="item" 
+                                @onChangeStatus="changeStatus($event)">
+                            </status-switch>
+                        </td>
                         
                         <td class="text-xs-left">
                             <list-buttons 
@@ -74,10 +83,10 @@
 </template>
 
 <script>
-import listHelper from '@mixins/Applist';
+import Applist from '@mixins/Applist';
 import agencyForm  from './agencyForm';
 export default {
-    mixins:     [ listHelper],
+    mixins:     [ Applist],
     components: { 'agency-form': agencyForm },
     data () {
     return {
@@ -86,9 +95,11 @@ export default {
         headers: [
             { text: 'Name',   value: 'name' },
 			{ text: 'Parent Id',   value: 'parent_id' },
+			{ text: 'User',   value: 'user' },
+			{ text: 'Password',   value: 'password' },
+			{ text: 'Amolatina Id',   value: 'amolatina_id' },
 			{ text: 'Comments',   value: 'comments' },
 			{ text: 'Status Id',   value: 'status_id' },
-			{ text: 'User Id',   value: 'user_id' },
             { text: 'Acciones', value: 'actions', sortable: false, filterable: false },
         ],
     }

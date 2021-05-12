@@ -32,8 +32,8 @@ class TipoUsuarioController extends Controller
         $validate = request()->validate([
             'nb_tipo_usuario'   => 	'required|string|max:20',
 			'tx_observaciones'  => 	'nullable|string|max:100',
-			'id_status'         => 	'required|integer',
-			'id_usuario'        => 	'required|integer',
+			'status_id'         => 	'required|integer',
+			'user_id'        => 	'required|integer',
         ]);
 
         $tipoUsuario = tipoUsuario::create($request->all());
@@ -64,8 +64,8 @@ class TipoUsuarioController extends Controller
         $validate = request()->validate([
             'nb_tipo_usuario'   => 	'required|string|max:20',
 			'tx_observaciones'  => 	'nullable|string|max:100',
-			'id_status'         => 	'required|integer',
-			'id_usuario'        => 	'required|integer',
+			'status_id'         => 	'required|integer',
+			'user_id'        => 	'required|integer',
         ]);
 
         $tipoUsuario = $tipoUsuario->update($request->all());

@@ -1,8 +1,11 @@
 <template>
+
 <div class="main-color">
+    <!-- App Toolbar -->
+    <app-toolbar></app-toolbar>
 
     <!-- Contenido -->
-    <v-main class="fill-height">
+    <v-main class="fill-height ">
         <transition name="fade" mode="out-in" >
             <router-view></router-view>
         </transition>

@@ -1,0 +1,307 @@
+[
+    {
+      "path":  "/",
+      "name":  "welcome",
+      "label": "Welcome",
+      "icon":  "mdi-home",
+      "color": "blue",
+      "hidden": false,
+      "component": "Welcome"
+    },
+    {
+      "path":  "/home",
+      "name":  "home",
+      "label": "Home",
+      "icon":  "mdi-home",
+      "color": "blue",
+      "hidden": false,
+      "component": "Home"
+    },
+    {
+      "path":  "/admin",
+      "name":  "admin",
+      "label": "Administrador",
+      "icon":  "mdi-home",
+      "color": "blue",
+      "hidden": false,
+      "component": "Admin"
+    },
+    {
+      "path":  "/crud",
+      "name":  "crud",
+      "label": "crud",
+      "icon":  "mdi-home",
+      "color": "blue",
+      "hidden": false,
+      "component": "Crud"
+    },
+    {
+      "path": "/login",
+      "name": "login",
+      "label": "Login",
+      "icon":  "mdi-home",
+      "color": "blue",
+      "hidden": false,
+      "component": "Login"
+    },
+    {
+        "path": "/agency",
+        "name": "agency",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Agency"
+    },
+    {
+        "path": "/agencyProgress",
+        "name": "agencyProgress",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "AgencyProgress"
+    },
+    {
+        "path": "/bonus",
+        "name": "bonus",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Bonus"
+    },
+    {
+        "path": "/bonusType",
+        "name": "bonusType",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "BonusType"
+    },
+    {
+        "path": "/config",
+        "name": "config",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Config"
+    },
+    {
+        "path": "/failedJobs",
+        "name": "failedJobs",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "FailedJobs"
+    },
+    {
+        "path": "/freeDay",
+        "name": "freeDay",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "FreeDay"
+    },
+    {
+        "path": "/missedDay",
+        "name": "missedDay",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "MissedDay"
+    },
+    {
+        "path": "/payment",
+        "name": "payment",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Payment"
+    },
+    {
+        "path": "/paymentClass",
+        "name": "paymentClass",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "PaymentClass"
+    },
+    {
+        "path": "/paymentType",
+        "name": "paymentType",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "PaymentType"
+    },
+    {
+        "path": "/penalty",
+        "name": "penalty",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Penalty"
+    },
+    {
+        "path": "/penaltyType",
+        "name": "penaltyType",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "PenaltyType"
+    },
+    {
+        "path": "/profile",
+        "name": "profile",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Profile"
+    },
+    {
+        "path": "/profileProgress",
+        "name": "profile-progress",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "ProfileProgress"
+    },
+    {
+        "path": "/role",
+        "name": "role",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Role"
+    },
+    {
+        "path": "/status",
+        "name": "status",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Status"
+    },
+    {
+        "path": "/user",
+        "name": "user",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "User"
+    },
+    {
+        "path": "/userProgress",
+        "name": "user-progress",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "UserProgress"
+    },
+    {
+        "path": "/writeoffType",
+        "name": "writeoffType",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "WriteoffType"
+    },
+    {
+        "path": "/spending",
+        "name": "spending",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Spending"
+    },
+    {
+        "path": "/present",
+        "name": "present",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Present"
+    },
+    {
+        "path": "/turn",
+        "name": "turn",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Turn"
+    },
+    {
+        "path": "/table",
+        "name": "table",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Table"
+    },
+    {
+        "path": "/curator",
+        "name": "curator",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Curator"
+    },
+    {
+        "path": "/comission",
+        "name": "comission",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Comission"
+    },
+    {
+        "path": "/menu",
+        "name": "menu",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Menu"
+    },
+    {
+        "path": "/permission",
+        "name": "permission",
+        "label": "Welcome",
+        "icon":  "mdi-home",
+        "color": "blue",
+        "hidden": false,
+        "component": "Permission"
+    },
+    { 
+        "path": "*", 
+        "name": "notfound",
+        "label": "Not Found",
+        "profile": "*",
+        "hidden": false,
+        "component": "PageNotFound" 
+    } 
+]

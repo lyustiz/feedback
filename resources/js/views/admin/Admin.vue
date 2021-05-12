@@ -1,189 +1,107 @@
 <template>
-  <v-container fluid class="">
-    
-   <v-app class="transparent">
-     
-    <v-main >
+<v-app class="transparent">
+  <v-main>
+    <v-container fluid class="mt-n12">
+      <v-row dense> 
 
-      <div class="d-block mb-1">
-        <v-avatar size="50" color="white" class="mr-2 pointer" @click="navigateToName('welcome')">
-          <img src="/images/logo.jpg" alt="Bingolin">
-        </v-avatar>
-      </div>
-
-      <v-tabs color="deep-orange" v-model="tab" class="rounded-t-lg">
-        <v-tab>Subscriptores</v-tab>
-        <v-tab>Banner</v-tab>
-        <v-tab>Promociones</v-tab>
-        <v-tab>Resultados</v-tab>
-        <v-tab>Sedes</v-tab>
-      </v-tabs>
-
-      <v-tabs-items v-model="tab">
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text class="pa-0">
-                <v-card-text><AppSuscripcion></AppSuscripcion></v-card-text>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item>
-          <v-card flat>
+        <v-col>
+          <v-card color="rgba(0,0,0,0.4)" class="rounded-lg " height="90vh">
             <v-card-text>
-                <v-card-text><AdminBanner></AdminBanner></v-card-text>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-                <v-card-text><AdminPromotion></AdminPromotion></v-card-text>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-                <v-card-text><AdminWinners></AdminWinners></v-card-text>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-        <v-tab-item>
-          <v-card flat>
-            <v-card-text>
-                <v-card-text><AdminLocations></AdminLocations></v-card-text>
-            </v-card-text>
-          </v-card>
-        </v-tab-item>
-      </v-tabs-items>
-    </v-main>
-  </v-app>
-
-
-   <v-dialog
-      v-model="isLogin"
-      v-if="isLogin"
-      fullscreen
-      persistent
-    >
-      <v-card class="main-color">
-      <v-card-text>
-      <v-row justify="center" align="center">
-        <v-col cols="12" md="6">
-        <v-card height="27rem" class="rounded-lg mt-6">
-          <v-card-title class="deep-orange--text">
-            Ingresar
-          </v-card-title>
-          <v-card-text class="px-6">
-            <v-form v-model="valid" ref="loginForm" >
-            <v-col cols="12" class="mt-4">
-                <v-text-field
-                    color="deep-orange"
-                    prepend-inner-icon="mdi-account"
-                    label="Usuario"
-                    hint="Indique el usuario"
-                    type="text"
-                    v-model="form.nb_usuario"
-                    :rules="[rules.required]"
-                    filled
-                    rounded
-                  >
-                </v-text-field>
-            </v-col>
-            <v-col cols="12">
-                <v-text-field
-                    color="deep-orange"
-                    prepend-inner-icon="mdi-lock"
-                    :append-icon="show ? 'visibility_off' : 'visibility'"
-                    @click:append="show = !show"
-                    label="Password"
-                    hint="Debe contener letras y numeros y una longitud minima de 8 caracteres"
-                    :type="show ? 'text' : 'password'"
-                    v-model="form.password"
-                    :rules="rules.password"
-                    filled
-                    rounded
-                    >
-                </v-text-field>
-            </v-col>
-            </v-form>
-          </v-card-text>
-          <v-card-actions class="px-7 pb-4">
-            <v-row dense>
-              <v-col cols="12">
-                  <v-btn block dark color="deep-orange" :loading="loading" @click="login()">Ingresar</v-btn>
-              </v-col>
-              <v-col cols="12">
-                <v-btn block text color="deep-orange" :disabled="loading" @click="navigateToName('welcome')">
-                    volver a Inicio
-                </v-btn>
+            <v-row>
+              <v-col>
+                <AppUser></AppUser>
               </v-col>
             </v-row>
-          </v-card-actions>
-      </v-card>
-      </v-col>
+            <v-row>
+              <v-col>
+                <AppDashBoard></AppDashBoard>
+              </v-col>
+            </v-row>
+            </v-card-text>
+          </v-card>
+        </v-col>
+
+        <v-col>
+            <AppOperatos></AppOperatos>
+        </v-col>
+
+        <v-col>
+            <AppProfile></AppProfile>
+        </v-col>
+
       </v-row>
-      </v-card-text>
-      </v-card>
-    </v-dialog>
-
-
-</v-container>
+    </v-container>
+  </v-main>
+</v-app>
 </template>
 
 <script>
-import AdminBanner    from './components/AdminBanner'
-import AdminPromotion from './components/AdminPromotion'
-import AdminWinners   from './components/AdminWinners'
-import AdminLocations from './components/AdminLocations'
-import AppSuscripcion from '@views/suscripcion/AppSuscripcion'
-import AppData        from '@mixins/AppData';
+
+import AppUser from './components/AppUser'
+import AppDashBoard from './components/AppDashBoard'
+import AppOperatos from './components/AppOperatos'
+import AppProfile from './components/AppProfile'
 
 export default {
+  name: 'admin-board',
 
   components:{
-    AdminBanner,
-    AdminPromotion,
-    AdminWinners,
-    AdminLocations,
-    AppSuscripcion
+    AppUser,
+    AppDashBoard,
+    AppOperatos,
+    AppProfile,
   },
-
-  mixins: [AppData],
-
-  created()
-  {
-    
-  },
-
+  
   data: () => ({
-      tab: 0,
-      form:{
-        nb_usuario: '',
-        password  : '',
-      },
-      show:     false,
-      loading:  false,
-      valid:    '',
-      isLogin:  true
+    clientes:[
+       { id: 1, name: 'Luis Jose', month: 330, day: 30, fault: 2},
+       { id: 2, name: 'Roberto Marques', month: 530, day: 21, fault: 4} ,
+       { id: 3, name: 'Raul Garcia', month: 830, day: 100, fault: 1} ,
+       { id: 4, name: 'Laura Miranda', month: 230, day: 15, fault: 0} 
+    ]
   }),
 
-  methods:{
-
-    login(){
-      if (!this.$refs.loginForm.validate())  return 
-      if( this.form.nb_usuario = 'admin' && this.form.password == '@pommekt2156')
-      {
-        this.isLogin = false
-      }else{
-        alert('Usuario o password invalido')
-      }
-      this.$refs.loginForm.reset()
-    },
   }
-}
 </script>
 
 <style>
+.city-name{
+  color: white;
+  text-shadow: 2px 2px #383838;
+  background-color: rgba(43, 39, 39, 0.2);
+}
 
+.text-image{
+   text-shadow: 2px 2px #383838;
+}
+
+.badground-image{
+   background-color: rgba(43, 39, 39, 0.2);
+}
+
+.text-image-white{
+   text-shadow: 1px 1px rgb(255, 255, 255);
+}
+
+.v-slide-group__next, .v-slide-group__prev{
+  min-width: 1px !important;
+}
+
+.v-slide-group__content{
+  justify-content: center !important;
+}
+
+.promocion-color{
+  background-color: #FFFFFF !important;
+}
+.resultado-color{
+  background-color: #9B069B !important;
+}
+.sorteo-color{
+  background-color:#16B033 !important; 
+}
+
+.pointer{
+  cursor: pointer;
+}
 </style>

@@ -35,7 +35,7 @@ export default
             loading:     true,
             default:     {},
             defaultForm: {
-                id_status: 1
+                status_id: 1
             },
         }
     },
@@ -62,9 +62,9 @@ export default
 
 	computed: 
 	{
-        idUser()
+        userId()
         {
-            return 1 //this.$store.getters['getUserid']
+            return this.$store.getters['getUserid']
         },
         
         apiUrl() 
@@ -132,7 +132,7 @@ export default
 			
             this.loading = true;
 
-            this.form.id_usuario = this.idUser 
+            this.form.user_id = this.userId 
 				
             axios.post(this.fullUrl, this.form)
             .then(response => 
@@ -161,7 +161,7 @@ export default
 
             this.loading = true;
 
-            this.form.id_usuario = this.idUser
+            this.form.user_id = this.userId
             
             axios.put(this.fullUrlId, this.form)
             .then(response => 
@@ -203,7 +203,7 @@ export default
                     this.$refs.form.reset();
                 }
             }
-            this.form.id_usuario = this.idUser
+            this.form.user_id = this.userId
             
         },
 		
@@ -221,7 +221,7 @@ export default
                 this.form[key]  =  this.default[key];
             }
 
-            this.form.id_usuario = this.idUser
+            this.form.user_id = this.userId
         },
 
         getResource(resource)
