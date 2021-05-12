@@ -106,7 +106,7 @@ export default
 				document.cookie = "XSRF-TOKEN= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
 				axios.get('/sanctum/csrf-cookie').then((tokenresp) => {
 					console.log('sactum', tokenresp)
-						axios.post('/api/' + 'login', credentials).then(response => 
+						axios.post('/' + 'login', credentials).then(response => 
 							{
 								console.log('login',response)
 								if (response.status == 200)
@@ -122,7 +122,6 @@ export default
 									resolve( { status: 200, path: response.data.role.path } )
 								}
 								else{
-	
 									dispatch('unatenticate')
 									reject(response)
 								}
@@ -175,7 +174,7 @@ export default
 		{
 			return new Promise((resolve, reject) => 
 			{
-				axios.post('/api/' + 'logout')
+				axios.post('/' + 'logout')
 				.then(response => 
 				{
 					resolve(response)

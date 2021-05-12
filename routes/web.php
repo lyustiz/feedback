@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+
+Route::post('/login',            'Auth\LoginController@login')->name('login');;
+Route::post('/logout',            'Auth\LoginController@logout');
 /* Route::view('/', 'app'); */
 
 /*     Route::get('/', [App\Http\Controllers\HomeController::class, 'welcome'])->name('welcome');
