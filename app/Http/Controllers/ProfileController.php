@@ -6,6 +6,7 @@ use App\Models\Profile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Validation\ValidationException;
 
 
 class ProfileController extends Controller
@@ -23,10 +24,10 @@ class ProfileController extends Controller
 
     public function profileUser($userId)
     {
-        return Profile::with([])
-                ->whereHas('user', function (Builder $query) use($userId) {
-                    $query->where('user.id', $userId);
-                })->get();
+        return Profile::with(['presence:id,start_at,user_id,profile_id', 'presence.user:id,name,surname', 'agency:agency.id,amolatina_id'])
+                        ->whereHas('user', function (Builder $query) use($userId) {
+                            $query->where('user.id', $userId);
+                        })->get();
     }
 
     /**

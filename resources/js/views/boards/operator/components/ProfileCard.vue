@@ -3,7 +3,7 @@
     <v-list dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
         <v-list-item v-if="profile" class="my-n2 py-0"> 
             <v-list-item-avatar color="blue" size="40">
-             <v-img :src="`/images/profiles/${profile.photo || 'nophoto'}.80x80.thumb-fd`" ></v-img>
+             <v-img :src="`/storage/photo/profile/${profile.photo || 'nophoto'}.80x80.thumb-fd`" ></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
                 <v-list-item-title>

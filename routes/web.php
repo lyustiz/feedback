@@ -10,23 +10,26 @@ use Illuminate\Validation\ValidationException;
 /* Route::post('/login',            'Auth\LoginController@login')->name('login');; */
 
 Route::post('/login', function(Request $request ){
+    
     $request->validate([
-        'email'    => 'required',
+        'username'    => 'required',
         'password' => 'required',
     ]);
 
-    $credentials = $request->only('email', 'password');
+    $credentials = $request->only('username', 'password');
 
     if (Auth::attempt($credentials)) {
-        
         
         $user    = Auth::user();
 
         if($user->status_id == 1) 
         {
-            // $request->session()->regenerate();
-
-            $user->load(['agency:id,name,amolatina_id,token' ]);
+            $request->session()->regenerate();
+            $user->load(['agency:agency.id,name,amolatina_id,token' ]);
+            if( in_array($user->role_id, [1,2,3]))
+            {
+                $user->load(['agencyManage:agency.id,name,amolatina_id,token' ]);
+            }
             $role  = $user->role; 
             $menu  = $role->menu; 
 
@@ -35,8 +38,6 @@ Route::post('/login', function(Request $request ){
                 'role' => $role,
                 'menu' => $menu
             ], 200 );
-
-           /*  return ;  */
         }
 
         throw ValidationException::withMessages(['userInactive' => "Usuario Inactivo consulte con el Administrador"]);

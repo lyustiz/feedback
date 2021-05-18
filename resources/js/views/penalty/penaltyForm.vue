@@ -19,7 +19,7 @@
                     <v-text-field
                         v-model="dates.day"
                         :rules="[rules.fecha]"
-                        label="Day"
+                        label="Fecha"
                         prepend-icon="event"
                         readonly
                         v-on="on"
@@ -33,35 +33,25 @@
             </v-menu>
         </v-col> 
         <v-col cols="12" md="6">
-            <v-text-field
-                :rules="[rules.required]"
+            <v-select
+                :rules="[rules.select]"
                 v-model="form.penalty_type_id"
-                label="Penalty Type Id"
-                placeholder="Indique Penalty Type Id"
+                :items="selects.penaltyType"
+                item-text="name"
+                item-value="id"
+                label="Tipo Falta"
                 dense
-            ></v-text-field>
+            ></v-select>
         </v-col>
                   
-        <v-col cols="12" md="6">
+        <v-col cols="12">
             <v-text-field
                 :rules="[rules.max(80)]"
                 v-model="form.comments"
-                label="Comments"
-                placeholder="Indique Comments"
+                label="Descripcion"
                 dense
             ></v-text-field>
         </v-col>
-                  
-        <v-col cols="12" md="6">
-            <v-text-field
-                :rules="[rules.required]"
-                v-model="form.user_id_ed"
-                label="User Id Ed"
-                placeholder="Indique User Id Ed"
-                dense
-            ></v-text-field>
-        </v-col>
-                 
 
         </v-row>
 
@@ -107,24 +97,27 @@ export default {
             },
             form:
             {
-                id: 	null,
-				day: 	null,
-				penalty_type_id: 	null,
-				user_id: 	null,
-				comments: 	null,
-				status_id: 	null,
-				user_id_ed: 	null,
+                id: 	         null,
+				day: 	         null,
+				penalty_type_id: null,
+				user_id: 	     null,
+				comments: 	     null,
+				status_id: 	     null,
+				user_id_ed: 	 null,
             },
             selects:
             {
-                
+                penaltyType:[]
             },
         }
     },
 
     methods:
     {
-
+        extraActions(method)
+        {
+            this.form.user_id_ed = this.userId
+        },
     }
 }
 </script>

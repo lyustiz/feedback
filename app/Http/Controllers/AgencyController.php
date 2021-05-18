@@ -5,9 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\Agency;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\ValidationException;
+use App\Http\Controllers\Traits\AmolatinaDataTrait as Amolatina;
 
 class AgencyController extends Controller
 {
+    use Amolatina;
+    
     /**
      * Display a listing of the resource.
      *
@@ -17,6 +21,24 @@ class AgencyController extends Controller
     {
         return Agency::with([])
                     ->get();
+    }
+
+    public function agencyTotals(Request $request)
+    {
+        $validate = request()->validate([
+            'token'        => 	'required',
+			'amolatina_id' => 	'required',
+            'type'         => 	'required',
+        ]);
+        
+        $token  = $request->token;
+        $url    = Amolatina::getSetup('total-credits')->url . '/' . $request->amolatina_id;
+        $range  = Amolatina::dateRange($request->type);
+        $params = [ 'from' => $range->from, 'to' => $range->to ];
+        $header = [ 'accept' => 'application/json+vnd.sdv.numeric' ];
+        $response = Amolatina::getDataUrl( $request->token, $url,  $params, $header);
+        
+        return response( [ 'data' => $response['body'], 'detail' => $response['detail']  ] , $response['status']) ;
     }
 
     /**

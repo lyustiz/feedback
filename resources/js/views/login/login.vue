@@ -86,7 +86,7 @@
                     label="Usuario"
                     hint="Indique el usuario"
                     type="text"
-                    v-model="form.email"
+                    v-model="form.username"
                     :rules="[rules.required]"
                     filled
                     rounded
@@ -150,7 +150,7 @@ export default {
 	{
         return {
             form:{
-                email: '',
+                username: '',
                 password  : '',
             },
             show: false,
@@ -192,7 +192,7 @@ export default {
                     }
                     if(error.response.status == 419)
                     {
-                        location.reload();
+                       // location.reload();
                     }
                     
                 }                

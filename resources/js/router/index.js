@@ -54,6 +54,10 @@ import Permission      from '@views/permission/permission.vue';
 import UserProfile     from '@views/userProfile/userProfile.vue';
 import Group  from '@views/group/group.vue';
 import Country  from '@views/country/country.vue';
+import UserAgency  from '@views/userAgency/userAgency.vue';
+import UserPresence  from '@views/userPresence/userPresence.vue';
+import Absence  from '@views/absence/absence.vue';
+import AbsenceType  from '@views/absenceType/absenceType.vue';
 //newImport
 
 let isAuthenticated = true;
@@ -328,6 +332,31 @@ export default new Router({
     name: 'country',
     icon: 'bubble_chart',
     component: Country,
+},
+{
+    path: '/userAgency',
+    name: 'userAgency',
+    icon: 'bubble_chart',
+    component: UserAgency,
+},
+
+{
+    path: '/userPresence',
+    name: 'userPresence',
+    icon: 'bubble_chart',
+    component: UserPresence,
+},
+{
+    path: '/absence',
+    name: 'absence',
+    icon: 'bubble_chart',
+    component: Absence,
+},
+{
+    path: '/absenceType',
+    name: 'absenceType',
+    icon: 'bubble_chart',
+    component: AbsenceType,
 },
 //newRoutes
 

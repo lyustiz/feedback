@@ -6,6 +6,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use App\Listeners\StopPresenceListener;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -20,6 +21,11 @@ class EventServiceProvider extends ServiceProvider
         ],
     ];
 
+    public function shouldDiscoverEvents()
+    {
+        return true;
+    }
+
     /**
      * Register any events for your application.
      *
@@ -27,6 +33,13 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        /* StopPresenceListener:class; */
+        /* Event::listen(
+            [StopPresenceListener::class, 'handle']
+        );
+
+        Event::listen(function (StopPresenceListener $event) {
+            dd($event);
+        }); */
     }
 }

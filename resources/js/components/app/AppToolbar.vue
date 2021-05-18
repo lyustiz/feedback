@@ -3,13 +3,13 @@
 
      <v-app-bar
       app
-      color="rgba(0, 0, 0, 0.2)"
+      color="rgba(0, 0, 0, 0.3)"
       dark
       flat
       height="45"
     >
       <v-avatar size="35" color="white" class="mr-2 pointer" @click="navigateToName('home')">
-        <img src="/images/logo.jpg" alt="Bingolin">
+        <img src="/images/logo.jpg" alt="criptoWeb">
       </v-avatar>
 
       <v-toolbar-title class="font-weight-bold">

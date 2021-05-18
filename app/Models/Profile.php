@@ -58,6 +58,16 @@ class Profile extends Model
         return $this->HasMany('App\Models\UserProfile');
     }
 
+    public function agency()
+	{
+		return $this->BelongsTo('App\Models\Agency');
+	}
+
+    public function presence()
+    {
+        return $this->HasOne('App\Models\UserPresence')->where('status_id', 3);
+    }
+
     public function user()
 	{
 		return $this->hasManyThrough(
@@ -69,6 +79,8 @@ class Profile extends Model
             'user_id' // fk en intermedia
 		);
 	}
+
+    
 
 
 }

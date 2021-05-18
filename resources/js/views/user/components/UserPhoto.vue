@@ -73,8 +73,8 @@ export default {
             default:    1
         },
 
-        foto: {
-            type:       Object,
+        photo: {
+            type:       String,
             default:    null
         },
 
@@ -106,8 +106,8 @@ export default {
 
     created()
     {
-        this.src          = (this.foto) ? this.foto.full_url: null
-        this.image        = (this.foto) ? this.foto: null
+        this.src          = (this.photo) ? `/storage/photo/operator/${this.photo}`: null
+        this.image        = (this.photo) ? this.photo: null
         this.validateForm = false
     },
 

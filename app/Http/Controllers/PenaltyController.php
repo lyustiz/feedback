@@ -15,7 +15,15 @@ class PenaltyController extends Controller
      */
     public function index()
     {
-        return Penalty::with([])
+        return Penalty::with(['penaltyType'])
+                    ->get();
+    }
+
+    public function penaltyUser($userId)
+    {
+        return Penalty::with(['penaltyType'])
+                    ->where( 'user_id', $userId)
+                    ->orderBY('day', 'desc')
                     ->get();
     }
 
@@ -28,7 +36,7 @@ class PenaltyController extends Controller
     public function store(Request $request)
     {
         $validate = request()->validate([
-            'day'               => 	'required|string|max:0',
+            'day'               => 	'required|date',
 			'penalty_type_id'   => 	'required|integer|max:999999999',
 			'user_id'           => 	'required|integer|max:999999999',
 			'comments'          => 	'nullable|string|max:100',
@@ -62,7 +70,7 @@ class PenaltyController extends Controller
     public function update(Request $request, Penalty $penalty)
     {
         $validate = request()->validate([
-            'day'               => 	'required|string|max:0',
+            'day'               => 	'required|date',
 			'penalty_type_id'   => 	'required|integer|max:999999999',
 			'user_id'           => 	'required|integer|max:999999999',
 			'comments'          => 	'nullable|string|max:100',

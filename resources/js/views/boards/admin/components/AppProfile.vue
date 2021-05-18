@@ -5,7 +5,7 @@
       <v-list subheader two-line dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
         <v-list-item v-for="profile in profiles" :key="profile.id" > 
           <v-list-item-avatar color="blue" size="60">
-            <v-img :src="`/images/profiles/${profile.photo || 'nophoto'}.80x80.thumb-fd`" ></v-img>
+            <v-img :src="`/storage/photo/profile/${profile.photo || 'nophoto'}.80x80.thumb-fd`" ></v-img>
           </v-list-item-avatar>
           <v-list-item-content>
               <v-list-item-title>

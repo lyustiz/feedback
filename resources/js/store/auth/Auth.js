@@ -14,6 +14,7 @@ export default
 			modules:    	[],
 			menu:       	[],
 			agency:     	null,
+			agencyManage:   null,
 		}
 	},
 
@@ -32,6 +33,7 @@ export default
 		getModules:   	    state => state.modules,
 		getMenu:   	    	state => state.menu,
 		getAgency:   	    state => state.agency,
+		getAgencyManage:   	state => state.agencyManage,
 		
 	},
 
@@ -95,6 +97,12 @@ export default
 			localStorage.setItem("agency", (agency)  ? JSON.stringify(agency): [])
 		},
 
+		setAgencyManage( state, agency )
+		{
+			state.agencyManage	= agency
+			localStorage.setItem("agencyManage", (agency)  ? JSON.stringify(agency): [])
+		}
+
     },
     
     actions:
@@ -115,7 +123,8 @@ export default
 										user: response.data.user,
 										role: response.data.role,
 										menu: response.data.menu,
-										agency: response.data.user.agency
+										agency: response.data.user.agency,
+										agencyManage: response.data.user.agency_manage
 									};
 	
 									dispatch('autenticate', data)
@@ -250,7 +259,9 @@ export default
 			commit('setRole'  	 		, data.role);
 			commit('setMenu'  	 		, data.menu);
 			commit('setAgency'   		, data.agency);
-			commit('setAmolatinaToken'  , data.agency.token);
+			commit('setAgencyManage'    , data.agencyManage);
+			
+			commit('setAmolatinaToken'  , data.agency[0].token);
 			commit('setAuth'  	 		, true);
 		},
 
@@ -261,6 +272,7 @@ export default
 			commit('setRole'  	 , null);
 			commit('setMenu'  	 , null);
 			commit('setAgency'   , null);
+			commit('setAgencyManage', null);
 			localStorage.clear()
 			localStorage.setItem("auth", 	false)
 		}

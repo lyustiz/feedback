@@ -15,6 +15,7 @@ export default {
         let role            = localStorage.getItem('role');
         let menu            = localStorage.getItem('menu');
         let agency          = localStorage.getItem('agency');
+        let agencyManage    = localStorage.getItem('agencyManage');
         let amolatina_token = localStorage.getItem('amolatina_token');
         
         if(auth==='true') // TODO:check expire
@@ -24,6 +25,7 @@ export default {
                             role: JSON.parse(role),
                             menu: JSON.parse(menu),
                             agency: JSON.parse(agency),
+                            agencyManage: JSON.parse(agencyManage),
                             amolatina_token: amolatina_token
                         };
             

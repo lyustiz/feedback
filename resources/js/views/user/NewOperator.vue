@@ -74,11 +74,10 @@
                             <v-select
                                 dense
                                 outlined
-                                clearable
                                 filled
                                 label="Grupo"
-                                v-model="form.table_id"    
-                                :items="selects.table"
+                                v-model="form.group_id"    
+                                :items="selects.group"
                                 :rules="[rules.required]"
                                 item-value="id"
                                 item-text="name"
@@ -90,11 +89,10 @@
                             <v-select
                                 dense
                                 outlined
-                                clearable
                                 filled
                                 label="Mesa"
-                                v-model="form.group_id"    
-                                :items="selects.group"
+                                v-model="form.table_id"    
+                                :items="selects.table"
                                 :rules="[rules.required]"
                                 item-value="id"
                                 item-text="name"

@@ -13,11 +13,14 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Carbon\Carbon;
+use App\Http\Controllers\Traits\AmolatinaDataTrait as Amolatina;
+use App\Models\UserPresence;
 
 
 
 class DataController extends Controller
 {
+    use Amolatina;
     public $BASE_URL     = 'https://api.amolatina.com/';
     public $agency       = null;
     public $amolatinaId  = null;
@@ -36,11 +39,12 @@ class DataController extends Controller
 
     public function index()
     {
-        $this->agencySetup(Auth::user());
+        /* $this->agencySetup(Auth::user());
         
-        $token = $this->getToken();
-
-        dd($token);
+        $token = $this->getToken(); */
+        $date = new Carbon;
+        
+        return $date->now()->toDateString();
 /*
         promoter
 realm
@@ -63,6 +67,54 @@ realm
 80313661531
         *
 /
+compartido curator
+https://api.amolatina.com/credits/commissions/shares/79602433731/descendants/81541406531
+
+
+ganancia perdida perfiles
+accept: application/json+vnd.sdv.numeric
+https://api.amolatina.com/credits/commissions/79602433731?from=2021-05-01T00%3A00%3A00.000Z&grouping%5B0%5D=userId&grouping%5B1%5D=positive&positive=true&to=2021-05-14T16%3A59%3A02.420Z
+from: 2021-05-01T00:00:00.000Z
+grouping[0]: userId
+grouping[1]: positive
+positive: true
+to: 2021-05-14T16:59:02.420Z
+
+perfiles ganancias resumen /**************** *
+https://api.amolatina.com/credits/commissions/79602433731?from=2021-05-01T00%3A00%3A00.000Z&grouping%5B0%5D=userId&grouping%5B1%5D=positive&positive=true&to=2021-05-14T17%3A32%3A56.491Z
+https://api.amolatina.com/credits/commissions/79602433731?from=2021-05-01T00%3A00%3A00.000Z&grouping%5B0%5D=userId&grouping%5B1%5D=positive&positive=true&to=2021-05-14T17%3A15%3A58.397Z
+accept: application/json+vnd.sdv.numeric
+from: 2021-05-01T00:00:00.000Z
+grouping[0]: userId
+grouping[1]: positive
+positive: true
+to: 2021-05-14T17:15:58.397Z
+
+perdidas lista
+https://api.amolatina.com/credits/commissions/79602433731?from=2021-05-01T00%3A00%3A00.000Z&omit=0&positive=false&select=50&to=2021-05-14T16%3A59%3A02.420Z
+from: 2021-05-01T00:00:00.000Z
+omit: 0
+positive: false
+select: 50
+to: 2021-05-14T16:59:02.420Z
+
+resumen perdidas
+https://api.amolatina.com/credits/commissions/79602433731?from=2021-05-01T00%3A00%3A00.000Z&positive=false&to=2021-05-14T17%3A07%3A18.700Z
+accept: application/json+vnd.sdv.numeric
+from: 2021-05-01T00:00:00.000Z
+positive: false
+to: 2021-05-14T17:07:18.700Z
+
+
+stadistica ganancias perdidas
+https://api.amolatina.com/credits/commissions/stats/79602433731?agency-id=79602433731&date=2021-05&from=2021-05-01&to=2021-05-31
+agency-id: 79602433731
+date: 2021-05
+from: 2021-05-01
+to: 2021-05-31
+
+
+
 
         $url = 'credits/commissions/79602433731?from=2021-04-28T00%3A00%3A00.000Z&omit=0&positive=true&select=100&to=2021-04-28T23%3A17%3A07.050Z';
         //  users
@@ -446,6 +498,7 @@ types: +introductory+letter
         return $auth;
     }
 
+ 
 
     
         

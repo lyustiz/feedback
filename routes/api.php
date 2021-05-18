@@ -52,7 +52,13 @@ Route::put('/status/resource',                  'StatusController@updateResource
 Route::apiResource('/suscriptor',               'SuscriptorController');
 Route::apiResource('/tipoSuscripcion',          'TipoSuscripcionController');
 Route::apiResource('/vendedor',                 'VendedorController');
+
+
+Route::get('/agency/totals',            'AgencyController@agencyTotals');
 Route::apiResource('/agency',                   'AgencyController');
+
+
+
 Route::apiResource('/agencyProgress',           'AgencyProgressController');
 Route::apiResource('/bonus',                    'BonusController');
 Route::apiResource('/bonusType',                'BonusTypeController');
@@ -63,10 +69,19 @@ Route::apiResource('/missedDay',                'MissedDayController');
 Route::apiResource('/payment',                  'PaymentController');
 Route::apiResource('/paymentClass',             'PaymentClassController');
 Route::apiResource('/paymentType',              'PaymentTypeController');
-Route::apiResource('/penalty',                  'PenaltyController');
-Route::apiResource('/penaltyType',              'PenaltyTypeController');
+
+
+
+Route::get('/penalty/user/{user}',      'PenaltyController@penaltyUser');
+Route::apiResource('/penalty',          'PenaltyController');
+Route::apiResource('/penaltyType',     'PenaltyTypeController');
+
+Route::get('/absence/user/{user}',     'AbsenceController@absenceUser');
+Route::apiResource('/absence',         'AbsenceController');
+Route::apiResource('/absenceType',     'AbsenceTypeController');
 
 // user
+Route::put('/user/{user}/goals',                'UserController@goals');
 Route::get('/user/list',                        'UserController@list');
 Route::apiResource('/user',                     'UserController');
 Route::apiResource('/userProgress',             'UserProgressController');
@@ -102,5 +117,10 @@ Route::apiResource('/comission',                'ComissionController');
 Route::apiResource('/table',     'TableController');
 Route::apiResource('/group',     'GroupController');
 Route::apiResource('/country',     'CountryController');
+Route::apiResource('/userAgency',     'UserAgencyController');
+
+Route::put('/userPresence/stop',     'UserPresenceController@stop');
+Route::apiResource('/userPresence',     'UserPresenceController');
+
 //newRoutes
 });

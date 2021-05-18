@@ -1,16 +1,16 @@
 <template>
   <v-card dark class="rounded-lg " color="rgba(0,0,0,0.4)">
-    <v-subheader class="title">
-        <v-row>
-            <v-col cols="auto">
-                Perfiles
+    <v-subheader>
+        <v-row class="title">
+            <v-col cols="auto" >
+              <v-icon left>mdi-face-outline</v-icon>  Perfiles
             </v-col>
-            <v-col >
-            </v-col>
+            <v-col cols="auto" ><v-icon  small @click="list()">mdi-reload</v-icon> </v-col>
+            <v-col > </v-col>
             <v-col cols="auto">
-                <v-btn :color="(active) ? 'error' : 'success'" @click="active=!active">
-                  <v-icon dark> {{ (active) ? 'mdi-stop' : 'mdi-play'}}</v-icon>
-                   {{ (active) ? 'pausar' : 'Iniciar' }} 
+                <v-btn :color="(myProfilesStarted.length > 0) ? 'error' : 'success'" @click="setPresence()" :loading="loading">
+                  <v-icon dark> {{ (myProfilesStarted.length > 0) ? 'mdi-stop' : 'mdi-play'}}</v-icon>
+                   {{ (myProfilesStarted.length > 0) ? 'pausar' : 'Iniciar' }} 
                 </v-btn>
             </v-col>
         </v-row>
@@ -27,7 +27,7 @@
         >
         <v-list-item v-for="profile in profiles" :key="profile.id" :value="profile" > 
           <v-list-item-avatar color="blue" size="60">
-            <v-img :src="`/images/profiles/${profile.photo || 'nophoto'}.80x80.thumb-fd`" ></v-img>
+            <v-img :src="`/storage/photo/profile/${profile.photo || 'nophoto'}.80x80.thumb-fd`" ></v-img> 
           </v-list-item-avatar>
           <v-list-item-content>
               <v-list-item-title>
@@ -56,8 +56,13 @@
                 <v-row>
                   <v-col>{{profile.name}}</v-col>
                   <v-col cols="auto">
-                    <v-icon :color="(active) ? 'green' : 'red'" size="14"> 
-                      {{(active) ? 'mdi-checkbox-blank-circle' : 'mdi-checkbox-blank-circle-outline'}}
+                    <v-icon :color="(profile.presence) ? 'green' : 'red'" size="14"> 
+                      {{(profile.presence) ? 'mdi-checkbox-blank-circle' : 'mdi-checkbox-blank-circle-outline'}}
+                    </v-icon> 
+                  </v-col>
+                  <v-col cols="auto" v-if="profile.presence">
+                    <v-icon :color="( myProfilesStarted.includes(profile.id) ) ? 'yellow' : 'orange'" size="20"> 
+                      {{(myProfilesStarted.includes(profile.id)) ? 'mdi-account-star' : 'mdi-account-lock'  }}
                     </v-icon> 
                   </v-col>
                 </v-row>
@@ -83,24 +88,37 @@ export default {
 
   created() {
     this.list()
+    this.form.token = this.token 
   },
 
   computed: {
     profile:
-        {
-            get() {
-                return this.$store.getters['getProfile']
-            },
-            set(profile) {
-                this.$store.commit('setProfile', profile)
-            }
-        },
+    {
+      get() {
+          return this.$store.getters['getProfile']
+      },
+      set(profile) {
+          this.$store.commit('setProfile', profile)
+      },
+    },
+    token()
+    {
+      return this.$store.getters['getAmolatinaToken']
+    }
   },
 
   data: () => ({
     profiles: [],
-    profileSelected:null,
-    active: false
+    profilesStarted:   [],
+    profilesAvailable: [],
+    myProfilesStarted: [],
+    active: false,
+    form: {
+      id: 	      null,
+      user_id: 	  null,
+      profiles_id: [],
+      token: null
+    },
   }),
 
   methods: {
@@ -108,12 +126,80 @@ export default {
     list() {
         this.getResource(`profile/user/${this.userId}`).then( data => {
           this.profiles = data
+          this.setActives()
         })
     },
 
     setProfile(profile)
     {
       this.$store.commit('setProfile', profile)
+    },
+
+    setPresence()
+    {
+      if(this.myProfilesStarted.length > 0)
+      {
+        this.stopPresence();
+      } else  {
+        this.startPresence();
+      } 
+
+    },
+
+    startPresence()
+    {
+      if(this.profilesAvailable.length < 1 )
+      {
+        this.showError('No existen perfiles Disponibles')
+        this.list()
+        return
+      }
+      this.form.profiles_id = this.profilesAvailable 
+      this.storeResource('userPresence', this.form)
+      .then(data => {
+        this.showMessage(data.msj)
+      })
+      .finally( () => 
+      {
+        this.list()
+      });
+    },
+
+    stopPresence()
+    {
+      if(this.myProfilesStarted.length < 1 )
+      {
+        this.showError('No posees perfiles iniciados')
+        this.list()
+        return
+      }
+      this.updateResource('userPresence/stop', this.form)
+      .then(data => {
+        this.showMessage(data.msj)
+      })
+      .finally( () => 
+      {
+        this.list()
+      });
+    },
+
+    setActives()
+    {
+      this.profilesStarted   = []
+      this.profilesAvailable = []
+      this.myProfilesStarted = []
+      
+      this.profiles.forEach(profile => {
+        if(profile.presence){
+          this.profilesStarted.push(profile.id)
+          if(profile.presence.user.id == this.userId)
+          {
+            this.myProfilesStarted.push(profile.id)
+          }
+        }else{
+          this.profilesAvailable.push(profile.id)
+        }
+      }, this);
     }
   }
 }

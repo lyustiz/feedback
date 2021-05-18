@@ -36,11 +36,16 @@ class Penalty extends Model
 
     public function status()
     {
-        return $this->BelongsTo('App\Models\Status', 'status_id');
+        return $this->BelongsTo('App\Models\Status');
     }
                            
     public function user()
     {
-        return $this->BelongsTo('App\Models\User', 'user_id');
+        return $this->BelongsTo('App\Models\User');
+    }
+
+    public function penaltyType()
+    {
+        return $this->BelongsTo('App\Models\PenaltyType');
     }
 }

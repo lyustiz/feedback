@@ -93,7 +93,7 @@ export default
                 {
                     if(this.form.hasOwnProperty(key))
                     {
-                        if(key.includes('fe_') && ((this.item[key]) ? this.item[key].length : 0 > 9))
+                        if(key.includes('_at') && ((this.item[key]) ? this.item[key].length : 0 > 9))
                         {
                             this.dates[key] =  this.formatDate(this.item[key]);
 							
@@ -224,29 +224,6 @@ export default
             this.form.user_id = this.userId
         },
 
-        getResource(resource)
-        {
-            this.loading = true
-      
-            return new Promise((resolve, reject) => 
-			{
-				axios.get(this.apiUrl + resource)
-				.then(response => 
-				{
-                    resolve(response.data)
-				})
-				.catch(error => 
-				{
-                    this.showError(error)
-                    reject(error)
-                })
-                .finally( () => 
-                {
-                    this.loading = false
-                });
-			})
-
-        },
 
         onCreateForm()
         {
