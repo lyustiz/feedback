@@ -2,7 +2,7 @@
   <v-card dark class="rounded-lg " color="rgba(0,0,0,0.4)">
     <v-subheader class="title">Perfiles 
       <v-btn icon color="success" @click="list()" :loading="loading"><v-icon>mdi-reload</v-icon></v-btn>
-      <v-btn icon color="red" @click="getProgress()" :loading="loading"><v-icon>mdi-reload</v-icon></v-btn>
+      <!-- <v-btn icon color="red" @click="getProgress()" :loading="loading"><v-icon>mdi-reload</v-icon></v-btn> -->
     </v-subheader>
     <v-card-text class="pt-0 accounts-container custom-scroll">
       <v-list subheader two-line dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
