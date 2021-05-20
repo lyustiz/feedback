@@ -37,7 +37,7 @@
           <v-row dense class="grey lighten-5 subtitle-1">
             <v-col cols="auto">
                 <v-avatar color="grey" class="elevation-3" :size="30">
-                  <v-img :src="`/images/profiles/${item.photo || 'nophoto'}.80x80.thumb-fd`" ></v-img>
+                  <v-img :src="`/storage/photo/profile/${item.photo || 'nophoto'}.80x80.thumb-fd`" ></v-img>
                 </v-avatar>
               </v-col>
             <v-col>
@@ -56,7 +56,7 @@
       <v-list dense color="rgba(0,0,0,0.4)" class="rounded-lg mt-1"> 
           <v-list-item v-for="userProfile in userProfiles" :key="userProfile.id" > 
             <v-list-item-avatar color="blue" size="30">
-              <v-img :src="`/images/profiles/${userProfile.photo || 'nophoto'}.80x80.thumb-fd`" ></v-img>
+              <v-img :src="`/storage/photo/profile/${userProfile.photo || 'nophoto'}.80x80.thumb-fd`" ></v-img>
             </v-list-item-avatar>
             <v-list-item-content>
                 <v-list-item-title>

@@ -40,6 +40,7 @@ class UserController extends Controller
                     ->withSum(['presenceDay', 'presenceMonth' ], 'profit')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
                     ->operator($request->boolean('operator'))
+                    ->orderBy('name')
                     ->get(); 
     }
 

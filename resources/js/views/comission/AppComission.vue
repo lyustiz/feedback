@@ -12,7 +12,7 @@
                    <v-btn :loading="loading" icon color="blue" @click="goTo(commisions.last_page_url )"><v-icon>mdi-chevron-double-right</v-icon></v-btn>
                </v-col>
                <v-col>
-
+                   <v-btn icon color="success" :loading="loading" @click="getdetail()"><v-icon>mdi-refresh</v-icon></v-btn>
                </v-col>
                <v-col>
                    <v-row no-gutters>
@@ -143,6 +143,11 @@ export default {
         list() {
             this.getResource(this.url).then(data =>{
                 this.commisions = data
+            })
+        },
+
+        getdetail(){
+            this.getResource('comission/detail').then(data =>{
             })
         },
 

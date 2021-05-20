@@ -89,7 +89,7 @@
 
                     <v-menu right bottom offset-x :disabled="operator.profile.length<1">
                       <template v-slot:activator="{ on }">
-                          <v-badge :value="operator.profile.length > 0" offset-x="10" offset-y="12" color="rgba(0,0,0,0.15)" :content="operator.profile.length">  
+                          <v-badge v-if="operator.profile.length > 0" :value="operator.profile.length > 0" offset-x="10" offset-y="12" color="rgba(0,0,0,0.15)" :content="operator.profile.length">  
                             <list-simple-icon v-on="on" icon="mdi-account-multiple-outline" label="perfiles" color="green"></list-simple-icon>
                           </v-badge>
                       </template>

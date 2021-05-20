@@ -3,7 +3,7 @@
     <v-subheader>
         <v-row class="title">
             <v-col cols="auto" >
-              <v-icon left>mdi-face-outline</v-icon>  Perfiles
+              <v-icon left>mdi-account-multiple-outline</v-icon>  Perfiles
             </v-col>
             <v-col cols="auto" ><v-icon  small @click="list()">mdi-reload</v-icon> </v-col>
             <v-col > </v-col>
@@ -33,18 +33,36 @@
               <v-list-item-title>
               <v-row no-gutters>
                   <v-col cols="auto">
-                  {{ profile.day || 0 }}  /  {{ profile.month || 0}}
+                    <v-tooltip bottom color="blue">
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-on="on" v-bind="attrs">{{ profile.presence_day_sum_profit || 0 }}  /  {{ 200 }}</span>
+                    </template>
+                    <span>Ganacias Dia</span>
+                    </v-tooltip>
                   </v-col>
                   <v-spacer></v-spacer>
                   <v-col cols="auto">
-                  3000
+                    <v-tooltip bottom color="red">
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-on="on" v-bind="attrs">{{profile.presence_day_sum_writeoff}}</span>
+                    </template>
+                    <span>Perdidas Dia</span>
+                    </v-tooltip>
                   </v-col>
               </v-row>
               <v-row no-gutters>
                   <v-col>
                   <v-progress-linear
-                  :value="profile.day*100/profile.month || 50"
+                  :value="profile.presence_day_sum_profit*100/200 || 0"
                   color="blue"
+                  height="8"
+                  class="mb-2 mt-1"
+                  ></v-progress-linear>
+              </v-col>
+               <v-col>
+                  <v-progress-linear
+                  :value="profile.presence_day_sum_writeoff*(-1) || 0"
+                  color="red"
                   height="8"
                   class="mb-2 mt-1"
                   ></v-progress-linear>

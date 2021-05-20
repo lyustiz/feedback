@@ -4,8 +4,8 @@
     <v-card dark class="rounded-lg " color="rgba(0,0,0,0.4)" min-height="91vh" v-if="user">
         <v-card-title primary-title>
             <v-row dense>
-                <v-col>{{user.full_name}} ({{user.username}})</v-col>
-                <v-col cols="auto"><v-btn icon color="success" @click="list()"><v-icon>mdi-dots-vertical</v-icon></v-btn></v-col>
+                <v-col>{{user.full_name}} ({{user.username}}) <v-btn icon :loading="loading" small @click="list()"><v-icon>mdi-refresh</v-icon></v-btn></v-col>
+                <v-col cols="auto"><v-btn icon color="success"><v-icon>mdi-dots-vertical</v-icon></v-btn></v-col>
             </v-row>
         </v-card-title>
         <v-card-text>
@@ -39,7 +39,7 @@
                         :rotate="-90"
                         :size="80"
                         :width="8"
-                        :value="user.presence_day_sum_profit * 100 / 200 "
+                        :value="user.presence_day_sum_profit * 100 / user.goal_day "
                         color="blue">
                             <v-row no-gutters>
                                 <v-col cols="12" class="caption">{{ formatNumber(user.presence_day_sum_profit) }}</v-col>
@@ -48,69 +48,44 @@
                     </v-progress-circular>
                 </v-col>  
                 <v-col class="text-center">
-                    <v-subheader>Meta Mes</v-subheader>
+                    <v-subheader>
+                        <v-row>
+                            <v-col>Perdidas</v-col>
+                        </v-row>
+                    </v-subheader>
                     <v-progress-circular
                         :rotate="-90"
                         :size="80"
                         :width="8"
-                        :value="user.presence_month_sum_profit * 100 / 900 "
-                        color="amber">
+                        :value=" (user.presence_day_sum_writeoff)*(-1) "
+                        color="red">
                         <v-row no-gutters>
-                                <v-col cols="12" class="caption">{{ formatNumber(user.presence_month_sum_profit) }}</v-col>
-                                <v-col cols="12" class="title">900</v-col>
+                                <v-col cols="12" class="caption">{{ formatNumber(user.presence_day_sum_writeoff) }}</v-col>
+                                <v-col cols="12" class="title">{{ formatNumber(user.presence_month_sum_writeoff) }}</v-col>
                             </v-row>
                     </v-progress-circular>
-                </v-col>  
+                </v-col>
+                <v-col class="text-center">
+                    <v-subheader>
+                        <v-row>
+                            <v-col>Meta Mes</v-col>
+                        </v-row>
+                    </v-subheader>
+                    <v-progress-circular
+                        :rotate="-90"
+                        :size="80"
+                        :width="8"
+                        :value="user.presence_month_sum_profit * 100 / user.goal_month "
+                        color="green">
+                        <v-row no-gutters>
+                            <v-col cols="12" class="caption">{{ formatNumber(user.presence_month_sum_profit) }}</v-col>
+                            <v-col cols="12" class="title">900</v-col>
+                        </v-row>
+                    </v-progress-circular>
+                </v-col>    
             </v-row>
 
-            <v-row>
-                <v-col cols="3">
-                    <v-subheader>Sanciones</v-subheader>
-                </v-col>
-                <v-col>
-                    <v-rating
-                      full-icon="mdi-circle-off-outline"
-                      :value="null || 2"
-                      :length="null || 2"
-                      color="red"
-                      background-color="grey lighten-1"
-                      readonly
-                  ></v-rating>
-                </v-col>
-            </v-row>
-            <v-row>
-                 <v-col cols="3">
-                    <v-subheader>Permisos</v-subheader>
-                </v-col>
-                <v-col>
-                    <v-rating
-                      full-icon="mdi-exit-run"
-                      :value="null || 1"
-                      :length="null || 1"
-                      color="success"
-                      background-color="grey lighten-1"
-                      readonly
-                  ></v-rating>
-                </v-col>
-            </v-row>
-
-            <v-row>
-                 <v-col cols="3">
-                    <v-subheader>Bonos</v-subheader>
-                </v-col>
-                <v-col>
-                    <v-rating
-                      full-icon="mdi-star"
-                      :value="null || 4"
-                      :length="null || 4"
-                      color="amber"
-                      background-color="grey lighten-1"
-                      readonly
-                  ></v-rating>
-                </v-col>
-            </v-row>
-
-            
+        
 
         </v-card-text>
     </v-card>
@@ -139,6 +114,13 @@ export default {
             this.getResource(`user/${this.userId}?with[]=profile&with[]=table&with[]=group&with[]=presenceDay`).then( data => {
                 this.user = data;
             })
+        },
+
+        estimatePresence()
+        {
+           this.getResource(`userPresence/estimate`).then( data => {
+               console.log(data)
+            }) 
         }
     }
 

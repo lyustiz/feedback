@@ -18,8 +18,11 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        return Profile::with([])
-                    ->get();
+        return Profile::with(['profileProgress'])
+                        ->withSum(['presenceMonth', 'presenceDay'], 'profit')
+                        ->withSum(['presenceMonth', 'presenceDay'], 'writeoff')
+                        ->orderBy('name')
+                        ->get();
     }
 
     public function profileUser($userId)
@@ -27,7 +30,10 @@ class ProfileController extends Controller
         return Profile::with(['presence:id,start_at,user_id,profile_id', 'presence.user:id,name,surname', 'agency:agency.id,amolatina_id'])
                         ->whereHas('user', function (Builder $query) use($userId) {
                             $query->where('user.id', $userId);
-                        })->get();
+                        })
+                        ->withSum(['presenceDay'], 'profit')
+                        ->withSum(['presenceDay'], 'writeoff')
+                        ->get();
     }
 
     /**

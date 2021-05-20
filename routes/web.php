@@ -30,6 +30,10 @@ Route::post('/login', function(Request $request ){
             {
                 $user->load(['agencyManage:agency.id,name,amolatina_id,token' ]);
             }
+            if($user->agency->count() == 0)
+            {
+                throw ValidationException::withMessages(['userInactive' => "Sin perfiles asignados contacte con el administrador"]);
+            }
             $role  = $user->role; 
             $menu  = $role->menu; 
 

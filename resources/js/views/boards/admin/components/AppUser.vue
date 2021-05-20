@@ -11,7 +11,7 @@
                   <v-list-item-subtitle class="title-section"> {{user.name}}</v-list-item-subtitle>
                   <v-list-item-title>{{ role.name }}</v-list-item-title>
               </v-list-item-content>
-              <v-list-item-icon @click="getdata()">
+              <v-list-item-icon>
                   <v-icon>mdi-dots-vertical</v-icon>
               </v-list-item-icon>
           </v-list-item>
@@ -39,8 +39,8 @@
     <v-subheader>
       <v-row>
         <v-col>Ganancias</v-col>
-        <v-col cols="auto"><v-icon  small @click="getCuratorsCommision($event)">mdi-home-search-outline</v-icon></v-col>
-        <v-col cols="auto"><v-icon  small @click="getTotalsCommisions($event)">mdi-reload</v-icon></v-col>
+<!--         <v-col cols="auto"><v-icon  small @click="getCuratorsCommision($event)">mdi-home-search-outline</v-icon></v-col>
+ -->        <v-col cols="auto"><v-icon  small @click="getTotalsCommisions($event)">mdi-reload</v-icon></v-col>
       </v-row>
     </v-subheader>
     
@@ -53,7 +53,7 @@
         <v-row no-gutters v-if="progress.day"> 
           <v-col cols="12"> {{progress.day.profit || 0}} / 800</v-col>
           <v-col cols="12">
-            <v-progress-linear height="10" :value="getPercent(progress.day.profit, 2000)" :indeterminate="loading"></v-progress-linear>
+            <v-progress-linear height="10" :value="getPercent(progress.day.profit, 800)" :indeterminate="loading"></v-progress-linear>
           </v-col>
         </v-row>
       </v-col>
@@ -67,7 +67,7 @@
         <v-row no-gutters v-if="progress.day"> 
           <v-col cols="12"> {{progress.month.profit || 0}} / 15000</v-col>
           <v-col cols="12">
-            <v-progress-linear height="10" :value="getPercent(progress.month.profit, 20000)" :indeterminate="loading"></v-progress-linear>
+            <v-progress-linear height="10" :value="getPercent(progress.month.profit, 15000)" :indeterminate="loading"></v-progress-linear>
           </v-col>
         </v-row>
       </v-col>
@@ -182,9 +182,6 @@ export default {
           "profit": 0,
           "share":  0
       }
-
-     
-
 
         this.getResource(`agency/totals?type=day&token=${this.agency.token}&amolatina_id=${this.agency.amolatina_id}`).then( response => {
           this.progress.day = response.data

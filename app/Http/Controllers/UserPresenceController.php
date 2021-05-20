@@ -170,11 +170,99 @@ class UserPresenceController extends Controller
         }
 
         return $updates;
-        
-        //return response( [ 'data' => $response['body'], 'detail' => $response['detail']  ] , $response['status']) ;
-
-
     }
+
+    public function presenceEstimate()
+    {
+        $searches = UserPresence::select('user_presence.start_at', 'agency.amolatina_id')
+                                     ->join('profile', 'profile.id', '=', 'user_presence.profile_id')
+                                     ->join('agency', 'agency.id', '=', 'profile.agency_id')
+                                     ->where('user_presence.status_id', 3)
+                                     ->distinct()
+                                     ->get();
+
+        $userPresences = UserPresence::with(['profile:profile.id,amolatina_id', 'profile.agency:agency.id,amolatina_id'])
+                                     ->where( 'status_id' , 3)
+                                     ->get();
+
+        $end_at = Carbon::now('UTC')->toDateTimeLocalString('millisecond');
+        $token  = '33568305-c77b-4719-a97e-331610a9b170';
+        $updates = [];
+
+        foreach ($searches as $search) {
+            
+            $response = $this->getProfileCommisions($token, $search->amolatina_id, $search->start_at, $end_at);
+
+            if($response['ok'])
+            {
+                $commissions = $response['body']['commissions'];
+
+                $updates[$search->amolatina_id][$search->start_at] = $this->setPrecenseCommisions($userPresences, $commissions, $search->start_at);
+            } else {
+                $updates[$search->amolatina_id][$search->start_at] =['error'];
+            }
+        }
+
+        return $updates;
+    }
+
+
+    public function getProfileCommisions($token, $amolatinaId, $startAt, $endAt)
+    {
+        $setup          = Amolatina::getSetup('credits-profile');
+        $url            = $setup->url . '/' . $amolatinaId;
+        $params         = $setup->params;
+        $params['from'] = Amolatina::formatDateTime($startAt);
+        $params['to']   = Amolatina::formatDateTime($endAt);
+        $header         = $setup->header;
+
+        return   Amolatina::getDataUrl( $token, $url, $params, $header);
+    }
+
+    public function setPrecenseCommisions($userPresences, $commissions, $startAt)
+    {
+        $updates = [];
+        
+        foreach ($userPresences as $userPresence) {
+
+            $amolatina_id  = $userPresence->profile->amolatina_id; 
+    
+            $totals  =  [ 
+                'bonus'    => 0,
+                'writeoff' => 0,
+                'shared'   => 0,
+                'profit'   => 0,
+            ];
+    
+            foreach ($commissions as $commission) {
+                
+                if(!isset($commission['user-id']))
+                {
+                    continue;
+                }
+
+                if( $commission['user-id'] == $amolatina_id  &&  $startAt = $userPresence->start_at)
+                {
+                    $totals[ 'bonus' ]    =  $totals[ 'bonus' ]    + (($commission['positive']) ? $commission['points'] : 0) ; 
+                    $totals[ 'writeoff' ] =  $totals[ 'writeoff' ] + ((!$commission['positive']) ? $commission['points'] : 0) ; 
+                    $totals[ 'shared' ]   =  $totals[ 'shared' ]   + $commission['share'];
+                    $totals[ 'profit' ]   =  $totals[ 'profit' ]   + $commission['profit'];
+                    $totals[ 'comments' ] =  'manually';
+                }
+            }
+
+            if(isset($totals[ 'comments' ]))
+            {
+                $updates[$amolatina_id] = UserPresence::find($userPresence->id )->update($totals);
+            }
+
+        }
+
+        return  $updates;
+    }
+
+    
+
 
     /**
      * Remove the specified resource from storage.

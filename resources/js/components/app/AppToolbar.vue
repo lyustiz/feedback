@@ -132,6 +132,7 @@
               .then(() => 
               {
                   this.navigateToName('welcome')
+                  location.reload();
                   this.loading = false
               })
 

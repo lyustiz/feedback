@@ -1,6 +1,9 @@
 <template>
   <v-card dark class="rounded-lg " color="rgba(0,0,0,0.4)">
-    <v-subheader class="title">Perfiles</v-subheader>
+    <v-subheader class="title">Perfiles 
+      <v-btn icon color="success" @click="list()" :loading="loading"><v-icon>mdi-reload</v-icon></v-btn>
+      <v-btn icon color="red" @click="getProgress()" :loading="loading"><v-icon>mdi-reload</v-icon></v-btn>
+    </v-subheader>
     <v-card-text class="pt-0 accounts-container custom-scroll">
       <v-list subheader two-line dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
         <v-list-item v-for="profile in profiles" :key="profile.id" > 
@@ -11,22 +14,41 @@
               <v-list-item-title>
               <v-row no-gutters>
                   <v-col cols="auto">
-                  {{ profile.day || 0 }}  /  {{ profile.month || 0}}
+                    <v-tooltip bottom color="blue">
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-on="on" v-bind="attrs">{{ profile.profile_progress.profit_day || 0 }}  /  {{ profile.month || 600}}</span>
+                    </template>
+                    <span>Meta Dia</span>
+                    </v-tooltip>
                   </v-col>
                   <v-spacer></v-spacer>
                   <v-col cols="auto">
-                  3000
+                    <v-tooltip bottom color="green">
+                    <template v-slot:activator="{ on, attrs }">
+                      <span v-on="on" v-bind="attrs">{{ profile.profile_progress.profit_month || 0 }}  /  {{ profile.month || 2000}}</span>
+                    </template>
+                    <span>Meta Mes</span>
+                    </v-tooltip>
                   </v-col>
               </v-row>
               <v-row no-gutters>
                   <v-col>
-                  <v-progress-linear
-                  :value="profile.day*100/profile.month || 50"
-                  color="blue"
-                  height="8"
-                  class="mb-2 mt-1"
-                  ></v-progress-linear>
-              </v-col>
+                    <v-progress-linear
+                    v-on="on" v-bind="attrs"
+                    :value="( profile.profile_progress.profit_day*100/900 )|| 0"
+                    color="blue"
+                    height="8"
+                    class="mb-2 mt-1"
+                    ></v-progress-linear>
+                </v-col>
+                <v-col>
+                    <v-progress-linear
+                    :value="( profile.profile_progress.profit_month*100/2000 )|| 0"
+                    color="green"
+                    height="8"
+                    class="mb-2 mt-1"
+                    ></v-progress-linear>
+                </v-col>
               </v-row>
               
               </v-list-item-title>
@@ -34,15 +56,32 @@
               <v-row>
                   <v-col>{{profile.name}}</v-col>
                   <v-col>
-                  <v-rating
-                      full-icon="mdi-circle-off-outline"
-                      :value="profile.fault || 2"
-                      :length="profile.fault || 2"
-                      color="red"
-                      background-color="grey lighten-1"
-                      small
-                      readonly
-                  ></v-rating>
+                    <v-tooltip bottom color="orange">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-progress-linear
+                        v-on="on" v-bind="attrs"
+                        :value="( profile.profile_progress.writeoff_day * (-1))|| 0"
+                        color="orange"
+                        height="8"
+                        class="mb-2 mt-1"
+                      ></v-progress-linear>
+                    </template>
+                    <span>writeoff dia {{profile.profile_progress.writeoff_day || 0}}</span>
+                    </v-tooltip>
+                  </v-col>
+                  <v-col>
+                    <v-tooltip bottom color="red">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-progress-linear
+                        v-on="on" v-bind="attrs"
+                        :value="( profile.profile_progress.writeoff_month * (-1))|| 0"
+                        color="red"
+                        height="8"
+                        class="mb-2 mt-1"
+                      ></v-progress-linear>
+                    </template>
+                    <span>writeoff mes {{profile.profile_progress.writeoff_month || 0}}</span>
+                    </v-tooltip>
                   </v-col>
               </v-row>
               </v-list-item-subtitle>
@@ -73,9 +112,16 @@ export default {
   methods: {
 
     list() {
-        this.getResource('profile').then( data => {
-          this.profiles = data
-        })
+      this.getResource('profile').then( data => {
+        this.profiles = data
+      })
+    },
+
+    getProgress()
+    {
+      this.getResource('profileProgress/fill').then( data => {
+        console.log(data)
+      })
     }
   }
 }

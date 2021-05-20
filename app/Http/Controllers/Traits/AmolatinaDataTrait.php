@@ -80,7 +80,6 @@ trait AmolatinaDataTrait
                 return $setup;
                 break;
             
-            
             case 'total-credits':
                 
                 $setup->url      = 'credits/commissions';
@@ -90,7 +89,16 @@ trait AmolatinaDataTrait
                 $setup->comments = 'total de credito/perdida agencia segun periodo' ;
                 return $setup;
                 break;
-            
+
+            case 'credits-detail':
+                
+                $setup->url      = 'credits/commissions';
+                $setup->urlParam = ['amolatinaid'];
+                $setup->params   = ['from' => null, 'to' => null, 'positive'=> 'null', 'omit' => '0', 'select' => '10000' ];
+                $setup->comments = 'detalle de creditos/writeoff de la agencia segun periodo' ;
+                return $setup;
+                break;
+
             default:
                 throw ValidationException::withMessages(['error' => "tipo url requerida invalido ($type)"  ]);
                 break;

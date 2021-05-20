@@ -192,7 +192,7 @@ export default {
                     }
                     if(error.response.status == 419)
                     {
-                       // location.reload();
+                       location.reload();
                     }
                     
                 }                

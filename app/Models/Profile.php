@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Profile extends Model
 {
@@ -68,6 +69,11 @@ class Profile extends Model
         return $this->HasOne('App\Models\UserPresence')->where('status_id', 3);
     }
 
+    public function profileProgress()
+    {
+        return $this->HasOne('App\Models\ProfileProgress');
+    }
+
     public function user()
 	{
 		return $this->hasManyThrough(
@@ -79,6 +85,22 @@ class Profile extends Model
             'user_id' // fk en intermedia
 		);
 	}
+
+    public function presenceDay()
+    {
+        return $this->HasMany('App\Models\UserPresence')->whereBetween('start_at', [
+                                                                                     Carbon::now()->startOfDay(), 
+                                                                                     Carbon::now()->endOfDay()
+                                                                                     ]);
+    }
+
+    public function presenceMonth()
+    {
+        return $this->HasMany('App\Models\UserPresence')->whereBetween('start_at', [
+                                                                                     Carbon::now()->startOfMonth(), 
+                                                                                     Carbon::now()->endOfMonth()
+                                                                                     ]);
+    }
 
     
 

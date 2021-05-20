@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\ProfileProgress;
+use App\Models\Agency;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\AmolatinaDataTrait as Amolatina;
 
 class ProfileProgressController extends Controller
 {
@@ -17,6 +20,97 @@ class ProfileProgressController extends Controller
     {
         return ProfileProgress::with([])
                     ->get();
+    }
+
+    public function getProgress()
+    {
+        
+        $agencies = Agency::select('id', 'amolatina_id')->limit(1)->get();  //TODO ALL AGENCIES
+
+        $this->setProfiles();
+
+        $updates = [];
+
+        foreach ($agencies as $agency) {
+            
+            $token        = '33568305-c77b-4719-a97e-331610a9b170';
+
+            $amolatina_id = $agency->amolatina_id;
+
+            $response = $this->getProfileCommisions($token, $amolatina_id, 'month');
+
+            if($response['ok'])
+            {
+                $commissions = $response['body']['commissions'];
+
+                $updates[] = $this->setProfileProgress($commissions, 'month');
+            }
+
+            $response = $this->getProfileCommisions($token, $amolatina_id, 'day');
+
+            if($response['ok'])
+            {
+                $commissions = $response['body']['commissions'];
+
+                $updates[] = $this->setProfileProgress($commissions, 'day');
+            }
+        }
+
+        return $updates;
+    }
+
+    public function setProfiles()
+    {
+        $profiles  = Profile::where('status_id', 1)->doesntHave('profileProgress')->get();
+        $insert    = [];  
+
+        foreach ($profiles as $profile) {
+            $insert[] = [
+                'profile_id'   => $profile->id,
+                'amolatina_id' => $profile->amolatina_id, 
+                'user_id'      => $profile->user_id, 
+                'status_id'    => $profile->status_id
+            ];
+        }
+        return ProfileProgress::insert($insert);
+    }
+
+    public function getProfileCommisions($token, $amolatinaId, $type)
+    {
+        $range          = Amolatina::dateRange($type);
+        $setup          = Amolatina::getSetup('credits-profile');
+        $url            = $setup->url . '/' . $amolatinaId;
+        $params         = $setup->params;
+        $params['from'] = $range->from;
+        $params['to']   = $range->to;
+        $header         = $setup->header;
+        return   Amolatina::getDataUrl( $token, $url, $params, $header);
+    }
+
+    public function setProfileProgress($commissions, $type)
+    {
+        foreach ($commissions as $commission) {
+
+            $updates = [];
+            if(isset($commission['user-id']))
+            {
+                
+                if($type == 'month')
+                {
+                    $totals = ( $commission['positive'] == 'true' ) 
+                          ? ['profit_month'   => $commission['profit']] 
+                          : ['writeoff_month' => $commission['points']];
+
+                } else {
+                    $totals = ( $commission['positive'] == 'true' ) 
+                          ? ['profit_day'   => $commission['profit']] 
+                          : ['writeoff_day' => $commission['points']];
+                }
+
+                $updates[]  = ProfileProgress::where('amolatina_id',  $commission['user-id'] )->update($totals);
+            }
+        }
+        return $updates;
     }
 
     /**

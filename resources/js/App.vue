@@ -20,12 +20,15 @@ export default {
         
         if(auth==='true') // TODO:check expire
         {
+ 
             const data ={
+                            
+                            
                             user: JSON.parse(user),
                             role: JSON.parse(role),
                             menu: JSON.parse(menu),
                             agency: JSON.parse(agency),
-                            agencyManage: JSON.parse(agencyManage),
+                            agencyManage:  (agencyManage) ? JSON.parse(agencyManage) : null,
                             amolatina_token: amolatina_token
                         };
             

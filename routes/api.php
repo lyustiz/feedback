@@ -93,6 +93,8 @@ Route::apiResource('/userProfile',              'UserProfileController');
 Route::get('/profile/user/{user}',              'ProfileController@profileUser');
 Route::apiResource('/profile',                  'ProfileController');
 
+
+Route::get('/profileProgress/fill',             'ProfileProgressController@getProgress');
 Route::apiResource('/profileProgress',          'ProfileProgressController');
 
 
@@ -112,15 +114,20 @@ Route::apiResource('/curator',                  'CuratorController');
 Route::apiResource('/spending',                 'SpendingController');
 
 
-
+Route::get('/comission/detail',                'ComissionController@comissionDetail');
 Route::apiResource('/comission',                'ComissionController');
+
+
 Route::apiResource('/table',     'TableController');
 Route::apiResource('/group',     'GroupController');
 Route::apiResource('/country',     'CountryController');
 Route::apiResource('/userAgency',     'UserAgencyController');
 
+
+
+Route::get('/userPresence/estimate', 'UserPresenceController@presenceEstimate');
 Route::put('/userPresence/stop',     'UserPresenceController@stop');
-Route::apiResource('/userPresence',     'UserPresenceController');
+Route::apiResource('/userPresence',  'UserPresenceController');
 
 //newRoutes
 });
