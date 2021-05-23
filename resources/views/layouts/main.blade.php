@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="referrer" content="origin">
 
     <!-- SEO -->
     <meta name="description" content="criptoweb"/>
@@ -18,7 +19,7 @@
     <!-- Schema.org Google -->
     <meta itemprop="name" content="criptoweb">
     <meta itemprop="description" content="criptoweb.">
-    <meta itemprop="image" content="https://criptowebcom/images/logo.jpg">
+    <meta itemprop="image" content="https://criptoweb.com/images/logo.jpg">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary">
@@ -32,7 +33,7 @@
     <meta name="og:description" content="criptoweb.">
     <meta name="og:image" content="https://criptoweb.com/images/logo.jpg">
     <meta name="og:url" content="https://criptoweb.com/">
-    <meta name="og:site_name" content="criptoweb">
+    <meta name="og:site_name" content="criptoweb.com">
     <meta name="og:locale" content="es_Ve">
     <meta name="og:type" content="app">
 

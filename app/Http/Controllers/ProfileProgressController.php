@@ -25,7 +25,7 @@ class ProfileProgressController extends Controller
     public function getProgress()
     {
         
-        $agencies = Agency::select('id', 'amolatina_id')->limit(1)->get();  //TODO ALL AGENCIES
+        $agencies = Agency::select('id', 'amolatina_id', 'token')->get();  //TODO ALL AGENCIES
 
         $this->setProfiles();
 
@@ -33,7 +33,7 @@ class ProfileProgressController extends Controller
 
         foreach ($agencies as $agency) {
             
-            $token        = '33568305-c77b-4719-a97e-331610a9b170';
+            $token        = $agency->token;
 
             $amolatina_id = $agency->amolatina_id;
 
@@ -50,6 +50,7 @@ class ProfileProgressController extends Controller
 
             if($response['ok'])
             {
+                
                 $commissions = $response['body']['commissions'];
 
                 $updates[] = $this->setProfileProgress($commissions, 'day');
@@ -98,12 +99,12 @@ class ProfileProgressController extends Controller
                 if($type == 'month')
                 {
                     $totals = ( $commission['positive'] == 'true' ) 
-                          ? ['profit_month'   => $commission['profit']] 
+                          ? ['profit_month'   => $commission['profit'], 'points_month' => $commission['points'] ] 
                           : ['writeoff_month' => $commission['points']];
 
                 } else {
                     $totals = ( $commission['positive'] == 'true' ) 
-                          ? ['profit_day'   => $commission['profit']] 
+                          ? ['profit_day'   => $commission['profit'], 'points_day' => $commission['points']] 
                           : ['writeoff_day' => $commission['points']];
                 }
 

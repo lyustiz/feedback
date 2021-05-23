@@ -34,6 +34,23 @@ trait AmolatinaDataTrait
         self::errorHandler($response, $url, $params);
     }
 
+    static public function getContentUrl($token, $url, $replaceUrl = false)
+    {
+        
+        $header = [ 'authorization' => 'Token token="'.$token.'"' ];
+
+        $url      =  ($replaceUrl) ? $replaceUrl . $url :  config('amolatina.url') . $url;
+
+        $response = Http::withHeaders($header)->get($url);
+
+        if($response->successful())
+        {
+            return [  'status' => $response->status(), 'body' =>  $response->body() , 'detail' => $response->handlerStats(), 'ok' => $response->ok() ];
+        } 
+
+        self::errorHandler($response, $url, []);
+    }
+
     static public function errorHandler($response, $url, $params)
     {
         $status = $response->status();
@@ -46,9 +63,12 @@ trait AmolatinaDataTrait
             case 403:
                 throw ValidationException::withMessages(['error' => 'Token Amolatina no Valido'  ]);
                 break;
-            default:
 
-            dd($response);
+            case 410:
+                throw ValidationException::withMessages(['error' => 'Informacion no disponible'  ]);
+                break;
+
+            default:
                  throw ValidationException::withMessages(['error' => [ 'status' => $response->status(), 'url' => $url, 'params' => $params, 'details' => $response->handlerStats() ]  ]);
                 break;
         }
@@ -96,6 +116,23 @@ trait AmolatinaDataTrait
                 $setup->urlParam = ['amolatinaid'];
                 $setup->params   = ['from' => null, 'to' => null, 'positive'=> 'null', 'omit' => '0', 'select' => '10000' ];
                 $setup->comments = 'detalle de creditos/writeoff de la agencia segun periodo' ;
+                return $setup;
+                break;
+
+            case 'agency-profiles':
+            
+                $setup->url      = 'users/hierarchy';
+                $setup->urlParam = ['amolatinaid', 'descendants' ];
+                $setup->params   = [ 'omit' => '0', 'select' => '100', 'filter.suspended'=> 'false', 'filter.tags' =>'+p' ];
+                $setup->comments = 'lista los profiles de una agencia' ;
+                return $setup;
+                break;
+
+            case 'detail-profile':
+        
+                $setup->url      = 'users';
+                $setup->urlParam = ['amolatinaid'];
+                $setup->comments = 'optiene informacion detallada de un perfil' ;
                 return $setup;
                 break;
 

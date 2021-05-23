@@ -24,6 +24,8 @@ class Profile extends Model
 	 	 	 	 	 	 	'city',
 	 	 	 	 	 	 	'minage',
 	 	 	 	 	 	 	'maxage',
+                            'goal_day',
+                            'goal_month',
 	 	 	 	 	 	 	'comments',
 	 	 	 	 	 	 	'status_id',
 	 	 	 	 	 	 	'user_id'

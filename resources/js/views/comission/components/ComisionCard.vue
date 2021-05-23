@@ -57,7 +57,7 @@
                         </v-col>
                         <v-col cols="12" class="text-center">
                         <v-list-item-avatar color="blue" size="80" class="my-0 mx-auto">
-                            <v-img :src="`/images/profiles/${comission.profile.photo || 'nophoto'}.80x80.thumb-fd`" ></v-img>
+                            <v-img :src="`/storage/photo/profile/${comission.profile.photo || 'nophoto'}.jpg`" ></v-img>
                         </v-list-item-avatar>
                         </v-col>
                         <v-col cols="12" class="text-center">

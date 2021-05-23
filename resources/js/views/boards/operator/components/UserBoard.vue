@@ -39,10 +39,10 @@
                         :rotate="-90"
                         :size="80"
                         :width="8"
-                        :value="user.presence_day_sum_profit * 100 / user.goal_day "
+                        :value="user.presence_day_sum_bonus * 100 / user.goal_day "
                         color="blue">
                             <v-row no-gutters>
-                                <v-col cols="12" class="caption">{{ formatNumber(user.presence_day_sum_profit) }}</v-col>
+                                <v-col cols="12" class="caption">{{ formatNumber(user.presence_day_sum_bonus) }}</v-col>
                                 <v-col cols="12" class="title">200</v-col>
                             </v-row>
                     </v-progress-circular>

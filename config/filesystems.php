@@ -49,6 +49,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'photo_profile' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/photo/profile'),
+            'url' => env('APP_URL').'/storage/photo/profile',
+            'visibility' => 'public',
+        ],
+
         'photo_user' => [
             'driver' => 'local',
             'root' => storage_path('app/public/photo/user'),

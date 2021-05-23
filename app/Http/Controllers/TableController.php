@@ -19,6 +19,12 @@ class TableController extends Controller
                     ->get();
     }
 
+    public function tablesDetails()
+    {
+        return Table::with(['operator.profile', 'coordinator', 'manager', 'turn'])
+                    ->get();
+    }
+
     /**
      * Store a newly created resource in storage.
      *

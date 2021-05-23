@@ -30,6 +30,7 @@ class UserController extends Controller
     {
        return $user->load( 'group', 'table.manager', 'table.coordinator', 'profile', 'role')
                    ->loadSum(['presenceDay', 'presenceMonth' ], 'profit')
+                   ->loadSum(['presenceDay', 'presenceMonth' ], 'bonus')
                    ->loadSum(['presenceDay', 'presenceMonth' ], 'writeoff');
     }
 
@@ -38,6 +39,7 @@ class UserController extends Controller
         //$with = $this->userWiths($request);
         return User::with('group', 'table.manager', 'table.coordinator', 'profile', 'role', 'penaltyMonth.penaltyType')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'profit')
+                    ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
                     ->operator($request->boolean('operator'))
                     ->orderBy('name')

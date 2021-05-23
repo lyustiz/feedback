@@ -45,6 +45,26 @@ class Table extends Model
         return $this->BelongsTo('App\Models\User');
     }
 
+    public function operator()
+    {
+        return $this->HasMany('App\Models\User')->where('role_id', 4);
+    }
+
+    /* public function coordinator()
+    {
+        return $this->BelongsTo('App\Models\User', 'coordinator_id', 'user_id')->where('role_id', 3);
+    }
+
+    public function manager()
+    {
+        return $this->BelongsTo('App\Models\User', 'manager_id', 'user_id')->where('role_id', 3);
+    } */
+
+    public function turn()
+    {
+        return $this->BelongsTo('App\Models\Turn');
+    }
+
     public function manager()
     {
         return $this->BelongsTo('App\Models\User', 'manager_id', 'id' );

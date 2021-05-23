@@ -27,7 +27,7 @@
         >
         <v-list-item v-for="profile in profiles" :key="profile.id" :value="profile" > 
           <v-list-item-avatar color="blue" size="60">
-            <v-img :src="`/storage/photo/profile/${profile.photo || 'nophoto'}.80x80.thumb-fd`" ></v-img> 
+            <v-img :src="`/storage/photo/profile/${profile.photo || 'nophoto'}.jpg`" ></v-img> 
           </v-list-item-avatar>
           <v-list-item-content>
               <v-list-item-title>

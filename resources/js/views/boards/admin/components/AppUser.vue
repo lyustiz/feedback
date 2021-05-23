@@ -12,7 +12,13 @@
                   <v-list-item-title>{{ role.name }}</v-list-item-title>
               </v-list-item-content>
               <v-list-item-icon>
-                  <v-icon>mdi-dots-vertical</v-icon>
+                  <item-menu 
+                    :menus="itemsMenu" 
+                    iconColor="white" 
+                    btnColor="transparent" 
+                    :item="agency"
+                    @onItemMenu="onItemMenu($event)"
+                  ></item-menu>
               </v-list-item-icon>
           </v-list-item>
         </v-col>
@@ -51,9 +57,9 @@
       </v-col>
       <v-col>
         <v-row no-gutters v-if="progress.day"> 
-          <v-col cols="12"> {{progress.day.profit || 0}} / 800</v-col>
+          <v-col cols="12"> Total: {{progress.day.points || 0}} |  Profit: {{progress.day.profit || 0}}</v-col>
           <v-col cols="12">
-            <v-progress-linear height="10" :value="getPercent(progress.day.profit, 800)" :indeterminate="loading"></v-progress-linear>
+            <v-progress-linear height="10" :value="getPercent(progress.day.points, 2000)" :indeterminate="loading"></v-progress-linear>
           </v-col>
         </v-row>
       </v-col>
@@ -65,59 +71,35 @@
       </v-col>
       <v-col>
         <v-row no-gutters v-if="progress.day"> 
-          <v-col cols="12"> {{progress.month.profit || 0}} / 15000</v-col>
+          <v-col cols="12"> Total: {{progress.month.points || 0}} | Profit: {{progress.month.profit || 0}}</v-col>
           <v-col cols="12">
-            <v-progress-linear height="10" :value="getPercent(progress.month.profit, 15000)" :indeterminate="loading"></v-progress-linear>
+            <v-progress-linear height="10" :value="getPercent(progress.month.points, 30000)" :indeterminate="loading"></v-progress-linear>
           </v-col>
         </v-row>
       </v-col>
     </v-row>
 
-
-
-        <!-- <v-col class="text-center">
-          <v-subheader>citas</v-subheader>
-          <v-progress-circular
-              :rotate="-90"
-              :size="80"
-              :width="8"
-              :value="35"
-              color="blue">
-              35
-          </v-progress-circular>
-        </v-col>  
-        <v-col class="text-center">
-          <v-subheader>citas</v-subheader>
-          <v-progress-circular
-              :rotate="-90"
-              :size="80"
-              :width="8"
-              :value="12"
-              color="green">
-              12
-          </v-progress-circular>
-        </v-col>  
-        <v-col class="text-center">
-          <v-subheader>citas</v-subheader>
-          <v-progress-circular
-              :rotate="-90"
-              :size="80"
-              :width="8"
-              :value="10"
-              color="red">
-              10
-          </v-progress-circular>
-        </v-col>  --> 
     </v-card-text>
+
+    <v-dialog v-model="tableDetailDialog" scrollable  width="80vw">
+      <TableDetail v-if="tableDetailDialog" @closeDialog="closeDialog($event)" />
+    </v-dialog> 
+
+    
   </v-card> 
             
 </template>
 
 <script>
 import AppData from '@mixins/AppData'
+import TableDetail from '@views/table/TableDetail'
 export default {
 
   mixins: [AppData],
+
+  components:{
+    TableDetail
+  },
 
   mounted()
   {
@@ -149,7 +131,15 @@ export default {
       day:   null,
       month: null,
     },
-    curatorDialog: false
+    curatorDialog: false,
+    tableDetailDialog: false,
+    itemsMenu: [
+      { action: 'importProfile', icon: 'mdi-account-multiple-plus', label: 'Importar Nuevos Perfiles', iconColor: 'green' },
+      { action: 'importProfilePhoto', icon: 'mdi-camera-account', label: 'Importar Fotos Perfiles', iconColor: 'green' },
+      { action: 'showTablesDetail', icon: 'mdi-view-dashboard-outline', label: 'Organigrama', iconColor: 'blue' },
+
+      
+    ],
   }),
 
   methods:{
@@ -192,12 +182,41 @@ export default {
         })
     },
 
-     getPercent(value, goal)
-      {
-        if(!goal)  return 0
-        if(!value) return 0
-        return ( value * 100 / goal > 100) ? 100 :  value * 100 / goal
-      }
+    getPercent(value, goal)
+    {
+      if(!goal)  return 0
+      if(!value) return 0
+      return ( value * 100 / goal > 100) ? 100 :  value * 100 / goal
+    },
+
+    importProfile(agency)
+    {
+      if(!agency) return
+      this.getResource(`profile/import/agency/${agency.id}`).then(data =>{
+        this.showMessage(data.msj);
+      })
+    },
+
+    importProfilePhoto()
+    {
+      this.getResource(`profile/import/photo`).then(data =>{
+        this.showMessage(data.msj);
+      })
+    },
+
+    showTablesDetail()
+    {
+      this.tableDetailDialog = true
+    },
+
+    closeDialog(reload)
+    {
+
+      this.tableDetailDialog   = false
+
+    },
+
+    
   }
 }
 </script>
