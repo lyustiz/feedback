@@ -29,7 +29,12 @@
       <v-list subheader two-line dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
         <v-list-item v-for="profile in showProfiles" :key="profile.id" > 
           <v-list-item-avatar color="blue" size="60">
-            <v-img :src="`/storage/photo/profile/${profile.photo || 'nophoto'}.jpg`" ></v-img>
+            <v-tooltip bottom color="blue">
+              <template v-slot:activator="{ on, attrs }">
+                <v-img v-on="on" v-bind="attrs" :src="`/storage/photo/profile/${profile.photo || 'nophoto'}.jpg`" ></v-img>
+              </template>
+              <span>{{profile.amolatina_id}}</span>
+            </v-tooltip>
           </v-list-item-avatar>
           <v-list-item-content>
               <v-list-item-title>

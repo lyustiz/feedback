@@ -58,6 +58,7 @@ import UserAgency  from '@views/userAgency/userAgency.vue';
 import UserPresence  from '@views/userPresence/userPresence.vue';
 import Absence  from '@views/absence/absence.vue';
 import AbsenceType  from '@views/absenceType/absenceType.vue';
+import Client  from '@views/client/AppClient';
 //newImport
 
 let isAuthenticated = true;
@@ -357,6 +358,12 @@ export default new Router({
     name: 'absenceType',
     icon: 'bubble_chart',
     component: AbsenceType,
+},
+{
+    path: '/client',
+    name: 'client',
+    icon: 'bubble_chart',
+    component: Client,
 },
 //newRoutes
 

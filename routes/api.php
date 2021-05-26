@@ -53,7 +53,7 @@ Route::apiResource('/suscriptor',               'SuscriptorController');
 Route::apiResource('/tipoSuscripcion',          'TipoSuscripcionController');
 Route::apiResource('/vendedor',                 'VendedorController');
 
-
+Route::get('/agency/clients',            'AgencyController@agencyClients');
 Route::get('/agency/totals',            'AgencyController@agencyTotals');
 Route::apiResource('/agency',                   'AgencyController');
 
@@ -130,5 +130,6 @@ Route::get('/userPresence/estimate', 'UserPresenceController@presenceEstimate');
 Route::put('/userPresence/stop',     'UserPresenceController@stop');
 Route::apiResource('/userPresence',  'UserPresenceController');
 
+Route::apiResource('/client',     'ClientController');
 //newRoutes
 });

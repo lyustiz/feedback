@@ -45,6 +45,8 @@
     <v-subheader>
       <v-row>
         <v-col>Ganancias</v-col>
+<v-col cols="auto"><v-icon  small @click="getdata($event)">mdi-home-search-outline</v-icon></v-col>
+        
 <!--         <v-col cols="auto"><v-icon  small @click="getCuratorsCommision($event)">mdi-home-search-outline</v-icon></v-col>
  -->        <v-col cols="auto"><v-icon  small @click="getTotalsCommisions($event)">mdi-reload</v-icon></v-col>
       </v-row>
@@ -145,7 +147,7 @@ export default {
   methods:{
     getdata()
     {
-      this.getResource('data').then( data => {
+      this.getResource('comission/detail').then( data => {
         console.log(data)
       })
 

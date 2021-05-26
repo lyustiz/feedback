@@ -26,28 +26,58 @@ class ComissionController extends Controller
 
     public function comissionDetail()
     {
-        set_time_limit ( 300 );
+        set_time_limit ( 900 );
         
-        $currentCommisions = Comission::groupBy('agency_id')
-                           ->get(['agency_id', \DB::raw('MAX(comission_at) as comission_at')]);
+/*         $currentCommisions = Comission::groupBy('agency_id')
+                           ->get(['agency_id', \DB::raw('MAX(comission_at) as comission_at')]); */
 
         $stored = []; 
+        $token  = '33568305-c77b-4719-a97e-331610a9b170'; // 002c9916-e95a-4a9d-a796-b48a72c9a6eb
+        $amolatina_id = '79602433731';
 
-        foreach ($currentCommisions  as  $currentCommision) {
+        $day = new Carbon('2020-12-31');
 
-            $token  = '33568305-c77b-4719-a97e-331610a9b170';
-            $amolatina_id = $currentCommision->agency_id;
-            $start =  Carbon::parse($currentCommision->comission_at)->toDateTimeLocalString('millisecond'); // ->addSecond(1)
-            $end_at = Carbon::now('UTC')->toDateTimeLocalString('millisecond');
+        for ($i = 1; $i <= 134 ; $i++) { 
+            
+            $day = $day->addDay();
+
+            $start_at = $day->startOfDay()->toISOString();
+
+            $end_at   = $day->endOfDay()->toISOString();
+
+            $response = $this->getDetailCommisions($token, $amolatina_id, $start_at, $end_at );
+
+            if($response['ok'])
+            {
+                $commisions = $response['body'];
+                $stored[$day->toISOString()] = count($this->storeCommision($commisions)) * 500;
+            }
+            else {
+                $stored[$day->toISOString()] = $response;
+            }
+            
+        }
+
+        return $stored;
+
+        // foreach ($currentCommisions  as  $currentCommision) {
+
+            $token  = '33568305-c77b-4719-a97e-331610a9b170'; // 002c9916-e95a-4a9d-a796-b48a72c9a6eb
+            $amolatina_id = '79602433731'; // $currentCommision->agency_id; 81559831131
+           /*  $start =  Carbon::parse($currentCommision->comission_at)->toDateTimeLocalString('millisecond'); // ->addSecond(1)
+            $end_at = Carbon::now('UTC')->toDateTimeLocalString('millisecond'); */
+
+            $start_at = new Carbon('2021-05-01'); //Carbon::parse($currentCommision->comission_at)->toDateTimeLocalString('millisecond'); // ->addSecond(1)
+            $end_at   = new Carbon('2021-01-01');
             
             $response = $this->getDetailCommisions($token, $amolatina_id, $start, $end_at );
             
             if($response['ok'])
             {
                 $commisions = $response['body'];
-                $stored[$amolatina_id] = $this->storeCommision($commisions);
+                $stored[$amolatina_id] = count($this->storeCommision($commisions)) * 500;
             }
-        }
+        //}
 
         return $stored;
     }

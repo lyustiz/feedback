@@ -139,9 +139,6 @@ export default {
 
         let ageFrom  = (this.ageFrom > this.ageTo ) ? this.ageTo   : this.ageFrom
         let ageTo    = (this.ageTo < this.ageFrom ) ? this.ageFrom : this.ageTo
-
-        console.log(this.sex)
-
         this.$emit('onSearch', { country: this.country, ageFrom: ageFrom, ageTo: ageTo, sex: this.sex  })
       }
     }

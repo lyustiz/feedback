@@ -23,6 +23,15 @@ class AgencyController extends Controller
                     ->get();
     }
 
+    public function agencyClients()
+    {
+        return Agency::with([])
+                    ->withCount(['clients', 'clientsContacted', 'clientsPending', 'clientsDay', 'clientsWeek', 'clientsMonth' ])
+                    ->get();
+    }
+
+    
+
     public function agencyTotals(Request $request)
     {
         $validate = request()->validate([

@@ -6,13 +6,13 @@
     <v-card-text>
       <v-row>
         <v-col>
-          <v-card color="blue" v-ripple>
+          <v-card color="blue" v-ripple @click="navigateToName('client')">
             <v-card-text>
               <v-row>
                 <v-col>
-                  <v-icon size="34">mdi-gift</v-icon>
+                  <v-icon size="34">mdi-account-cash</v-icon>
                 </v-col>
-                <v-col class="pt-4">Bonus</v-col>
+                <v-col class="pt-4">Clientes</v-col>
               </v-row>
             </v-card-text>
           </v-card>

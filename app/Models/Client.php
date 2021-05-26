@@ -4,17 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Table extends Model
+class Client extends Model
 {
-    protected $table 	  = 'table';
+    protected $table 	  = 'client';
 
     protected $fillable   = [
-                            'name',
-	 	 	 	 	 	 	'value',
-	 	 	 	 	 	 	'turn_id',
+                            'amolatina_id',
+	 	 	 	 	 	 	'name',
+	 	 	 	 	 	 	'birthday',
+	 	 	 	 	 	 	'age',
+	 	 	 	 	 	 	'photo',
+	 	 	 	 	 	 	'gender',
+	 	 	 	 	 	 	'preference',
+	 	 	 	 	 	 	'country',
+	 	 	 	 	 	 	'city',
+	 	 	 	 	 	 	'profit',
+	 	 	 	 	 	 	'crown',
+	 	 	 	 	 	 	'contacted_at',
+	 	 	 	 	 	 	'last_contact',
 	 	 	 	 	 	 	'comments',
 	 	 	 	 	 	 	'status_id',
-	 	 	 	 	 	 	'manager_id',
 	 	 	 	 	 	 	'user_id'
                             ]; 
     
@@ -43,25 +52,5 @@ class Table extends Model
     public function user()
     {
         return $this->BelongsTo('App\Models\User');
-    }
-
-    public function operator()
-    {
-        return $this->HasMany('App\Models\User')->where('role_id', 4);
-    }
-
-    public function turn()
-    {
-        return $this->BelongsTo('App\Models\Turn');
-    }
-
-    public function manager()
-    {
-        return $this->BelongsTo('App\Models\User', 'manager_id', 'id' );
-    }
-
-    public function coordinator()
-    {
-        return $this->BelongsTo('App\Models\User', 'coordinator_id', 'id' );
     }
 }

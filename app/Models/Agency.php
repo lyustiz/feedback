@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Agency extends Model
 {
@@ -29,6 +30,12 @@ class Agency extends Model
 	 	 	 	 	 	 	'updated_at',
                             ];
 
+    
+    
+    protected $pending    = 5;
+    protected $contacted  = 6;
+    protected $captured   = 7;
+    protected $discarted  = 8;
 
 
     public function scopeActive($query, $active=false)
@@ -50,4 +57,49 @@ class Agency extends Model
     {
         return $this->BelongsTo('App\Models\User');
     }
+
+    public function clients()
+    {
+        return $this->hasMany('App\Models\Client');
+    }
+
+    public function clientsPending()
+    {
+        return $this->hasMany('App\Models\Client')->where('status_id', $this->pending);
+    }
+
+    public function clientsContacted()
+    {
+        return $this->hasMany('App\Models\Client')->where('status_id', $this->contacted);
+    }
+
+    public function clientsCaptured()
+    {
+        return $this->hasMany('App\Models\Client')->where('status_id', $this->captured);
+    }
+
+    public function clientsDay()
+    {
+        return $this->hasMany('App\Models\Client')->whereBetween('contacted_at', [
+            Carbon::now()->startOfDay(), 
+            Carbon::now()->endOfDay()
+        ])->whereNotNull('contacted_at')->whereIn('status_id',[$this->contacted,$this->captured]);
+    }
+
+    public function clientsWeek()
+    {
+        return $this->hasMany('App\Models\Client')->whereBetween('contacted_at', [
+            Carbon::now()->startOfWeek(Carbon::SUNDAY), 
+            Carbon::now()->endOfWeek(Carbon::MONDAY)
+        ])->whereNotNull('contacted_at')->whereIn('status_id',[$this->contacted,$this->captured]);
+    }
+
+    public function clientsMonth()
+    {
+        return $this->hasMany('App\Models\Client')->whereBetween('contacted_at', [
+            Carbon::now()->startOfMonth(), 
+            Carbon::now()->endOfMonth()
+        ])->whereNotNull('contacted_at')->whereIn('status_id',[$this->contacted,$this->captured]);
+    }
+
 }

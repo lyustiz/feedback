@@ -36,7 +36,6 @@ trait AmolatinaDataTrait
 
     static public function getContentUrl($token, $url, $replaceUrl = false)
     {
-        
         $header = [ 'authorization' => 'Token token="'.$token.'"' ];
 
         $url      =  ($replaceUrl) ? $replaceUrl . $url :  config('amolatina.url') . $url;
@@ -114,7 +113,7 @@ trait AmolatinaDataTrait
                 
                 $setup->url      = 'credits/commissions';
                 $setup->urlParam = ['amolatinaid'];
-                $setup->params   = ['from' => null, 'to' => null, 'positive'=> 'null', 'omit' => '0', 'select' => '10000' ];
+                $setup->params   = ['from' => null, 'to' => null, 'positive'=> 'null', 'omit' => '0', 'select' => '100000' ];
                 $setup->comments = 'detalle de creditos/writeoff de la agencia segun periodo' ;
                 return $setup;
                 break;

@@ -2,6 +2,7 @@
 
 <v-card class="main-color" dark>
   <v-card-title>
+
     <v-row>
       <v-col>Mesas</v-col>
       <v-col cols="auto">
