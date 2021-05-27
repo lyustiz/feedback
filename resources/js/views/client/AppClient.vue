@@ -11,6 +11,9 @@
             <ClientStatistics></ClientStatistics>
         </v-col>
         <v-col>
+            <ClientTop></ClientTop>
+        </v-col>
+        <v-col>
             busqueda
         </v-col>
         <v-col>

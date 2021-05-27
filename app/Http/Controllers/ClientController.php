@@ -19,6 +19,14 @@ class ClientController extends Controller
                     ->get();
     }
 
+    public function topAgency($agencyId)
+    {
+        return Client::with([])
+                    ->where('agency_id', $agencyId)
+                    ->orderBy('profit', 'desc')
+                    ->get();
+    }
+
     /**
      * Store a newly created resource in storage.
      *

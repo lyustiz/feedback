@@ -26,7 +26,7 @@ class AgencyController extends Controller
     public function agencyClients()
     {
         return Agency::with([])
-                    ->withCount(['clients', 'clientsContacted', 'clientsPending', 'clientsDay', 'clientsWeek', 'clientsMonth' ])
+                    ->withCount(['clients', 'clientsContacted', 'clientsCaptured', 'clientsPending', 'clientsDay', 'clientsWeek', 'clientsMonth' ])
                     ->get();
     }
 
