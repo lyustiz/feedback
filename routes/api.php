@@ -130,7 +130,7 @@ Route::get('/userPresence/estimate', 'UserPresenceController@presenceEstimate');
 Route::put('/userPresence/stop',     'UserPresenceController@stop');
 Route::apiResource('/userPresence',  'UserPresenceController');
 
-Route::apiResource('/client/top/Agency/{agency}',     'ClientController@topAgency');
+Route::get('/client/top/Agency/{agency}',     'ClientController@topAgency');
 Route::apiResource('/client',     'ClientController');
 //newRoutes
 });
