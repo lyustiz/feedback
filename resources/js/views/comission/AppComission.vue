@@ -125,7 +125,7 @@ export default {
             {name: 'VIDEO_STREAM',        value: "videostream",                      type: 'bonus',     color: 'blue', icon: 'mdi-video-box'},
             {name: 'PROFILE_VIDEO',       value: "paidresource:video",               type: 'bonus',     color: 'blue', icon: 'mdi-message-video'},
             {name: 'PRESENT',             value: "present",                          type: 'bonus',     color: 'blue', icon: 'mdi-gift'},
-            {name: 'MANUAL_BONUS',        value: "manualbonus",                      type: 'bonus',     color: 'blue', icon: 'mdi-trophy'},
+            {name: 'MANUAL_BONUS',        value: "manual",                           type: 'bonus',     color: 'blue', icon: 'mdi-trophy'},
             {name: 'GIFT',                value: "cheers",                           type: 'bonus',     color: 'blue', icon: 'mdi-wallet-giftcard'},
             {name: 'MISSED_INVITE',       value: "dialogs.interval.added:missed",    type: 'writeoff',  color: 'red', icon: 'mdi-account-cancel'},
             {name: 'MISSED_ANSWER',       value: "dialogs.interval.answer:missed",   type: 'writeoff',  color: 'red', icon: 'mdi-message-bulleted-off'},
@@ -134,7 +134,7 @@ export default {
             {name: 'MISSED_EMAIL',        value: "dialogs.letter:missed.hopelessly", type: 'writeoff',  color: 'red', icon: 'mdi-email-alert'},
             {name: 'MISSED_VIDEO_INVITE', value: "dialogs.media:missed",             type: 'writeoff',  color: 'red', icon: 'mdi-video-box-off'},
             {name: 'MISSED_PRESENT',      value: "present:missed",                   type: 'writeoff',  color: 'red', icon: 'mdi-gift-outline'},
-            {name: 'MANUAL_WRITEOFF',     value: "manualwriteoff",                   type: 'writeoff',  color: 'red', icon: 'mdi-gavel'}   
+            {name: 'MANUAL_WRITEOFF',     value: "manual",                           type: 'writeoff',  color: 'red', icon: 'mdi-gavel'}   
         ]
     }),
 

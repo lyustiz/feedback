@@ -20,6 +20,7 @@ class Agency extends Model
 	 	 	 	 	 	 	'user',
 	 	 	 	 	 	 	'password',
 	 	 	 	 	 	 	'amolatina_id',
+                            'register_at',
 	 	 	 	 	 	 	'comments',
 	 	 	 	 	 	 	'status_id',
 	 	 	 	 	 	 	'user_id'

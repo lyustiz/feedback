@@ -10,41 +10,45 @@ class ComissionDetail
     
     public function __invoke()
     {
-        set_time_limit ( 300 );
-        
-        $currentCommisions = Comission::groupBy('agency_id')
-                           ->get(['agency_id', \DB::raw('MAX(comission_at) as comission_at')]);
+        set_time_limit ( 900 );
 
-        foreach ($currentCommisions  as  $currentCommision) {
+        $currents = Comission::with(['agency:id,amolatina_id,name,token'])
+                             ->groupBy('agency_id', 'positive')
+                             ->get(['agency_id','positive', \DB::raw('MAX(comission_at) as comission_at')]); 
 
-            $token  = '33568305-c77b-4719-a97e-331610a9b170';
-            $amolatina_id = $currentCommision->agency_id;
-            $start =  Carbon::parse($currentCommision->comission_at)->toDateTimeLocalString('millisecond'); // ->addSecond(1)
-            $end_at = Carbon::now('UTC')->toDateTimeLocalString('millisecond');
-            
-            $response = $this->getDetailCommisions($token, $amolatina_id, $start, $end_at );
-            
-            if($response['ok'])
-            {
+        $stored = []; 
+
+        foreach ($currents  as $current) {
+
+            $token        = $current->agency->token;
+            $amolatina_id = $current->agency->amolatina_id;
+            $start_at     = Carbon::parse($current->comission_at)->toDateTimeLocalString('millisecond');
+            $end_at       = Carbon::now('UTC')->toDateTimeLocalString('millisecond');
+            $response     = $this->getDetailCommisions($token, $amolatina_id, $start_at, $end_at, $current->positive );
+
+            if($response['ok']) {
                 $commisions = $response['body'];
-                $this->storeCommision($commisions);
+                $stored[$start_at.'-'.$end_at] = count($this->storeCommision($commisions, $current->positive)) * 500;
+            } else {
+                $stored[$start_at . '-' . $end_at . '-' . $current->positive] = $response;
             }
         }
     }
 
-    public function getDetailCommisions($token, $amolatinaId, $startAt, $endAt)
+    public function getDetailCommisions($token, $amolatinaId, $startAt, $endAt, $positive = 1)
     {
         $setup          = Amolatina::getSetup('credits-detail');
         $url            = $setup->url . '/' . $amolatinaId;
         $params         = $setup->params;
         $params['from'] = Amolatina::formatDateTime($startAt);
         $params['to']   = Amolatina::formatDateTime($endAt);
-        $params['select']   = 500;
+        $params['select']   = 100000;
+        $params['positive'] =  ($positive == 1) ? 'true' : 'false';
 
         return   Amolatina::getDataUrl( $token, $url, $params);
     }
 
-    public function storeCommision($commisions)
+    public function storeCommision($commisions, $positive = null)
     {
         $data = [];
         foreach ($commisions as $row) {
@@ -54,10 +58,11 @@ class ComissionDetail
             $data[] = [
                 'comission_id' => $row['commission-id'],
                 'agency_id'    => $row['agency-id'],
+                'positive'     => $positive,
                 'curator_id'   => isset($row['curator-id']) ? $row['curator-id'] : 0 ,
-                'profile_id'   => isset($row['user-id']) ? $row['user-id'] : 0, 
-                'user_id'      => isset($row['user-id']) ? $row['user-id'] : 0,
-                'client_id'    => isset($row['target-id']) ? $row['target-id'] : 0, 
+                'profile_id'   => isset($row['user-id'])    ? $row['user-id'] : 0, 
+                'user_id'      => isset($row['user-id'])    ? $row['user-id'] : 0,
+                'client_id'    => isset($row['target-id'])  ? $row['target-id'] : 0, 
                 'service'      => $row['service'],
                 'fact'         => $row['fact'],
                 'points'       => $row['points'],
@@ -73,9 +78,13 @@ class ComissionDetail
 
         $chunks = $data->chunk(500);
 
+        $insert = [];
+
         foreach ($chunks as $chunk)
         {
-            Comission::insert($chunk->toArray());
+            $insert[] = Comission::insert($chunk->toArray());
         }
+
+        return $insert;
     }
 }

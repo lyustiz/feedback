@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comission;
+use App\Models\Agency;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\AmolatinaDataTrait as Amolatina;
@@ -19,82 +20,87 @@ class ComissionController extends Controller
     public function index()
     {
         return Comission::with(['profile:id,amolatina_id,name,photo,gender'])
-        ->orderBy('comission_at', 'desc')
-        ->paginate(21)->withPath('comission');  
+                        ->orderBy('comission_at', 'desc')
+                        ->paginate(21)
+                        ->withPath('comission');  
     }
-
 
     public function comissionDetail()
     {
-        set_time_limit ( 900 );
+        set_time_limit ( 330 );
         
-/*         $currentCommisions = Comission::groupBy('agency_id')
-                           ->get(['agency_id', \DB::raw('MAX(comission_at) as comission_at')]); */
-
+        $currents = Comission::with(['agency:id,amolatina_id,name,token'])
+                             ->groupBy('agency_id', 'positive')
+                             ->get(['agency_id','positive',  \DB::raw('MAX(comission_at) as comission_at')]); 
+        
         $stored = []; 
-        $token  = '33568305-c77b-4719-a97e-331610a9b170'; // 002c9916-e95a-4a9d-a796-b48a72c9a6eb
-        $amolatina_id = '79602433731';
+        foreach ($currents  as $current) {
 
-        $day = new Carbon('2020-12-31');
+            $token        = $current->agency->token;
+            $amolatina_id = $current->agency->amolatina_id;
+            $start_at     = Carbon::parse($current->comission_at)->toDateTimeLocalString('millisecond');
+            $end_at       = Carbon::now('UTC')->toDateTimeLocalString('millisecond');
+            $response     = $this->getDetailCommisions($token, $amolatina_id, $start_at, $end_at, $current->positive );
+            //return [ $response, $token, $amolatina_id, $start_at, $end_at, $current->positive ]; 
+            if($response['ok']) {
+                $commisions = $response['body'];
+                $stored[$start_at.'-'.$end_at] = count($this->storeCommision($commisions, $current->positive)) * 500;
+            } else {
+                $stored[$start_at . '-' . $end_at . '-' . $current->positive] = $response;
+            }
+        }
+        return $stored;
+    }
 
-        for ($i = 1; $i <= 134 ; $i++) { 
+    public function fillComissionDetail($agencyID, $positive)
+    {
+        set_time_limit ( 1900 );
+        
+        $agency = Agency::find($agencyID);
+        
+        $token        = $agency->token;
+        $amolatina_id = $agency->amolatina_id;
+        $day          = Carbon::parse($agency->register_at);
+        $days         = $day->diffInDays(Carbon::now());
+
+        $stored = [];
+
+        for ($i = 1; $i <= $days ; $i++) { 
             
-            $day = $day->addDay();
-
             $start_at = $day->startOfDay()->toISOString();
 
             $end_at   = $day->endOfDay()->toISOString();
 
-            $response = $this->getDetailCommisions($token, $amolatina_id, $start_at, $end_at );
-
+            $response = $this->getDetailCommisions($token, $amolatina_id, $start_at, $end_at, $positive );
+            
             if($response['ok'])
             {
                 $commisions = $response['body'];
-                $stored[$day->toISOString()] = count($this->storeCommision($commisions)) * 500;
+                $stored[$start_at.'-'.$end_at .'-'. $positive] = count($this->storeCommision($commisions, $positive) ) * 500;
             }
             else {
-                $stored[$day->toISOString()] = $response;
+                $stored[$start_at.'-'.$end_at] = $response;
             }
-            
+            $day = $day->addDay();
         }
-
-        return $stored;
-
-        // foreach ($currentCommisions  as  $currentCommision) {
-
-            $token  = '33568305-c77b-4719-a97e-331610a9b170'; // 002c9916-e95a-4a9d-a796-b48a72c9a6eb
-            $amolatina_id = '79602433731'; // $currentCommision->agency_id; 81559831131
-           /*  $start =  Carbon::parse($currentCommision->comission_at)->toDateTimeLocalString('millisecond'); // ->addSecond(1)
-            $end_at = Carbon::now('UTC')->toDateTimeLocalString('millisecond'); */
-
-            $start_at = new Carbon('2021-05-01'); //Carbon::parse($currentCommision->comission_at)->toDateTimeLocalString('millisecond'); // ->addSecond(1)
-            $end_at   = new Carbon('2021-01-01');
-            
-            $response = $this->getDetailCommisions($token, $amolatina_id, $start, $end_at );
-            
-            if($response['ok'])
-            {
-                $commisions = $response['body'];
-                $stored[$amolatina_id] = count($this->storeCommision($commisions)) * 500;
-            }
-        //}
 
         return $stored;
     }
 
-    public function getDetailCommisions($token, $amolatinaId, $startAt, $endAt)
+    public function getDetailCommisions($token, $amolatinaId, $startAt, $endAt, $positive = 1)
     {
         $setup          = Amolatina::getSetup('credits-detail');
         $url            = $setup->url . '/' . $amolatinaId;
         $params         = $setup->params;
         $params['from'] = Amolatina::formatDateTime($startAt);
         $params['to']   = Amolatina::formatDateTime($endAt);
-        $params['select']   = 10000;
+        $params['select']   = 100000;
+        $params['positive'] =  ($positive == 1) ? 'true' : 'false';
 
         return   Amolatina::getDataUrl( $token, $url, $params);
     }
 
-    public function storeCommision($commisions)
+    public function storeCommision($commisions, $positive = null)
     {
         $data = [];
         foreach ($commisions as $row) {
@@ -104,6 +110,7 @@ class ComissionController extends Controller
             $data[] = [
                 'comission_id' => $row['commission-id'],
                 'agency_id'    => $row['agency-id'],
+                'positive'     => $positive,
                 'curator_id'   => isset($row['curator-id']) ? $row['curator-id'] : 0 ,
                 'profile_id'   => isset($row['user-id']) ? $row['user-id'] : 0, 
                 'user_id'      => isset($row['user-id']) ? $row['user-id'] : 0,

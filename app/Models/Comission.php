@@ -49,11 +49,16 @@ class Comission extends Model
                            
     public function user()
     {
-        return $this->BelongsTo('App\Models\Profile', 'profile_id', 'amolatina_id');
+        return $this->BelongsTo('App\Models\User');
     }
 
     public function profile()
     {
         return $this->BelongsTo('App\Models\Profile', 'profile_id', 'amolatina_id');
+    }
+
+    public function agency()
+    {
+        return $this->BelongsTo('App\Models\Agency', 'agency_id', 'amolatina_id');
     }
 }

@@ -1,2 +1,0 @@
--update table client add colum agency_id
--edit sp impor user add agency id

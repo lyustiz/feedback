@@ -109,6 +109,17 @@ trait AmolatinaDataTrait
                 return $setup;
                 break;
 
+            case 'total-agency':
+            
+                $setup->url      = 'credits/commissions/stats';
+                $setup->urlParam = ['amolatinaid'];
+                $setup->params   = ['agency-id' => null, 'date' => '2021-05', 'from' => '2021-05-01', 'to' => '2021-05-31'];
+                $setup->comments = 'total de credito/perdida agencia mes' ;
+                return $setup;
+                break;
+
+               // https://api.amolatina.com/credits/commissions/stats/79602433731?agency-id=79602433731&date=2021-05&from=2021-05-01&to=2021-05-31
+
             case 'credits-detail':
                 
                 $setup->url      = 'credits/commissions';
