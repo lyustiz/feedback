@@ -56,6 +56,13 @@ return [
             'visibility' => 'public',
         ],
 
+        'photo_client' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/photo/client'),
+            'url' => env('APP_URL').'/storage/photo/client',
+            'visibility' => 'public',
+        ],
+
         'photo_user' => [
             'driver' => 'local',
             'root' => storage_path('app/public/photo/user'),

@@ -24,14 +24,14 @@ class UserProfileController extends Controller
     public function assing($userId, $agencyId)
     {
         $userProfile = UserProfile::select('id','user_id','profile_id','agency_id')
-                                        ->with(['profile:id,name,photo,gender,amolatina_id'])
+                                        ->with(['profile:id,name,photo,gender,amolatina_id', 'agency:id,name'])
                                         ->where('user_id', $userId)
-                                        ->where('agency_id', $agencyId)
                                         ->get();
 
         $profile     = Profile::select('id','name', 'photo', 'gender', 'amolatina_id', 'agency_id')
+                                ->with(['agency:id,name'])
                                 ->whereNotIn('profile.id', $userProfile->pluck('profile_id'))
-                                ->where('agency_id', $agencyId)
+                                ->orderBy('profile.name', 'asc')
                                 ->get();
 
         $userProfile = $this->formatProfiles($userProfile);

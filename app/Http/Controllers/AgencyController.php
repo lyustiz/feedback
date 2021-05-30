@@ -30,6 +30,19 @@ class AgencyController extends Controller
                     ->get();
     }
 
+    public function agencyClientsTop()
+    {
+        return Agency::with([   'clientsCaptured' => function($query) {
+                                    $query->select('id','amolatina_id','name','points','crown', 'agency_id','gender', 'age', 'photo')
+                                          ->orderBy('points', 'desc')
+                                          ->limit(50);
+                                }
+                            ])
+                    ->get();
+    }
+   
+    
+
     
 
     public function agencyTotals(Request $request)

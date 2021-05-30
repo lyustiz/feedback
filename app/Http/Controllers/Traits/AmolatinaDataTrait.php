@@ -13,7 +13,7 @@ use Illuminate\Validation\ValidationException;
 trait AmolatinaDataTrait
 {
   
-    static public function getDataUrl($token, $url, $params = [], $headers = [])
+    static public function getDataUrl($token, $url, $params = [], $headers = [], $handler = true)
     {
         $header   =  array_merge([ 'authorization' => 'Token token="'.$token.'"'], $headers); 
 
@@ -31,10 +31,10 @@ trait AmolatinaDataTrait
            return [  'status' => $response->status(), 'body' =>  $response->json() , 'detail' => $response->handlerStats(), 'ok' => $response->ok() ];
         } 
 
-        self::errorHandler($response, $url, $params);
+        return self::errorHandler($response, $url, $params, $handler);
     }
 
-    static public function getContentUrl($token, $url, $replaceUrl = false)
+    static public function getContentUrl($token, $url, $replaceUrl = false, $handler = true)
     {
         $header = [ 'authorization' => 'Token token="'.$token.'"' ];
 
@@ -47,28 +47,46 @@ trait AmolatinaDataTrait
             return [  'status' => $response->status(), 'body' =>  $response->body() , 'detail' => $response->handlerStats(), 'ok' => $response->ok() ];
         } 
 
-        self::errorHandler($response, $url, []);
+        return self::errorHandler($response, $url, [], $handler);
     }
 
-    static public function errorHandler($response, $url, $params)
+    static public function errorHandler($response, $url, $params, $handler = true)
     {
         $status = $response->status();
 
         switch ($status) {
             case 401:
-                throw ValidationException::withMessages(['error' => 'Token Amolatina no Valido'  ]);
+                if($handler)
+                {
+                    throw ValidationException::withMessages(['error' => 'Token Amolatina no Valido'  ]);
+                } 
+                return ['error' => 'Token Amolatina no Valido', 'status' => $response->status(), 'url' => $url, 'params' => $params, 'details' => $response->handlerStats(), 'ok' => false  ];
+                
                 break;
 
             case 403:
-                throw ValidationException::withMessages(['error' => 'Token Amolatina no Valido'  ]);
+                if($handler)
+                {
+                    throw ValidationException::withMessages(['error' => 'Token Amolatina no Valido'  ]);
+                }
+                return ['error' => 'Token Amolatina no Valido', 'status' => $response->status(), 'url' => $url, 'params' => $params, 'details' => $response->handlerStats(), 'ok' => false  ];
                 break;
 
             case 410:
-                throw ValidationException::withMessages(['error' => 'Informacion no disponible'  ]);
+                if($handler)
+                {
+                    throw ValidationException::withMessages(['error' => 'Informacion no disponible', 'status' => $response->status(), 'url' => $url, 'params' => $params, 'details' => $response->handlerStats()   ]);
+                }
+                
+                return ['error' => 'Informacion no disponible', 'status' => $response->status(), 'url' => $url, 'params' => $params, 'details' => $response->handlerStats(), 'ok' => false  ];
                 break;
 
             default:
-                 throw ValidationException::withMessages(['error' => [ 'status' => $response->status(), 'url' => $url, 'params' => $params, 'details' => $response->handlerStats() ]  ]);
+                if($handler)
+                {
+                    throw ValidationException::withMessages(['error' => [ 'status' => $response->status(), 'url' => $url, 'params' => $params, 'details' => $response->handlerStats() ]  ]);
+                }
+                return ['error' => 'Error en la peticion', 'status' => $response->status(), 'url' => $url, 'params' => $params, 'details' => $response->handlerStats(), 'ok' => false  ]; 
                 break;
         }
     }
@@ -118,7 +136,6 @@ trait AmolatinaDataTrait
                 return $setup;
                 break;
 
-               // https://api.amolatina.com/credits/commissions/stats/79602433731?agency-id=79602433731&date=2021-05&from=2021-05-01&to=2021-05-31
 
             case 'credits-detail':
                 

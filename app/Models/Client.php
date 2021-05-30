@@ -18,6 +18,7 @@ class Client extends Model
 	 	 	 	 	 	 	'preference',
 	 	 	 	 	 	 	'country',
 	 	 	 	 	 	 	'city',
+                            'points',
 	 	 	 	 	 	 	'profit',
 	 	 	 	 	 	 	'crown',
 	 	 	 	 	 	 	'contacted_at',
@@ -52,5 +53,10 @@ class Client extends Model
     public function user()
     {
         return $this->BelongsTo('App\Models\User');
+    }
+
+    public function agency()
+    {
+        return $this->BelongsTo('App\Models\Agency');
     }
 }

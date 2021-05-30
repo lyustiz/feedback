@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\AmolatinaDataTrait as Amolatina;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Storage;
 
 class ClientController extends Controller
 {
@@ -26,6 +29,112 @@ class ClientController extends Controller
                     ->orderBy('profit', 'desc')
                     ->get();
     }
+
+
+    public function detailClients()
+    {
+        set_time_limit ( 300 );
+
+        $clients = Client::with(['agency:id,amolatina_id,token'])->whereIn('status_id',[ 6, 7 ])->whereNull('name')->limit(300)->get();
+        
+        $storeClients = [];
+        $errorClients = [];
+
+        foreach ($clients as $client) {
+            
+            $response = $this->getDetailClient($client->agency->token, $client->amolatina_id);
+
+            if($response['ok'])
+            {
+                $clientDetail = $response['body'];
+
+                $storeClients[$client->amolatina_id] = $this->setDataClient($client, $clientDetail);
+
+                $update[$client->amolatina_id] = $client->update($storeClients[$client->amolatina_id]);
+            }
+            else{
+                if($response['status'] == 410)
+                {
+                    $client->update(['status_id' => 9]);
+                }
+                
+                $errorClients[$client->amolatina_id] = $response;
+            }
+        }
+
+        return ['msj' => 'se actualizaron (' . count($storeClients) . ') clientes', 'update' => $storeClients, 'erros' => $errorClients ];
+    }
+
+    public function setDataClient($client, $clientDetail)
+    {
+        return   $data = [
+            'name'     => $clientDetail['name'],
+            'birthday' => (isset($clientDetail['birthday'])) ?  Carbon::parse($clientDetail['birthday'])->format('Y-m-d') : null,
+            'age'      => (isset($clientDetail['birthday'])) ?  Carbon::parse($clientDetail['birthday'])->age : null,
+            'photo'    => (isset($clientDetail['thumbnail'])) ? $clientDetail['thumbnail'] : null,
+            'gender'   => (isset($clientDetail['gender'])) ? $clientDetail['gender'] : null,
+            'country'  => (isset($clientDetail['country'])) ? $clientDetail['country'] : null,
+            'city'     => (isset($clientDetail['city'])) ? $clientDetail['city'] : null,
+        ];
+    }
+
+    public function getDetailClient($token, $amolatinaId)
+    {
+        $setup          = Amolatina::getSetup('detail-profile');
+        $url            = $setup->url . '/' . $amolatinaId  ;
+        return Amolatina::getDataUrl( $token, $url, [], [], false );
+    }
+
+    public function importClientPhoto()
+    {
+        set_time_limit ( 300 );
+
+        $clients = Client::with(['agency:id,amolatina_id,token:'])
+                          ->whereIn('status_id',[ 6, 7 ])
+                          ->whereNotNull('photo')
+                          ->whereNotIn('comments', ['has-photo', 'no-photo'])
+                          ->orderBy('points', 'desc')
+                          ->get();
+
+        $stored = [];
+        foreach ($clients as $client) {
+            $stored[$client->amolatina_id] = $this->getPhotoClient($client);
+            if($stored[$client->amolatina_id])
+            {
+                $client->update(['comments' => 'has-photo']);
+            }else{
+                $client->update(['comments' => 'no-photo']);
+            }
+        }
+
+        return [ 'msj' => 'importadas'. count($stored), 'stored' => $stored] ;
+    }
+
+    public function getPhotoClient($client)
+    {
+        $token       = $client->agency->token;
+        $response    = $this->getPhoto($token, $client);
+         
+        if($response['ok'])
+        {
+            $file = $response['body'];
+            return  $this->storePhoto($file, "$client->photo.jpg", 'photo_client'); 
+        }
+        return false;
+    }
+
+    public function getPhoto($token, $client)
+    {
+       $photo    = "$client->photo.190x180.thumb-fd";
+       $url      = "users/".$client->amolatina_id."/photos/$photo";
+       return    Amolatina::getContentUrl($token, $url, 'https://api8.amolatina.com/', false);
+    }
+
+    public function storePhoto($fileContend, $fileName, $storage)
+    {
+        return Storage::disk($storage)->put( $fileName, $fileContend);
+    }
+
 
     /**
      * Store a newly created resource in storage.

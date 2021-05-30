@@ -1,0 +1,9 @@
+sp_upd_undo_ball;
+
+ -- DATOS DE LA BALOTA
+  SELECT id
+	  INTO @id_ball
+    FROM ball
+   WHERE ball_number = p_ball
+     AND game_id = p_game_id 
+     AND status_id = 1; -- fix balota anulada

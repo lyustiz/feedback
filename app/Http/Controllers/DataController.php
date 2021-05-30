@@ -49,7 +49,11 @@ class DataController extends Controller
         promoter
 realm
 
+https://api.amolatina.com/users/19446624042/preferences
 
+foto
+ttps://api8.amolatina.com/users/19446624042/photos/09839839910dd03a.190x180.thumb-fd
+                                                   09839839910dd03a
 
         clientes
         https://api.amolatina.com/users/80313661531/gateway?filter=photos&gender=fem&omit=0&preferences.gender=mal&search-token=925cc60dadb16cdd8413f0864040e0d7&select=15&sort=7

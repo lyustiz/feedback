@@ -15,6 +15,7 @@ class UserProfile extends Model
                             'user_id',
 	 	 	 	 	 	 	'profile_id',
                             'agency_id',
+                            'goal',
 	 	 	 	 	 	 	'comments',
 	 	 	 	 	 	 	'status_id',
 	 	 	 	 	 	 	'user_id_ed'
@@ -55,5 +56,10 @@ class UserProfile extends Model
     public function profile()
     {
         return $this->BelongsTo('App\Models\Profile');
+    }
+
+    public function agency()
+    {
+        return $this->BelongsTo('App\Models\Agency');
     }
 }
