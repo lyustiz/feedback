@@ -68,6 +68,21 @@ class User extends Authenticatable
         return ($operator) ?  $query->where('role_id', 4) : $query;
     }
 
+    public function scopeManager($query, $manager=false)
+    {
+        return ($manager) ?  $query->where('role_id', 2) : $query;
+    }
+
+    public function scopeCoordinator($query, $coordinator = false)
+    {
+        return ($coordinator ) ?  $query->where('role_id', 3) : $query;
+    }
+
+    public function scopeRole($query, $roles = [])
+    {
+        return ( count($roles) > 0 ) ?  $query->whereIn('role_id', 3) : $query;
+    }
+
     public function scopeComboData($query)
     {
         return $query->addSelect('id', 'name');
@@ -97,7 +112,6 @@ class User extends Authenticatable
     {
         return $this->BelongsTo('App\Models\Table');
     }
-
 
     public function userProfile()
     {
@@ -152,8 +166,6 @@ class User extends Authenticatable
             'id', // local en final
 			'agency_id' // fk en intermedia
 		)->distinct();
-
-       // return $this->belongsToMany(Agency::class, 'user_profile', 'user_id', 'agency_id');
 	}
 
     public function agencyManage()

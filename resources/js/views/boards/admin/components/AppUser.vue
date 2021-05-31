@@ -83,7 +83,7 @@
 
     </v-card-text>
 
-    <v-dialog v-model="tableDetailDialog" scrollable  width="80vw">
+    <v-dialog v-model="tableDetailDialog" scrollable  width="98vw">
       <TableDetail v-if="tableDetailDialog" @closeDialog="closeDialog($event)" />
     </v-dialog> 
 
@@ -138,7 +138,7 @@ export default {
     itemsMenu: [
       { action: 'importProfile', icon: 'mdi-account-multiple-plus', label: 'Importar Nuevos Perfiles', iconColor: 'green' },
       { action: 'importProfilePhoto', icon: 'mdi-camera-account', label: 'Importar Fotos Perfiles', iconColor: 'green' },
-      { action: 'showTablesDetail', icon: 'mdi-view-dashboard-outline', label: 'Organigrama', iconColor: 'blue' },
+      { action: 'showTablesDetail', icon: 'mdi-sitemap', label: 'Organigrama', iconColor: 'blue' },
 
       
     ],

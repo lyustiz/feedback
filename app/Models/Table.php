@@ -14,7 +14,8 @@ class Table extends Model
 	 	 	 	 	 	 	'turn_id',
 	 	 	 	 	 	 	'comments',
 	 	 	 	 	 	 	'status_id',
-	 	 	 	 	 	 	'manager_id',
+	 	 	 	 	 	 	'coordinator_id',
+                            'manager_id',
 	 	 	 	 	 	 	'user_id'
                             ]; 
     

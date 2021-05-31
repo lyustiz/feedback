@@ -15,7 +15,7 @@ class GroupController extends Controller
      */
     public function index()
     {
-        return Group::with([])
+        return Group::with(['manager:id,name,surname'])
                     ->get();
     }
 

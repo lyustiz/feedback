@@ -15,7 +15,7 @@ class TableController extends Controller
      */
     public function index()
     {
-        return Table::with([])
+        return Table::with([ 'manager:id,name,surname', 'coordinator:id,name,surname', 'turn:id,name' ])
                     ->get();
     }
 
@@ -34,18 +34,19 @@ class TableController extends Controller
     public function store(Request $request)
     {
         $validate = request()->validate([
-            'name'       => 'required|string|max:80',
-			'value'      => 'required|numeric|max:9',
-            'turn_id'    => 'required|integer|max:999999999',
-			'comments'   => 'nullable|string|max:100',
-            'manager_id' => 'required|integer|max:999999999',
-			'status_id'  => 'required|integer|max:999999999',
-			'user_id'    => 'required|integer|max:999999999',
+            'name'           => 'required|string|max:80',
+			'value'          => 'required|numeric|max:9',
+            'turn_id'        => 'required|integer|max:999999999',
+			'comments'       => 'nullable|string|max:100',
+            'manager_id'     => 'required|integer|max:999999999',
+            'coordinator_id' => 'required|integer|max:999999999',
+			'status_id'      => 'required|integer|max:999999999',
+			'user_id'        => 'required|integer|max:999999999',
         ]);
 
         $table = table::create($request->all());
 
-        return [ 'msj' => 'Table Agregado Correctamente', compact('table') ];
+        return [ 'msj' => 'Mesa Agregada Correctamente', compact('table') ];
     }
 
     /**
@@ -69,16 +70,19 @@ class TableController extends Controller
     public function update(Request $request, Table $table)
     {
         $validate = request()->validate([
-            'name'              => 	'required|string|max:80',
-			'value'             => 	'required|numeric|max:9',
-			'comments'          => 	'nullable|string|max:100',
-			'status_id'         => 	'required|integer|max:999999999',
-			'user_id'           => 	'required|integer|max:999999999',
+            'name'           => 'required|string|max:80',
+			'value'          => 'required|numeric|max:9',
+            'turn_id'        => 'required|integer|max:999999999',
+			'comments'       => 'nullable|string|max:100',
+            'manager_id'     => 'required|integer|max:999999999',
+            'coordinator_id' => 'required|integer|max:999999999',
+			'status_id'      => 'required|integer|max:999999999',
+			'user_id'        => 'required|integer|max:999999999',
         ]);
 
         $table = $table->update($request->all());
 
-        return [ 'msj' => 'Table Editado' , compact('table')];
+        return [ 'msj' => 'Mesa Editada' , compact('table')];
     }
 
     /**
@@ -91,6 +95,6 @@ class TableController extends Controller
     {
         $table = $table->delete();
  
-        return [ 'msj' => 'Table Eliminado' , compact('table')];
+        return [ 'msj' => 'mesa Eliminada' , compact('table')];
     }
 }

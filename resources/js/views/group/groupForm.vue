@@ -13,42 +13,33 @@
             <v-text-field
                 :rules="[rules.required]"
                 v-model="form.name"
-                label="Name"
-                placeholder="Indique Name"
+                label="Nombre"
                 dense
             ></v-text-field>
         </v-col>
-                  
-        <v-col cols="12" md="6">
-            <v-text-field
-                :rules="[rules.required]"
-                v-model="form.value"
-                label="Value"
-                placeholder="Indique Value"
-                dense
-            ></v-text-field>
+
+         <v-col cols="12" md="6">
+            <v-select
+            :items="selects.user"
+            item-text="full_name"
+            item-value="id"
+            v-model="form.manager_id"
+            :rules="[rules.select]"
+            label="Manager"
+            :loading="loading"
+            dense
+            ></v-select>
         </v-col>
-                  
-        <v-col cols="12" md="6">
+                   
+        <v-col cols="12">
             <v-text-field
                 :rules="[rules.required]"
                 v-model="form.comments"
                 label="Comments"
-                placeholder="Indique Comments"
                 dense
             ></v-text-field>
         </v-col>
-                  
-        <v-col cols="12" md="6">
-            <v-text-field
-                :rules="[rules.required]"
-                v-model="form.manager_id"
-                label="Manager Id"
-                placeholder="Indique Manager Id"
-                dense
-            ></v-text-field>
-        </v-col>
-                 
+                
 
         </v-row>
 
@@ -84,27 +75,23 @@ export default {
     data() {
         return {
             resource: 'group',
-            dates:
-            {
-                
-            },
-            pickers:
-            {
-                
-            },
             form:
             {
-                id: 	null,
-				name: 	null,
-				value: 	null,
+                id: 	    null,
+				name: 	    null,
+				value: 	    null,
 				comments: 	null,
 				status_id: 	null,
-				manager_id: 	null,
+				manager_id: null,
 				user_id: 	null,
             },
             selects:
             {
-                
+                user: ['/list?manager=true']
+            },
+            default:
+            {
+                value: 1
             },
         }
     },

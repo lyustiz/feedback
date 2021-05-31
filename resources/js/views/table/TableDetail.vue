@@ -1,24 +1,22 @@
 <template>
 
-<v-card class="main-color" dark>
-  <v-card-title>
-
+<v-card class="main-color" dark flat>
+  <v-subheader class="py-1">
     <v-row>
-      <v-col>Mesas</v-col>
+      <v-col class="title">Mesas</v-col>
       <v-col cols="auto">
-        <v-btn icon dark @click="$emit('closeDialog', false)"><v-icon>mdi-close</v-icon></v-btn>
+        <v-btn v-if="$route.name != 'table-detail'" icon dark @click="$emit('closeDialog', false)"><v-icon>mdi-close</v-icon></v-btn>
       </v-col>
     </v-row>
-    
-  </v-card-title>
+  </v-subheader>
   <v-card-text class="custom-scroll">
     <v-row>
       <v-col v-for="table in tables" :key="table.id">
-        <v-card color="rgba(0,0,0,0.4)">
+        <v-card color="rgba(0,0,0,0.4)" flat>
         <v-subheader>
           <v-row>
             <v-col>{{table.name}}</v-col>
-            <v-col>{{table.coordinator.name}}</v-col>
+            <v-col>{{table.coordinator.full_name}}</v-col>
             <v-col>{{table.turn.name}}</v-col>
           </v-row>
         </v-subheader>

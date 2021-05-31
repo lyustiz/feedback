@@ -29,9 +29,10 @@
                 <template v-slot:item="{ item }">
                     <tr>
                         <td>{{ item.name }}</td>
-						<td>{{ item.value }}</td>
-						<td>{{ item.turn_id }}</td>
-						<td>{{ item.comments }}</td>
+						<td>{{ item.turn.name }}</td>
+                        <td>{{ item.coordinator.full_name }}</td>
+                        <td>{{ item.manager.full_name }}</td>
+						<td><list-simple-icon icon="mdi-text" color="orange" :label="item.comments"></list-simple-icon></td>
 						<td>
                             <status-switch 
                                 :loading="loading" 
@@ -40,7 +41,6 @@
                                 @onChangeStatus="changeStatus($event)">
                             </status-switch>
                         </td>
-						<td>{{ item.manager_id }}</td>
                         
                         <td class="text-xs-left">
                             <list-buttons 
@@ -89,16 +89,16 @@ export default {
     components: { 'table-form': tableForm },
     data () {
     return {
-        title:    'Table',
+        title:    'Mesa',
         resource: 'table',
         headers: [
-            { text: 'Name',   value: 'name' },
-			{ text: 'Value',   value: 'value' },
-			{ text: 'Turn Id',   value: 'turn_id' },
-			{ text: 'Comments',   value: 'comments' },
-			{ text: 'Status Id',   value: 'status_id' },
-			{ text: 'Manager Id',   value: 'manager_id' },
-            { text: 'Acciones', value: 'actions', sortable: false, filterable: false },
+            { text: 'Name',        value: 'name' },
+			{ text: 'Turno',       value: 'turn.name' },
+			{ text: 'Coordinador', value: 'coordinator.name' },
+            { text: 'Manager',     value: 'manager.name' },
+			{ text: 'Comments',    value: 'comments' },
+			{ text: 'Status',      value: 'status_id' },
+            { text: 'Acciones',    value: 'actions', sortable: false, filterable: false },
         ],
     }
     },

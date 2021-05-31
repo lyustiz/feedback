@@ -7,8 +7,11 @@ import Welcome         from '@views/welcome/Welcome';
 import Home            from '@views/home/Home';
 
 
-import AdminBoard    from '@views/boards/admin/AdminBoard.vue'
-import OperatorBoard from '@views/boards/operator/OperatorBoard.vue'
+import AdminBoard       from '@views/boards/admin/AdminBoard.vue'
+import OperatorBoard    from '@views/boards/operator/OperatorBoard.vue'
+import CoordinatorBoard from '@views/boards/coordinator/CoordinatorBoard.vue'
+
+import TableDetail      from '@views/table/TableDetail';
 
 import Login           from '@views/login/login';
 
@@ -49,16 +52,16 @@ import Table           from '@views/table/table.vue';
 import Curator         from '@views/curator/curator.vue';
 import Comission       from '@views/comission/AppComission.vue';
 
-import Menu            from '@views/menu/menu.vue';
-import Permission      from '@views/permission/permission.vue';
-import UserProfile     from '@views/userProfile/userProfile.vue';
-import Group  from '@views/group/group.vue';
-import Country  from '@views/country/country.vue';
-import UserAgency  from '@views/userAgency/userAgency.vue';
-import UserPresence  from '@views/userPresence/userPresence.vue';
-import Absence  from '@views/absence/absence.vue';
+import Menu         from '@views/menu/menu.vue';
+import Permission   from '@views/permission/permission.vue';
+import UserProfile  from '@views/userProfile/userProfile.vue';
+import Group        from '@views/group/group.vue';
+import Country      from '@views/country/country.vue';
+import UserAgency   from '@views/userAgency/userAgency.vue';
+import UserPresence from '@views/userPresence/userPresence.vue';
+import Absence      from '@views/absence/absence.vue';
 import AbsenceType  from '@views/absenceType/absenceType.vue';
-import Client  from '@views/client/AppClient';
+import Client       from '@views/client/AppClient';
 //newImport
 
 let isAuthenticated = true;
@@ -90,7 +93,7 @@ export default new Router({
           name:  'admin',
           label: 'Administrador',
           icon:  'mdi-home',
-          profile: '',
+          profile: 'admin',
           visible: true,
           component: AdminBoard,
         },
@@ -100,10 +103,22 @@ export default new Router({
             name:  'operator',
             label: 'Operator',
             icon:  'mdi-home',
-            profile: 'mdi-monitor-dashboard',
+            profile: 'operator',
             visible: true,
             component: OperatorBoard,
-          },
+        },
+
+        {
+            path:  '/coordinator',
+            name:  'coordinator',
+            label: 'Coordinador',
+            icon:  'mdi-home',
+            profile: 'coordinator',
+            visible: true,
+            component: CoordinatorBoard,
+        },
+
+        
 
 
 
@@ -290,6 +305,14 @@ export default new Router({
             icon: 'bubble_chart',
             component: Table,
         },
+
+        {
+            path: '/tableDetail',
+            name: 'table-detail',
+            icon: 'bubble_chart',
+            component: TableDetail,
+        },
+
         {
             path: '/curator',
             name: 'curator',

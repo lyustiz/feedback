@@ -29,8 +29,8 @@
                 <template v-slot:item="{ item }">
                     <tr>
                         <td>{{ item.name }}</td>
-						<td>{{ item.value }}</td>
-						<td>{{ item.comments }}</td>
+                        <td>{{ item.manager.full_name }}</td>
+						<td><list-simple-icon icon="mdi-text" color="orange" :label="item.comments"></list-simple-icon></td>
 						<td>
                             <status-switch 
                                 :loading="loading" 
@@ -39,8 +39,7 @@
                                 @onChangeStatus="changeStatus($event)">
                             </status-switch>
                         </td>
-						<td>{{ item.manager_id }}</td>
-                        
+						
                         <td class="text-xs-left">
                             <list-buttons 
                                 @update="updateForm(item)" 
@@ -88,14 +87,13 @@ export default {
     components: { 'group-form': groupForm },
     data () {
     return {
-        title:    'Group',
+        title:    'Grupo',
         resource: 'group',
         headers: [
-            { text: 'Name',   value: 'name' },
-			{ text: 'Value',   value: 'value' },
-			{ text: 'Comments',   value: 'comments' },
-			{ text: 'Status Id',   value: 'status_id' },
-			{ text: 'Manager Id',   value: 'manager_id' },
+            { text: 'Name',     value: 'name' },
+			{ text: 'Manager',  value: 'manager.name' },
+			{ text: 'Comments', value: 'comments' },
+			{ text: 'Status',   value: 'status_id' },
             { text: 'Acciones', value: 'actions', sortable: false, filterable: false },
         ],
     }

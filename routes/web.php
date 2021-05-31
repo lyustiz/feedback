@@ -25,15 +25,23 @@ Route::post('/login', function(Request $request ){
         if($user->status_id == 1) 
         {
             $request->session()->regenerate();
+            
             $user->load(['agency:agency.id,name,amolatina_id,token' ]);
-            if( in_array($user->role_id, [1,2,3]))
+            
+            if( in_array($user->role_id, [1,2])) //administrador - Gerente
             {
                 $user->load(['agencyManage:agency.id,name,amolatina_id,token' ]);
+            
+            } else {  // coordinador - operador
+
+                $user->load(['table:id,name','group:id,name' ]);
             }
+            
             if($user->agency->count() == 0)
             {
                 throw ValidationException::withMessages(['userInactive' => "Sin perfiles asignados contacte con el administrador"]);
             }
+
             $role  = $user->role; 
             $menu  = $role->menu; 
 

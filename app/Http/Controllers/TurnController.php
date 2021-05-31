@@ -37,7 +37,7 @@ class TurnController extends Controller
 
         $turn = turn::create($request->all());
 
-        return [ 'msj' => 'Turn Agregado Correctamente', compact('turn') ];
+        return [ 'msj' => 'Turno Agregado Correctamente', compact('turn') ];
     }
 
     /**
@@ -70,7 +70,7 @@ class TurnController extends Controller
 
         $turn = $turn->update($request->all());
 
-        return [ 'msj' => 'Turn Editado' , compact('turn')];
+        return [ 'msj' => 'Turno Editado' , compact('turn')];
     }
 
     /**
@@ -83,6 +83,6 @@ class TurnController extends Controller
     {
         $turn = $turn->delete();
  
-        return [ 'msj' => 'Turn Eliminado' , compact('turn')];
+        return [ 'msj' => 'Turno Eliminado' , compact('turn')];
     }
 }

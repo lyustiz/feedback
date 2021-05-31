@@ -37,10 +37,10 @@
 
 <script>
 
-import AppUser from './components/AppUser'
+import AppUser      from './components/AppUser'
 import AppDashBoard from './components/AppDashBoard'
-import AppOperatos from './components/AppOperatos'
-import AppProfile from './components/AppProfile'
+import AppOperatos  from './components/AppOperatos'
+import AppProfile   from './components/AppProfile'
 
 export default {
   

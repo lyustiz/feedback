@@ -43,4 +43,9 @@ class Group extends Model
     {
         return $this->BelongsTo('App\Models\User', 'user_id');
     }
+
+    public function manager()
+    {
+        return $this->BelongsTo('App\Models\User', 'manager_id', 'id' );
+    }
 }

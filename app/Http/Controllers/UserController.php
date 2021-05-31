@@ -9,6 +9,7 @@ use App\Http\Controllers\Traits\UserTrait;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Builder;
 
 
 class UserController extends Controller
@@ -36,12 +37,29 @@ class UserController extends Controller
 
     public function list(Request $request)
     {
-        //$with = $this->userWiths($request);
         return User::with('group', 'table.manager', 'table.coordinator', 'profile', 'role', 'penaltyMonth.penaltyType')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'profit')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
                     ->operator($request->boolean('operator'))
+                    ->coordinator($request->boolean('coordinator'))
+                    ->manager($request->boolean('manager'))
+                    ->orderBy('name')
+                    ->get(); 
+    }
+
+    public function listTable()
+    {
+        $coordinator = \Auth::user();
+        
+        return User::with('group', 'table.manager', 'table.coordinator', 'profile', 'role', 'penaltyMonth.penaltyType')
+                    ->withSum(['presenceDay', 'presenceMonth' ], 'profit')
+                    ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
+                    ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
+                    ->operator(true)
+                    ->whereHas('table.coordinator', function (Builder $query) use($coordinator) {
+                        $query->where('id', $coordinator->id);
+                    })
                     ->orderBy('name')
                     ->get(); 
     }

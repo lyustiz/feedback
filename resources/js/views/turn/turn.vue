@@ -29,8 +29,7 @@
                 <template v-slot:item="{ item }">
                     <tr>
                         <td>{{ item.name }}</td>
-						<td>{{ item.value }}</td>
-						<td>{{ item.comments }}</td>
+                        <td><list-simple-icon icon="mdi-text" color="orange" :label="item.comments"></list-simple-icon></td>
 						<td>
                             <status-switch 
                                 :loading="loading" 
@@ -87,13 +86,12 @@ export default {
     components: { 'turn-form': turnForm },
     data () {
     return {
-        title:    'Turn',
+        title:    'Turno',
         resource: 'turn',
         headers: [
-            { text: 'Name',   value: 'name' },
-			{ text: 'Value',   value: 'value' },
-			{ text: 'Comments',   value: 'comments' },
-			{ text: 'Status Id',   value: 'status_id' },
+            { text: 'Nombre',   value: 'name' },
+			{ text: 'comentarios',   value: 'comments' },
+			{ text: 'Status',   value: 'status_id' },
             { text: 'Acciones', value: 'actions', sortable: false, filterable: false },
         ],
     }

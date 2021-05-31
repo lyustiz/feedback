@@ -9,32 +9,20 @@
         <v-row>
 
                  
-        <v-col cols="12" md="6">
+        <v-col cols="12">
             <v-text-field
                 :rules="[rules.required]"
                 v-model="form.name"
                 label="Name"
-                placeholder="Indique Name"
                 dense
             ></v-text-field>
         </v-col>
-                  
-        <v-col cols="12" md="6">
-            <v-text-field
-                :rules="[rules.required]"
-                v-model="form.value"
-                label="Value"
-                placeholder="Indique Value"
-                dense
-            ></v-text-field>
-        </v-col>
-                  
-        <v-col cols="12" md="6">
+                
+        <v-col cols="12">
             <v-text-field
                 :rules="[rules.required]"
                 v-model="form.comments"
-                label="Comments"
-                placeholder="Indique Comments"
+                label="Comentarios"
                 dense
             ></v-text-field>
         </v-col>
@@ -57,7 +45,7 @@
             ></form-buttons>
         </v-card-actions>
 
-        <pre vv-if="$App.debug">{{ $data }}</pre>
+        <pre v-if="$App.debug">{{ $data }}</pre>
 
     </v-card>
     
@@ -74,34 +62,25 @@ export default {
     data() {
         return {
             resource: 'turn',
-            dates:
-            {
-                
-            },
-            pickers:
-            {
-                
-            },
             form:
             {
-                id: 	null,
-				name: 	null,
-				value: 	null,
-				comments: 	null,
-				status_id: 	null,
+                id: 	    null,
+				name: 	    null,
+				value: 	    null,
+				comments:   null,
+				status_id:  null,
 				user_id: 	null,
             },
-            selects:
-            {
-                
+            select: {
+
             },
+            default: 
+            {
+                value: 1,
+            }
         }
     },
 
-    methods:
-    {
-
-    }
 }
 </script>
 
