@@ -157,13 +157,10 @@ export default {
 
     reload()
     {
-      if (this.started) {
-          this.isReload = setInterval( () => {
-              this.list();
-          }, 30000 )
-      } else {
-        clearInterval(this.isReload)
-      } 
+      clearInterval(this.isReload)
+      this.isReload = setInterval( () => {
+          this.list();
+      }, 30000 )
     },
 
     setProfile(profile)
@@ -194,7 +191,6 @@ export default {
       this.storeResource('userPresence', this.form)
       .then(data => {
         this.showMessage(data.msj)
-        this.reload()
       })
       .finally( () => 
       {
@@ -213,7 +209,6 @@ export default {
       this.updateResource('userPresence/stop', this.form)
       .then(data => {
         this.showMessage(data.msj)
-        this.reload()
       })
       .finally( () => 
       {
