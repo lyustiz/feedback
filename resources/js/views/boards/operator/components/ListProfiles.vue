@@ -159,7 +159,7 @@ export default {
     {
       if (this.started) {
           this.isReload = setInterval( () => {
-              this.load();
+              this.list();
           }, 30000 )
       } else {
         clearInterval(this.isReload)
