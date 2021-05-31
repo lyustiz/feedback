@@ -5,6 +5,7 @@
         <v-card-title primary-title>
             <v-row dense>
                 <v-col>{{user.full_name}} ({{user.username}}) <v-btn icon :loading="loading" small @click="list()"><v-icon>mdi-refresh</v-icon></v-btn></v-col>
+               <!--  <v-col cols="auto" ><v-btn icon :loading="loading" small @click="estimatePresence()"><v-icon color="red">mdi-refresh</v-icon></v-btn></v-col> -->
                 <v-col cols="auto"><v-btn icon color="success"><v-icon>mdi-dots-vertical</v-icon></v-btn></v-col>
             </v-row>
         </v-card-title>
@@ -101,10 +102,12 @@ export default {
     created()
     {
         this.list()
+        this.reload()
     },
 
     data: () => ({
-        user: null    
+        user: null,
+        isReload: null   
     }),
 
     methods:
@@ -114,6 +117,13 @@ export default {
             this.getResource(`user/${this.userId}?with[]=profile&with[]=table&with[]=group&with[]=presenceDay`).then( data => {
                 this.user = data;
             })
+        },
+
+        reload()
+        {
+            this.isReload = setInterval( () => {
+                this.list();
+            }, 30000 )
         },
 
         estimatePresence()

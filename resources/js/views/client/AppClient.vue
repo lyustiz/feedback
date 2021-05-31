@@ -1,6 +1,6 @@
 <template>
 
-  <v-card class="main-color" >
+  <v-card class="main-color" dark>
     <v-card-title class="py-1">
         Clients
     </v-card-title>

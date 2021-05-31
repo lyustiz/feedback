@@ -10,7 +10,8 @@ class PresenceEstimate
     
     public function __invoke()
     {
-        $searches = UserPresence::select('user_presence.start_at', 'agency.amolatina_id')
+        set_time_limit ( 300 );
+        $searches = UserPresence::select('user_presence.start_at', 'agency.amolatina_id', 'agency.token')
                                     ->join('profile', 'profile.id', '=', 'user_presence.profile_id')
                                     ->join('agency', 'agency.id', '=', 'profile.agency_id')
                                     ->where('user_presence.status_id', 3)
@@ -23,11 +24,9 @@ class PresenceEstimate
 
         $end_at = Carbon::now('UTC')->toDateTimeLocalString('millisecond');
         
-        $token  = '33568305-c77b-4719-a97e-331610a9b170';
-
         foreach ($searches as $search) {
             
-            $response = $this->getProfileCommisions($token, $search->amolatina_id, $search->start_at, $end_at);
+            $response = $this->getProfileCommisions($search->token, $search->amolatina_id, $search->start_at, $end_at);
 
             if($response['ok'])
             {
@@ -65,7 +64,7 @@ class PresenceEstimate
     
             foreach ($commissions as $commission) {
                 
-                if( $commission['user-id'] == $amolatina_id &&  $startAt = $userPresence->start_at )
+                if( $commission['user-id'] == $amolatina_id &&  $startAt == $userPresence->start_at )
                 {
                     $totals[ 'bonus' ]    =  $totals[ 'bonus' ]    + (($commission['positive']) ? $commission['points'] : 0) ; 
                     $totals[ 'writeoff' ] =  $totals[ 'writeoff' ] + ((!$commission['positive']) ? $commission['points'] : 0) ; 

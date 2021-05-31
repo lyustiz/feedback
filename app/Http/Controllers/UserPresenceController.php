@@ -103,103 +103,75 @@ class UserPresenceController extends Controller
             'token'          =>  'required',
         ]);
 
-        $userPresences = UserPresence::with(['profile:profile.id,amolatina_id', 'profile.agency:agency.id,amolatina_id'])
-                                       ->where( ['user_id' =>  $request->user_id, 'status_id' => 3])
-                                       ->get();
+        $searches = UserPresence::select('user_presence.start_at', 'agency.amolatina_id', 'agency.token')
+                                ->join('profile', 'profile.id', '=', 'user_presence.profile_id')
+                                ->join('agency', 'agency.id', '=', 'profile.agency_id')
+                                ->where('user_presence.status_id', 3)
+                                ->where('user_presence.user_id', $request->user_id)
+                                ->distinct()
+                                ->get();
 
-        $userPresencesId = $userPresences->pluck('id')->toArray();
+        $userPresences = UserPresence::with(['profile:profile.id,amolatina_id', 'profile.agency:agency.id,amolatina_id'])
+                        ->where( 'status_id' , 3)
+                        ->get();                        
 
         $end_at = Carbon::now('UTC')->toDateTimeLocalString('millisecond');
 
-        $update = UserPresence::whereIn('id', $userPresencesId )
-                                ->update([
-                                    'status_id' => 4, 
-                                    'active'    => 0,
-                                    'end_at'    => $end_at,
-                                ]);                    
-
-        $this->stopPrecence($userPresences, $request->token, $end_at);
-        
-        //event(new StopPresenceEvent($userPresences)); 
-
-        return [ 'msj' => 'Perfiles Finalizados' , compact('update')];
-    }
-
-    public function stopPrecence($userPresences, $token, $end_at)
-    {  
-        $start_at       = $userPresences->pluck('start_at')->first();
-        $setup          = Amolatina::getSetup('credits-profile');
-        $url            = $setup->url . '/' . '79602433731'; //TODO ARRAY FOREACH
-        $params         = $setup->params;
-        $params['from'] = Amolatina::formatDateTime($start_at);
-        $params['to']   = Amolatina::formatDateTime($end_at);
-        $header         = $setup->header;
-        $response       = Amolatina::getDataUrl( $token, $url, $params, $header);
-        
-        if($response['ok'])
-        {
-            $commissions = $response['body']['commissions'];
-
-            $updates = [];
-
-            foreach ($userPresences as $userPresence) {
-
-                $amolatina_id  = $userPresence->profile->amolatina_id; 
-
-                $totals  =  [ 
-                    'bonus'    => 0,
-                    'writeoff' => 0,
-                    'shared'   => 0,
-                    'profit'   => 0,
-                ];
-
-                foreach ($commissions as $commission) {
-                    
-                    if( $commission['user-id'] == $amolatina_id )
-                    {
-                        $totals[ 'bonus' ]    =  $totals[ 'bonus' ]    + (($commission['positive']) ? $commission['points'] : 0) ; 
-                        $totals[ 'writeoff' ] =  $totals[ 'writeoff' ] + ((!$commission['positive']) ? $commission['points'] : 0) ; 
-                        $totals[ 'shared' ]   =  $totals[ 'shared' ]   + $commission['share'];
-                        $totals[ 'profit' ]   =  $totals[ 'profit' ]   + $commission['profit'];
-                    }
-                }
-
-                $updates[] = UserPresence::find($userPresence->id )->update($totals);
-           }
-
-        }
-
-        return $updates;
-    }
-
-    public function presenceEstimate()
-    {
-        $searches = UserPresence::select('user_presence.start_at', 'agency.amolatina_id')
-                                     ->join('profile', 'profile.id', '=', 'user_presence.profile_id')
-                                     ->join('agency', 'agency.id', '=', 'profile.agency_id')
-                                     ->where('user_presence.status_id', 3)
-                                     ->distinct()
-                                     ->get();
-
-        $userPresences = UserPresence::with(['profile:profile.id,amolatina_id', 'profile.agency:agency.id,amolatina_id'])
-                                     ->where( 'status_id' , 3)
-                                     ->get();
-
-        $end_at = Carbon::now('UTC')->toDateTimeLocalString('millisecond');
-        $token  = '33568305-c77b-4719-a97e-331610a9b170';
         $updates = [];
-
+                
         foreach ($searches as $search) {
             
-            $response = $this->getProfileCommisions($token, $search->amolatina_id, $search->start_at, $end_at);
+            $response = $this->getProfileCommisions($search->token, $search->amolatina_id, $search->start_at, $end_at);
 
             if($response['ok'])
             {
                 $commissions = $response['body']['commissions'];
 
-                $updates[$search->amolatina_id][$search->start_at] = $this->setPrecenseCommisions($userPresences, $commissions, $search->start_at);
+                $updates[$search->name][$search->start_at] = $this->setPrecenseCommisions($userPresences, $commissions, $search->start_at, $end_at, true);
+
             } else {
-                $updates[$search->amolatina_id][$search->start_at] =['error'];
+                $updates[$search->name][$search->start_at] = ['error'];
+            }
+        }
+
+        return [ 'msj' => 'Perfiles Finalizados' , compact('updates')];
+    }
+
+    public function presenceEstimate()
+    {
+        set_time_limit ( 300 );
+        
+        $searches = UserPresence::select('user_presence.start_at', 'agency.amolatina_id', 'agency.name', 'agency.token')
+                                 ->join('profile', 'profile.id', '=', 'user_presence.profile_id')
+                                 ->join('agency', 'agency.id', '=', 'profile.agency_id')
+                                 ->where('user_presence.status_id', 3)
+                                 ->distinct()
+                                 ->get();
+
+        $userPresences = UserPresence::with(['profile:profile.id,amolatina_id,name', 'profile.agency:agency.id,amolatina_id'])
+                                     ->where( 'status_id' , 3)
+                                     ->get();
+
+                                     return $userPresences;
+
+        $end_at = Carbon::now('UTC')->toDateTimeLocalString('millisecond');
+        
+        $updates = [];
+
+        foreach ($searches as $search) {
+            
+            $response = $this->getProfileCommisions($search->token, $search->amolatina_id, $search->start_at, $end_at);
+
+            if($response['ok'])
+            {
+                $commissions = $response['body']['commissions'];
+
+                $updates[$search->name][$search->start_at] = $this->setPrecenseCommisions($userPresences, $commissions, $search->start_at, $end_at, false);
+
+            } else {
+
+                $updates[$search->name][$search->start_at] = ['error'];
+
             }
         }
 
@@ -219,7 +191,7 @@ class UserPresenceController extends Controller
         return   Amolatina::getDataUrl( $token, $url, $params, $header);
     }
 
-    public function setPrecenseCommisions($userPresences, $commissions, $startAt)
+    public function setPrecenseCommisions($userPresences, $commissions, $startAt, $endAt,  $stop = false)
     {
         $updates = [];
         
@@ -233,7 +205,7 @@ class UserPresenceController extends Controller
                 'shared'   => 0,
                 'profit'   => 0,
             ];
-    
+          
             foreach ($commissions as $commission) {
                 
                 if(!isset($commission['user-id']))
@@ -241,19 +213,33 @@ class UserPresenceController extends Controller
                     continue;
                 }
 
-                if( $commission['user-id'] == $amolatina_id  &&  $startAt = $userPresence->start_at)
+                if( $commission['user-id'] == $amolatina_id  &&  $startAt == $userPresence->start_at)
                 {
-                    $totals[ 'bonus' ]    =  $totals[ 'bonus' ]    + (($commission['positive']) ? $commission['points'] : 0) ; 
-                    $totals[ 'writeoff' ] =  $totals[ 'writeoff' ] + ((!$commission['positive']) ? $commission['points'] : 0) ; 
-                    $totals[ 'shared' ]   =  $totals[ 'shared' ]   + $commission['share'];
-                    $totals[ 'profit' ]   =  $totals[ 'profit' ]   + $commission['profit'];
-                    $totals[ 'comments' ] =  'manually';
+                    $totals[ 'bonus' ]    = $totals[ 'bonus' ]    + (($commission['positive']) ? $commission['points'] : 0) ; 
+                    $totals[ 'writeoff' ] = $totals[ 'writeoff' ] + ((!$commission['positive']) ? $commission['points'] : 0) ; 
+                    $totals[ 'shared' ]   = $totals[ 'shared' ]   + $commission['share'];
+                    $totals[ 'profit' ]   = $totals[ 'profit' ]   + $commission['profit'];
+                    $totals[ 'comments' ] = 'manually';
                 }
             }
 
             if(isset($totals[ 'comments' ]))
             {
-                $updates[$amolatina_id] = UserPresence::find($userPresence->id )->update($totals);
+                $updates[$userPresence->id . '-' . $amolatina_id] = $userPresence->update($totals);
+
+                $updates[$userPresence->id . '-' . $amolatina_id] = $totals;
+            }
+
+            if($stop)
+            {
+                $stopPrecense = [
+                    'status_id' => 4,
+                    'active'    => 0,
+                    'end_at'    => $endAt,
+                    'comments'  => 'stop'
+                ];
+
+                $userPresence->update($stopPrecense);
             }
 
         }

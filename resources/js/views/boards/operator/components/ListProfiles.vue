@@ -5,7 +5,7 @@
             <v-col cols="auto" >
               <v-icon left>mdi-account-multiple-outline</v-icon>  Perfiles
             </v-col>
-            <v-col cols="auto" ><v-icon  small @click="list()">mdi-reload</v-icon> </v-col>
+            <v-col cols="auto" > <v-btn icon :loading="loading"><v-icon  small @click="list()">mdi-reload</v-icon> </v-btn></v-col>
             <v-col > </v-col>
             <v-col cols="auto">
                 <v-btn :color="(myProfilesStarted.length > 0) ? 'error' : 'success'" @click="setPresence()" :loading="loading">
@@ -107,6 +107,7 @@ export default {
   created() {
     this.list()
     this.form.token = this.token 
+    this.reload()
   },
 
   computed: {
@@ -122,6 +123,11 @@ export default {
     token()
     {
       return this.$store.getters['getAmolatinaToken']
+    },
+
+    started()
+    {
+      return this.myProfilesStarted.length > 0
     }
   },
 
@@ -137,6 +143,7 @@ export default {
       profiles_id: [],
       token: null
     },
+    isReload: null,
   }),
 
   methods: {
@@ -146,6 +153,17 @@ export default {
           this.profiles = data
           this.setActives()
         })
+    },
+
+    reload()
+    {
+      if (this.started) {
+          this.isReload = setInterval( () => {
+              this.load();
+          }, 30000 )
+      } else {
+        clearInterval(this.isReload)
+      } 
     },
 
     setProfile(profile)
@@ -176,6 +194,7 @@ export default {
       this.storeResource('userPresence', this.form)
       .then(data => {
         this.showMessage(data.msj)
+        this.reload()
       })
       .finally( () => 
       {
@@ -194,6 +213,7 @@ export default {
       this.updateResource('userPresence/stop', this.form)
       .then(data => {
         this.showMessage(data.msj)
+        this.reload()
       })
       .finally( () => 
       {
