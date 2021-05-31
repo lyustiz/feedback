@@ -5,7 +5,7 @@
         <v-card-title primary-title>
             <v-row dense>
                 <v-col>{{user.full_name}} ({{user.username}}) <v-btn icon :loading="loading" small @click="list()"><v-icon>mdi-refresh</v-icon></v-btn></v-col>
-               <!--  <v-col cols="auto" ><v-btn icon :loading="loading" small @click="estimatePresence()"><v-icon color="red">mdi-refresh</v-icon></v-btn></v-col> -->
+                <v-col cols="auto" ><v-btn icon :loading="loading" small @click="estimatePresence()"><v-icon color="red">mdi-refresh</v-icon></v-btn></v-col>
                 <v-col cols="auto"><v-btn icon color="success"><v-icon>mdi-dots-vertical</v-icon></v-btn></v-col>
             </v-row>
         </v-card-title>
