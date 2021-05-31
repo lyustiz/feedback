@@ -27,6 +27,7 @@ class User extends Authenticatable
 	 	 	 	 	 	 	'agency_id',
 	 	 	 	 	 	 	'group_id',
                             'table_id',
+                            'turn_id',
                             'goal_day',
                             'goal_month',
 	 	 	 	 	 	 	'photo',
@@ -80,7 +81,7 @@ class User extends Authenticatable
 
     public function scopeRole($query, $roles = [])
     {
-        return ( count($roles) > 0 ) ?  $query->whereIn('role_id', 3) : $query;
+        return ( count($roles) > 0 ) ?  $query->whereIn('role_id', $roles) : $query;
     }
 
     public function scopeComboData($query)
@@ -111,6 +112,16 @@ class User extends Authenticatable
     public function table()
     {
         return $this->BelongsTo('App\Models\Table');
+    }
+
+    public function tableCordinator()
+    {
+        return $this->hasOne('App\Models\Table', 'id', 'cordinator_id');
+    }
+
+    public function turn()
+    {
+        return $this->BelongsTo('App\Models\Turn');
     }
 
     public function userProfile()

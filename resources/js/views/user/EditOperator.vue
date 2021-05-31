@@ -5,7 +5,7 @@
 
         <v-card-title  class="subtitle-2">
             <v-row>
-                <v-col>Operador</v-col>
+                <v-col>usuario</v-col>
                 <v-col cols="auto"><v-btn icon x-small dark @click="cancel()"><v-icon>mdi-close-circle</v-icon></v-btn></v-col>
             </v-row>
         </v-card-title>
@@ -113,7 +113,38 @@
                                 append-icon="mdi-table-furniture"
                                 hide-details
                             ></v-select>
+                        </v-col>
 
+                        <v-col cols="12" md="6">
+                            <v-select
+                                dense
+                                outlined
+                                filled
+                                label="Turno"
+                                v-model="form.turn_id"    
+                                :items="selects.turn"
+                                :rules="[rules.required]"
+                                item-value="id"
+                                item-text="name"
+                                append-icon="mdi-clock"
+                                hide-details
+                            ></v-select>
+                        </v-col>
+
+                        <v-col cols="12" md="6">
+                            <v-select
+                                dense
+                                outlined
+                                filled
+                                label="Rol"
+                                v-model="form.role_id"    
+                                :items="selects.role"
+                                :rules="[rules.required]"
+                                item-value="id"
+                                item-text="name"
+                                append-icon="mdi-account-switch-outline"
+                                hide-details
+                            ></v-select>
                         </v-col>
 
                          <v-col cols="12">
@@ -196,6 +227,7 @@ export default {
 				agency_id: 	null,
 				group_id: 	null,
                 table_id:   null,
+                turn_id:    null,
 				photo: 	    null,
 				email: 	    null,
 				comments: 	null,
@@ -205,12 +237,12 @@ export default {
             {
                 table: [],
                 group: [],
+                turn:  [],
+                role:  ['/list']
             },
             default: {
                 agency_id:   1,
-                role_id:     4,
                 status_id:   1,
-                rolename: 'operator',
             }
         }
     },
@@ -219,6 +251,21 @@ export default {
     {
         setPhoto(photoSrc) {
             this.form.photo = photoSrc
+        },
+
+        extraActions(method)
+        {
+            let role = this.selects.role.find( role => role.id = this.form.role_id)
+            this.form.rolename = role.path
+            
+            if(role.id == 3) //coordinator
+            {
+               let table = this.selects.table.find( table => table.id != this.form.table_id ) 
+              /*  
+               if( table.coodinator_id != this.form.id){
+                   alert('esta accion reemplazar el coordinador de la mesaa ' + table.name)
+               } */
+            }
         },
     }
 }

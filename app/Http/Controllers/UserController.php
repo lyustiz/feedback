@@ -29,7 +29,7 @@ class UserController extends Controller
 
     public function show(Request $request, User $user)
     {
-       return $user->load( 'group', 'table.manager', 'table.coordinator', 'profile', 'role')
+       return $user->load( 'group', 'table.manager', 'table.coordinator', 'profile', 'role', 'turn:id,name')
                    ->loadSum(['presenceDay', 'presenceMonth' ], 'profit')
                    ->loadSum(['presenceDay', 'presenceMonth' ], 'bonus')
                    ->loadSum(['presenceDay', 'presenceMonth' ], 'writeoff');
@@ -37,13 +37,17 @@ class UserController extends Controller
 
     public function list(Request $request)
     {
-        return User::with('group', 'table.manager', 'table.coordinator', 'profile', 'role', 'penaltyMonth.penaltyType')
+        $roles = ($request->filled('role')) ? $request->role : [];
+        
+        return User::with('group', 'table.manager', 'table.coordinator', 'profile', 'role', 'turn:id,name', 'penaltyMonth.penaltyType')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'profit')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
                     ->operator($request->boolean('operator'))
                     ->coordinator($request->boolean('coordinator'))
                     ->manager($request->boolean('manager'))
+                    ->role($roles)
+                    ->orderBy('role_id')
                     ->orderBy('name')
                     ->get(); 
     }
@@ -52,7 +56,7 @@ class UserController extends Controller
     {
         $coordinator = \Auth::user();
         
-        return User::with('group', 'table.manager', 'table.coordinator', 'profile', 'role', 'penaltyMonth.penaltyType')
+        return User::with('group', 'table.manager', 'table.coordinator', 'profile', 'role', 'turn:id,name', 'penaltyMonth.penaltyType')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'profit')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
@@ -97,6 +101,8 @@ class UserController extends Controller
             'rolename'          => 	'required|string|max:30',
 			'agency_id'         => 	'required|integer|max:999999999',
 			'group_id'          => 	'required|integer|max:999999999',
+            'table_id'          => 	'required|integer|max:999999999',
+            'turn_id'          => 	'required|integer|max:999999999',
 			'photo'             => 	'nullable|string',
 			'email'             => 	'nullable|string|max:100',
 			'comments'          => 	'nullable|string|max:100',
@@ -120,8 +126,29 @@ class UserController extends Controller
             throw ValidationException::withMessages(['photoError' => "No se cargo la imagen"]);
         }
 
+        if($user->role_id == 3)
+        {
+            $this->setTableCoordinator($user);
+        }
+
         return [ 'msj' => "$request->rolename Agregado Correctamente", compact('user') ];
     }
+
+    public function setTableCoordinator($user)
+    {
+        $table = $user->table;
+
+        /* if($table->coordinator_id != $user->id)
+        {
+            if($table->coordinator_id != null)
+            {
+                User::find($table->coordinator_id)->update(['role_id' => 4]);
+            }
+           
+            $table->update(['coordinator_id' => $user->id]);
+        } */
+    }
+    
 
     /**
      * Update the specified resource in storage.
@@ -134,12 +161,15 @@ class UserController extends Controller
     {
    
         $validate = request()->validate([
-			'password'          => 	'nullable|string',
+			'password'          => 	'nullable|string|min:6',
 			'name'              => 	'nullable|string|max:50',
 			'surname'           => 	'nullable|string|max:50',
 			'role_id'           => 	'required|integer|max:999999999',
             'rolename'          => 	'required|string|max:30',
 			'group_id'          => 	'required|integer|max:999999999',
+            'group_id'          => 	'required|integer|max:999999999',
+            'table_id'          => 	'required|integer|max:999999999',
+            'turn_id'          => 	'required|integer|max:999999999',
 			'photo'             => 	'nullable|string',
 			'email'             => 	'nullable|string|max:100',
 			'comments'          => 	'nullable|string|max:100',
@@ -147,8 +177,11 @@ class UserController extends Controller
         ]);
 
         if ($request->filled('password')) {
-            $password  = Hash::make($request->password);
-            $request->merge(['password' => $password]);
+            if( strlen($request->password) > 6)
+            {
+                $password  = Hash::make($request->password);
+                $request->merge(['password' => $password]);
+            }
         }
 
         if ($request->filled('photo')) {
@@ -168,9 +201,14 @@ class UserController extends Controller
             }
         }
 
-        $user = $user->update($request->all());
+        $update = $user->update($request->all());
 
-        return [ 'msj' => "$request->rolename Actualizado Correctamente", compact('user') ];
+        if($user->role_id == 3)
+        {
+            $this->setTableCoordinator($user);
+        }
+
+        return [ 'msj' => "$request->rolename Actualizado Correctamente", compact('update') ];
     }
 
     public function goals(Request $request, User $user)

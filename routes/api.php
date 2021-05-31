@@ -101,7 +101,7 @@ Route::apiResource('/profile',                  'ProfileController');
 Route::get('/profileProgress/fill',             'ProfileProgressController@getProgress');
 Route::apiResource('/profileProgress',          'ProfileProgressController');
 
-
+Route::get('/role/list',                        'RoleController@list');
 Route::apiResource('/role',                     'RoleController');
 Route::apiResource('/menu',                     'MenuController');
 Route::apiResource('/permission',               'PermissionController');

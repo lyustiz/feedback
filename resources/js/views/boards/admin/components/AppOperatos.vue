@@ -14,9 +14,11 @@
     <v-card-text class="pt-0 accounts-container custom-scroll">
       <v-list subheader two-line dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
         <v-list-item v-for="operator in operatos" :key="operator.id" > 
-          <v-list-item-avatar color="blue" size="60" class="elevation-2">
-              <v-img :src="`/storage/photo/operator/${operator.photo || 'nophoto.png'}`" ></v-img>
-          </v-list-item-avatar>
+          <v-badge offset-x="25" offset-y="25" overlap color="rgba(0,255,0,0.6)" :value="operator.role_id == 3" icon="mdi-shield-account">
+            <v-list-item-avatar color="blue" size="60" class="elevation-2">
+                <v-img :src="`/storage/photo/operator/${operator.photo || 'nophoto.png'}`" ></v-img>
+            </v-list-item-avatar>
+          </v-badge>
           <v-list-item-content>
             <v-list-item-title>
               <v-row no-gutters>
@@ -72,20 +74,24 @@
                     
                   </v-col>
 
-                  <v-col cols="auto" class="px-2">
+                  <v-col cols="auto" class="pr-2">
                     <v-badge v-if="operator.penalty_month.length > 0" offset-x="10" offset-y="12" color="rgba(0,0,0,0.15)" :content="operator.penalty_month.length">  
                       <list-simple-icon icon="mdi-account-cancel" label="Multas del Mes" color="red"></list-simple-icon>
                     </v-badge> 
                   </v-col>
 
-                  <v-col cols="auto" class="px-2">
+                  <v-col cols="auto" class="pr-1">
+                      <list-simple-icon  v-if="operator.turn" :icon="getIcon(operator)" :label="operator.turn.name" :color="getColor(operator)"></list-simple-icon>
+                  </v-col>
+
+                  <v-col cols="auto" class="pr-1">
                     <v-badge v-if="operator.table" offset-x="10" offset-y="12" color="rgba(0,0,0,0.15)" :content="operator.table.value">  
                       <list-simple-icon  v-if="operator.table" icon="mdi-table-furniture" :label="operator.table.name" color="amber"></list-simple-icon>
                     </v-badge> 
                   </v-col>
 
                 
-                  <v-col cols="auto" class="pr-3" v-if="operator.profile.length > 0">
+                  <v-col cols="auto" class="pr-1" v-if="operator.profile.length > 0">
 
                     <v-menu right bottom offset-x :disabled="operator.profile.length < 1">
                       <template v-slot:activator="{ on }">
@@ -190,7 +196,7 @@ export default {
   methods: {
 
     list() {
-        this.getResource('user/list?operator=true').then( data => {
+        this.getResource('user/list?role[]=3&role[]=4').then( data => {
           this.operatos = data
         })
     },
@@ -248,6 +254,40 @@ export default {
       this.addGoalsDialog     = false
       this.addAbsenceDialog   = false
     },
+
+     getIcon(operator)
+    {
+      switch (operator.turn_id) {
+        case 1:
+          return 'mdi-weather-sunny'
+
+        case 2:
+          return 'mdi-white-balance-sunny'
+
+        case 3:
+          return 'mdi-weather-night'
+
+        default:
+          return 'mdi-close'
+      }
+    },
+
+    getColor(operator)
+    {
+      switch (operator.turn_id) {
+        case 1:
+          return 'yellow'
+
+        case 2:
+          return 'orange'
+
+        case 3:
+          return 'blue'
+
+        default:
+          return 'mdi-close'
+      }
+    }
 
    
 

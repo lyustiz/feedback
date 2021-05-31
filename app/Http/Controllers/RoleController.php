@@ -19,6 +19,13 @@ class RoleController extends Controller
                     ->get();
     }
 
+    public function list()
+    {
+        return Role::with([])
+                    ->whereIn('id', [3,4])
+                    ->get();
+    }
+
     /**
      * Store a newly created resource in storage.
      *
