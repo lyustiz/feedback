@@ -152,7 +152,6 @@ class UserPresenceController extends Controller
                                      ->where( 'status_id' , 3)
                                      ->get();
 
-                                     return $userPresences;
 
         $end_at = Carbon::now('UTC')->toDateTimeLocalString('millisecond');
         

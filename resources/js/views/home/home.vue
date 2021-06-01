@@ -25,7 +25,7 @@ export default {
 
       board()
       {
-          console.log(this.role.name)
+          console.log(this.role.name, 'rol')
           
           if(this.role.name ==  'Administrador')
           {
