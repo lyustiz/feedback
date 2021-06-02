@@ -28,11 +28,12 @@
 
                 <template v-slot:item="{ item }">
                     <tr>
-                        <td>{{ item.name }}</td>
-						<!-- <td>{{ item.turn.name }}</td> -->
-                        <!-- <td>{{ item.coordinator.full_name }}</td> -->
-                        <td>{{ item.manager.full_name }}</td>
-						<td><list-simple-icon icon="mdi-text" color="orange" :label="item.comments"></list-simple-icon></td>
+                        <td>{{ item.table_id }}</td>
+						<td>{{ item.turn_id }}</td>
+						<td>{{ item.coordinator_id }}</td>
+						<td>{{ item.value }}</td>
+						<td>{{ item.color }}</td>
+						<td>{{ item.comments }}</td>
 						<td>
                             <status-switch 
                                 :loading="loading" 
@@ -59,11 +60,11 @@
                 :head-color="$App.theme.headModal"
                 :title="title"
             >
-                <table-form
+                <table-turn-form
                     :action="action"
                     :item="item"
                     @closeModal="closeModal()"
-                ></table-form>
+                ></table-turn-form>
 
             </app-modal>
 
@@ -83,22 +84,23 @@
 
 <script>
 import Applist from '@mixins/Applist';
-import tableForm  from './tableForm';
+import tableTurnForm  from './tableTurnForm';
 export default {
     mixins:     [ Applist],
-    components: { 'table-form': tableForm },
+    components: { 'table-turn-form': tableTurnForm },
     data () {
     return {
-        title:    'Mesa',
-        resource: 'table',
+        title:    'TableTurn',
+        resource: 'tableTurn',
         headers: [
-            { text: 'Name',        value: 'name' },
-		/* 	{ text: 'Turno',       value: 'turn.name' },
-			{ text: 'Coordinador', value: 'coordinator.name' }, */
-            { text: 'Manager',     value: 'manager.name' },
-			{ text: 'Comments',    value: 'comments' },
-			{ text: 'Status',      value: 'status_id' },
-            { text: 'Acciones',    value: 'actions', sortable: false, filterable: false },
+            { text: 'Table Id',   value: 'table_id' },
+			{ text: 'Turn Id',   value: 'turn_id' },
+			{ text: 'Coordinator Id',   value: 'coordinator_id' },
+			{ text: 'Value',   value: 'value' },
+			{ text: 'Color',   value: 'color' },
+			{ text: 'Comments',   value: 'comments' },
+			{ text: 'Status Id',   value: 'status_id' },
+            { text: 'Acciones', value: 'actions', sortable: false, filterable: false },
         ],
     }
     },

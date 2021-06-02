@@ -171,7 +171,6 @@ export default {
   data: () => ({
     operatos: [],
     itemsMenu: [
-      { action: 'addGoals',     icon: 'mdi-flag-checkered', label: 'Definir Metas', iconColor: 'green' },
       { action: 'addPenalty',   icon: 'mdi-account-cancel-outline', label: 'Multas', iconColor: 'red' },
       { action: 'addAbcense',   icon: 'mdi-account-arrow-right-outline', label: 'Ausencias/permisos', iconColor: 'red' },
     ],

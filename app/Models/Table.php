@@ -24,7 +24,14 @@ class Table extends Model
 	 	 	 	 	 	 	'updated_at'
                             ];
 
+    public static function boot() {
+        parent::boot();
 
+        static::deleting(function($table) { // before delete() method call this
+                $table->tableTurn()->delete();
+                // do the rest of the cleanup...
+        });
+    }
 
     public function scopeActive($query, $active=false)
     {
@@ -51,18 +58,40 @@ class Table extends Model
         return $this->HasMany('App\Models\User')->where('role_id', 4);
     }
 
-    public function turn()
+    public function tableTurn()
     {
-        return $this->BelongsTo('App\Models\Turn');
+        return $this->hasMany('App\Models\tableTurn');
     }
+
+
+    public function turn()
+	{
+		return $this->hasManyThrough(
+			'App\Models\Turn', //final
+            'App\Models\TableTurn', //intermedia
+            'table_id', // fk en intermedia
+            'id', // laocal en origen
+            'id', // local en final
+            'turn_id' // fk en intermedia
+		);
+	}
+
+    public function coordinator()
+	{
+		return $this->hasManyThrough(
+			'App\Models\User', //final
+            'App\Models\TableTurn', //intermedia
+            'table_id', // fk en intermedia
+            'id', // laocal en origen
+            'id', // local en final
+            'coordinator_id' // fk en intermedia
+		);
+	}
+
 
     public function manager()
     {
         return $this->BelongsTo('App\Models\User', 'manager_id', 'id' );
     }
 
-    public function coordinator()
-    {
-        return $this->BelongsTo('App\Models\User', 'coordinator_id', 'id' );
-    }
 }

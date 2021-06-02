@@ -8,7 +8,7 @@
 
         <v-row>
 
-        <v-col cols="12" md="6">
+        <v-col cols="12">
             <v-text-field
                 :rules="[rules.required]"
                 v-model="form.name"
@@ -17,7 +17,7 @@
             ></v-text-field>
         </v-col>
 
-        <v-col cols="12" md="6">
+ <!--        <v-col cols="12" md="6">
             <v-select
             :items="selects.turn"
             item-text="name"
@@ -28,9 +28,9 @@
             :loading="loading"
             dense
             ></v-select>
-        </v-col>
+        </v-col> -->
 
-        <v-col cols="12" md="6">
+     <!--    <v-col cols="12" md="6">
             <v-select
             :items="selects.user"
             item-text="full_name"
@@ -42,9 +42,9 @@
             dense
             ></v-select>
         </v-col>
-         
+          -->
 
-        <v-col cols="12" md="6">
+        <v-col cols="12">
             <v-text-field
                 :rules="[rules.max(80)]"
                 v-model="form.comments"
@@ -107,7 +107,9 @@ export default {
             default: 
             {
                 value: 1,
-                manager_id: 2
+                manager_id: 2,
+                coordinator_id: 1,
+                turn_id: 1
             }
 
         }

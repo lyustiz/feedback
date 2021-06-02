@@ -3,18 +3,17 @@
     <v-subheader>
         <v-row class="title">
             <v-col cols="auto" >
-              <v-icon left>mdi-account-multiple-outline</v-icon>  Perfiles
+              <v-icon left>mdi-table-furniture</v-icon>  Mesa
             </v-col>
             <v-col cols="auto" > <v-btn icon :loading="loading"><v-icon  small @click="list()">mdi-reload</v-icon> </v-btn></v-col>
-            <v-col > </v-col>
+            <v-spacer></v-spacer>
             <v-col cols="auto">
-                <v-btn small :color="(myProfilesStarted.length > 0) ? 'error' : 'success'" @click="setPresence()" :loading="loading">
+                <v-btn small :color="(myProfilesStarted.length > 0) ? 'error' : 'success'" @click="setPresence()" :loading="loading" :disabled="true">
                   <v-icon dark> {{ (myProfilesStarted.length > 0) ? 'mdi-stop' : 'mdi-play'}}</v-icon>
                    {{ (myProfilesStarted.length > 0) ? 'pausar' : 'Iniciar' }} 
                 </v-btn>
             </v-col>
         </v-row>
-        
 
     </v-subheader>
     <v-card-text class="pt-0 accounts-container custom-scroll">
@@ -24,8 +23,9 @@
         <v-list-item-group
           v-model="profile"
           color="green"
+          multiple
         >
-        <v-list-item v-for="profile in profiles" :key="profile.id" :value="profile" > 
+        <v-list-item v-for="profile in profiles" :key="profile.id" :value="profile" :disabled="false">
           <v-list-item-avatar color="blue" size="60">
             <v-img :src="`/storage/photo/profile/${profile.photo || 'nophoto'}.jpg`" ></v-img> 
           </v-list-item-avatar>
@@ -111,15 +111,11 @@ export default {
   },
 
   computed: {
-    profile:
-    {
-      get() {
-          return this.$store.getters['getProfile']
-      },
-      set(profile) {
-          this.$store.commit('setProfile', profile)
-      },
+
+    user(){
+      return this.$store.getters['getUser']
     },
+
     token()
     {
       return this.$store.getters['getAmolatinaToken']
@@ -149,7 +145,7 @@ export default {
   methods: {
 
     list() {
-        this.getResource(`profile/user/${this.userId}`).then( data => {
+        this.getResource(`profile/table/${this.user.table_id}`).then( data => {
           this.profiles = data
           this.setActives()
         })

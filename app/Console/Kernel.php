@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(new PresenceEstimate)->everyMinute();
+       // $schedule->call(new PresenceEstimate)->everyMinute();
 
         $schedule->call(new ComissionDetail)->everyMinute();
 

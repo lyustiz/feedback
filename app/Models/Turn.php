@@ -40,6 +40,6 @@ class Turn extends Model
                            
     public function user()
     {
-        return $this->BelongsTo('App\Models\User', 'user_id');
+        return $this->hasmany('App\Models\User');
     }
 }

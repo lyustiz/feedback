@@ -94,6 +94,7 @@ Route::apiResource('/userProfile',              'UserProfileController');
 
 Route::get('/profile/import/photo',             'ProfileController@importProfilePhoto');
 Route::get('/profile/import/agency/{agency}',   'ProfileController@profileImport');
+Route::get('/profile/table/{table}',            'ProfileController@profileTable');
 Route::get('/profile/user/{user}',              'ProfileController@profileUser');
 Route::apiResource('/profile',                  'ProfileController');
 
@@ -138,5 +139,8 @@ Route::get('/client/all/photo',               'ClientController@importClientPhot
 Route::get('/client/all/detail',              'ClientController@detailClients');
 Route::get('/client/top/Agency/{agency}',     'ClientController@topAgency');
 Route::apiResource('/client',     'ClientController');
+
+Route::get('/tableTurn/combo/{table}',     'TableTurnController@combo');
+Route::apiResource('/tableTurn',     'TableTurnController');
 //newRoutes
 });

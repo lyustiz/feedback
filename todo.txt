@@ -1,9 +1,16 @@
-sp_upd_undo_ball;
+TABLE TABLE_TURN
 
- -- DATOS DE LA BALOTA
-  SELECT id
-	  INTO @id_ball
-    FROM ball
-   WHERE ball_number = p_ball
-     AND game_id = p_game_id 
-     AND status_id = 1; -- fix balota anulada
+
+ALTER TABLE `user_presence`
+MODIFY COLUMN `bonus`  decimal(9,3) NULL DEFAULT 0 AFTER `end_at`,
+MODIFY COLUMN `writeoff`  decimal(9,3) NULL DEFAULT 0 AFTER `bonus`,
+MODIFY COLUMN `shared`  decimal(9,3) NULL DEFAULT 0 AFTER `writeoff`,
+MODIFY COLUMN `profit`  decimal(9,3) NULL DEFAULT 0 AFTER `shared`;
+
+
+
+UPDATE user AS t1 , table_turn AS t2
+						 SET t1.table_turn_id = t2.id
+					 WHERE t1.table_id =  t2.table_id
+						 AND t1.turn_id  = t2.turn_id
+

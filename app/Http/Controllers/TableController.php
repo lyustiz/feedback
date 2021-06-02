@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Table;
+use App\Models\Turn;
+use App\Models\TableTurn;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -15,13 +17,13 @@ class TableController extends Controller
      */
     public function index()
     {
-        return Table::with([ 'manager:id,name,surname', 'coordinator:id,name,surname', 'turn:id,name' ])
+        return Table::with([ 'manager', 'turn:turn.id,turn.name', 'coordinator' ])
                     ->get();
     }
 
     public function tablesDetails()
     {
-        return Table::with(['operator.profile', 'coordinator', 'manager', 'turn'])
+        return Table::with(['manager', 'tableTurn.turn'  , 'tableTurn.coordinator', 'tableTurn.operator.profile' ])
                     ->get();
     }
 
@@ -38,17 +40,36 @@ class TableController extends Controller
 			'value'          => 'required|numeric|max:9',
             'turn_id'        => 'required|integer|max:999999999',
 			'comments'       => 'nullable|string|max:100',
-            'manager_id'     => 'required|integer|max:999999999',
-            'coordinator_id' => 'required|integer|max:999999999',
+            'manager_id'     => 'nullable|integer|max:999999999',
+            'coordinator_id' => 'nullable|integer|max:999999999',
 			'status_id'      => 'required|integer|max:999999999',
 			'user_id'        => 'required|integer|max:999999999',
         ]);
 
         $table = table::create($request->all());
 
+        $this->assingTurns($table);
+
         return [ 'msj' => 'Mesa Agregada Correctamente', compact('table') ];
     }
 
+    
+    public function assingTurns($table)
+    {
+        $turns = Turn::where('status_id', 1)->get();
+        $tableTurns = [];
+        foreach ($turns as $turn) {
+            $tableTurns[] = [ 
+                                'table_id'   => $table->id, 
+                                'turn_id'    => $turn->id, 
+                                'user_id'    => $table->user_id, 
+                                'status_id'  => 1, 
+                                'created_at' => $table->created_at
+            ];
+        }
+        return TableTurn::insert($tableTurns);
+    }
+    
     /**
      * Display the specified resource.
      *
@@ -74,8 +95,8 @@ class TableController extends Controller
 			'value'          => 'required|numeric|max:9',
             'turn_id'        => 'required|integer|max:999999999',
 			'comments'       => 'nullable|string|max:100',
-            'manager_id'     => 'required|integer|max:999999999',
-            'coordinator_id' => 'required|integer|max:999999999',
+            'manager_id'     => 'nullable|integer|max:999999999',
+            'coordinator_id' => 'nullable|integer|max:999999999',
 			'status_id'      => 'required|integer|max:999999999',
 			'user_id'        => 'required|integer|max:999999999',
         ]);
@@ -95,6 +116,6 @@ class TableController extends Controller
     {
         $table = $table->delete();
  
-        return [ 'msj' => 'mesa Eliminada' , compact('table')];
+        return [ 'msj' => 'Mesa Eliminada' , compact('table')];
     }
 }

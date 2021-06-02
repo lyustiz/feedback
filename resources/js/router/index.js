@@ -62,6 +62,7 @@ import UserPresence from '@views/userPresence/userPresence.vue';
 import Absence      from '@views/absence/absence.vue';
 import AbsenceType  from '@views/absenceType/absenceType.vue';
 import Client       from '@views/client/AppClient';
+import TableTurn  from '@views/tableTurn/tableTurn.vue';
 //newImport
 
 let isAuthenticated = true;
@@ -387,6 +388,12 @@ export default new Router({
     name: 'client',
     icon: 'bubble_chart',
     component: Client,
+},
+{
+    path: '/tableTurn',
+    name: 'tableTurn',
+    icon: 'bubble_chart',
+    component: TableTurn,
 },
 //newRoutes
 

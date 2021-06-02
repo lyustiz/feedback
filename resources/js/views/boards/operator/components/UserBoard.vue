@@ -26,9 +26,9 @@
                         <v-col cols="5"  class="subtitle-2">Mesa</v-col>
                         <v-col cols="7" class="font-weight-light">{{user.table.name}}</v-col>
                         <v-col cols="5"  class="subtitle-2">Gerente</v-col>
-                        <v-col cols="7" class="font-weight-light">{{user.table.manager.name}}</v-col>
+                        <v-col cols="7" class="font-weight-light">{{user.table.manager.full_name}}</v-col>
                         <v-col cols="5"  class="subtitle-2">Coordinador</v-col>
-                        <v-col cols="7" class="font-weight-light">{{user.table.coordinator.name}}</v-col>
+                        <v-col cols="7" class="font-weight-light">{{user.coordinator.full_name}}</v-col>
                     </v-row>
                 </v-col>
             </v-row>

@@ -103,6 +103,52 @@ class UserPresenceController extends Controller
             'token'          =>  'required',
         ]);
 
+        $estimates = \DB::select( \DB::raw("SELECT total.id, 
+                                    SUM(IF(total.positive=0, total.points, 0)) write_off, 
+                                    SUM(IF(total.positive=1, total.points, 0)) points, 
+                                    SUM(total.share) share, 
+                                    SUM(total.profit) profit
+                               FROM (SELECT up.id, c.positive, c.points, c.share, c.profit 
+                                       FROM comission c
+                                       JOIN profile p ON p.amolatina_id = c.profile_id
+                                       JOIN user_presence up ON p.id = up.profile_id
+                                      WHERE c.comission_at > up.start_at
+                                        AND up.status_id = 3
+                                        AND up.user_id = :user_id) total
+                               GROUP BY total.id"), 
+                             array('user_id' => $request->user_id 
+                          )
+                  );
+
+         $end_at = Carbon::now('UTC')->toDateTimeLocalString('millisecond');
+
+         $updates = []; 
+
+         foreach ($estimates as $estimate) {
+
+            $updates[$estimate->id] = UserPresence::find($estimate->id)->update([
+                                            'bonus'      => $estimate->points,
+                                            'writeoff'   => $estimate->write_off,
+                                            'shared'     => $estimate->share,
+                                            'profit'     => $estimate->profit,
+                                            'end_at'     => $end_at,
+                                            'comments'   => 'stop',
+                                            'active'     => 0,
+                                            'status_id'  => 4,
+                                        ]);
+         }
+
+         $others = UserPresence::where('user_id', $request->user_id)->where('status_id', 3)->update([
+                                    'end_at'     => $end_at,
+                                    'comments'   => 'stop',
+                                    'active'     => 0,
+                                    'status_id'  => 4,
+                                ]);
+
+         return [ 'msj' => 'Perfiles Finalizados' , compact('updates')];
+
+       
+/* 
         $searches = UserPresence::select('user_presence.start_at', 'agency.amolatina_id', 'agency.token')
                                 ->join('profile', 'profile.id', '=', 'user_presence.profile_id')
                                 ->join('agency', 'agency.id', '=', 'profile.agency_id')
@@ -134,7 +180,7 @@ class UserPresenceController extends Controller
             }
         }
 
-        return [ 'msj' => 'Perfiles Finalizados' , compact('updates')];
+        return [ 'msj' => 'Perfiles Finalizados' , compact('updates')]; */
     }
 
     public function presenceEstimate()
@@ -146,7 +192,7 @@ class UserPresenceController extends Controller
                                  ->join('agency', 'agency.id', '=', 'profile.agency_id')
                                  ->where('user_presence.status_id', 3)
                                  ->distinct()
-                                 ->get();
+                                 ->dd();
 
         $userPresences = UserPresence::with(['profile:profile.id,amolatina_id,name', 'profile.agency:agency.id,amolatina_id'])
                                      ->where( 'status_id' , 3)

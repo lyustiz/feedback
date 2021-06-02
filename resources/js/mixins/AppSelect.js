@@ -10,6 +10,11 @@ export default {
     { 
         fillSelects()
         {
+            if(!this.selects){
+                this.loading = false;
+                return
+            } 
+            
             Promise.all(this.selectRequests(this.selects))
             .then(results => {
                 

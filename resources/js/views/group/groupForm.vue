@@ -33,7 +33,7 @@
                    
         <v-col cols="12">
             <v-text-field
-                :rules="[rules.required]"
+                :rules="[rules.max(80)]"
                 v-model="form.comments"
                 label="Comments"
                 dense

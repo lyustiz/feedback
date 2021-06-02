@@ -72,7 +72,7 @@ export default {
 				user_id: 	null,
             },
             select: {
-
+                
             },
             default: 
             {

@@ -112,6 +112,7 @@
                                 item-text="name"
                                 append-icon="mdi-table-furniture"
                                 hide-details
+                                @change="getTurns($event)"
                             ></v-select>
                         </v-col>
 
@@ -121,8 +122,8 @@
                                 outlined
                                 filled
                                 label="Turno"
-                                v-model="form.turn_id"    
-                                :items="selects.turn"
+                                v-model="form.table_turn_id"    
+                                :items="turns"
                                 :rules="[rules.required]"
                                 item-value="id"
                                 item-text="name"
@@ -206,6 +207,7 @@ export default {
   created()
   {
     this.mapForm()
+    this.getTurns(this.item.table_id)
   },
 
   components:{
@@ -217,33 +219,35 @@ export default {
             resource: 'user',
             form:
             {
-                id: 	    null,
-                username:   null,
-				password: 	null,
-				name: 	    null,
-				surname: 	null,
-				role_id: 	null,
-                rolename:   null,
-				agency_id: 	null,
-				group_id: 	null,
-                table_id:   null,
-                turn_id:    null,
-				photo: 	    null,
-				email: 	    null,
-				comments: 	null,
-				status_id: 	null,
+                id: 	       null,
+                username:      null,
+				password: 	   null,
+				name: 	       null,
+				surname: 	   null,
+				role_id: 	   null,
+                rolename:      null,
+				agency_id: 	   null,
+				group_id: 	   null,
+                table_id:      null,
+                turn_id:       null,
+                table_turn_id: null,
+				photo: 	       null,
+				email: 	       null,
+				comments: 	   null,
+				status_id: 	   null,
             },
             selects:
             {
                 table: [],
                 group: [],
-                turn:  [],
                 role:  ['/list']
             },
             default: {
                 agency_id:   1,
                 status_id:   1,
-            }
+                turn_id:     1,
+            },
+            turns: []
         }
     },
 
@@ -251,6 +255,12 @@ export default {
     {
         setPhoto(photoSrc) {
             this.form.photo = photoSrc
+        },
+
+        getTurns(tableId){
+            this.getResource(`tableTurn/combo/${tableId}`).then( data =>{
+                this.turns = data
+            })
         },
 
         extraActions(method)

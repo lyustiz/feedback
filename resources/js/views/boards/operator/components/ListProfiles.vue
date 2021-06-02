@@ -8,7 +8,7 @@
             <v-col cols="auto" > <v-btn icon :loading="loading"><v-icon  small @click="list()">mdi-reload</v-icon> </v-btn></v-col>
             <v-col > </v-col>
             <v-col cols="auto">
-                <v-btn :color="(myProfilesStarted.length > 0) ? 'error' : 'success'" @click="setPresence()" :loading="loading">
+                <v-btn small :color="(myProfilesStarted.length > 0) ? 'error' : 'success'" @click="setPresence()" :loading="loading">
                   <v-icon dark> {{ (myProfilesStarted.length > 0) ? 'mdi-stop' : 'mdi-play'}}</v-icon>
                    {{ (myProfilesStarted.length > 0) ? 'pausar' : 'Iniciar' }} 
                 </v-btn>
@@ -23,9 +23,11 @@
 
         <v-list-item-group
           v-model="profile"
-          color="green"
+          color=""
+          multiple
+
         >
-        <v-list-item v-for="profile in profiles" :key="profile.id" :value="profile" > 
+        <v-list-item v-for="profile in profiles" :key="profile.id" :value="profile" :color="myProfilesStarted.includes(profile.id) ? 'green':'blue'" > <!-- :disabled="!myProfilesStarted.includes(profile.id)" -->
           <v-list-item-avatar color="blue" size="60">
             <v-img :src="`/storage/photo/profile/${profile.photo || 'nophoto'}.jpg`" ></v-img> 
           </v-list-item-avatar>
@@ -111,20 +113,14 @@ export default {
   },
 
   computed: {
-    profile:
+    profile()
     {
-      get() {
-          return this.$store.getters['getProfile']
-      },
-      set(profile) {
-          this.$store.commit('setProfile', profile)
-      },
+      return this.$store.getters['getProfile']
     },
     token()
     {
       return this.$store.getters['getAmolatinaToken']
     },
-
     started()
     {
       return this.myProfilesStarted.length > 0

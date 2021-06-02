@@ -28,6 +28,7 @@ class User extends Authenticatable
 	 	 	 	 	 	 	'group_id',
                             'table_id',
                             'turn_id',
+                            'table_turn_id',
                             'goal_day',
                             'goal_month',
 	 	 	 	 	 	 	'photo',
@@ -114,9 +115,14 @@ class User extends Authenticatable
         return $this->BelongsTo('App\Models\Table');
     }
 
-    public function tableCordinator()
+    public function tableTurn()
     {
-        return $this->hasOne('App\Models\Table', 'id', 'cordinator_id');
+        return $this->BelongsTo('App\Models\TableTurn', 'table_turn_id', 'id');
+    }
+
+    public function coordinator()
+    {
+        return $this->hasOne('App\Models\User', 'table_turn_id', 'table_turn_id')->where('role_id', 3);
     }
 
     public function turn()

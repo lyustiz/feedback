@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Table;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\UserTrait;
@@ -29,7 +30,7 @@ class UserController extends Controller
 
     public function show(Request $request, User $user)
     {
-       return $user->load( 'group', 'table.manager', 'table.coordinator', 'profile', 'role', 'turn:id,name')
+       return $user->load([ 'group', 'profile', 'role', 'table', 'table.manager', 'coordinator', 'tableTurn.turn' ])
                    ->loadSum(['presenceDay', 'presenceMonth' ], 'profit')
                    ->loadSum(['presenceDay', 'presenceMonth' ], 'bonus')
                    ->loadSum(['presenceDay', 'presenceMonth' ], 'writeoff');
@@ -39,7 +40,7 @@ class UserController extends Controller
     {
         $roles = ($request->filled('role')) ? $request->role : [];
         
-        return User::with('group', 'table.manager', 'table.coordinator', 'profile', 'role', 'turn:id,name', 'penaltyMonth.penaltyType')
+        return  User::with(['group', 'table.manager', 'profile', 'role', 'tableTurn.turn', 'penaltyMonth.penaltyType'])
                     ->withSum(['presenceDay', 'presenceMonth' ], 'profit')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
@@ -61,9 +62,7 @@ class UserController extends Controller
                     ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
                     ->operator(true)
-                    ->whereHas('table.coordinator', function (Builder $query) use($coordinator) {
-                        $query->where('id', $coordinator->id);
-                    })
+                    ->where('table_turn_id', $coordinator->table_turn_id)
                     ->orderBy('name')
                     ->get(); 
     }
@@ -102,7 +101,8 @@ class UserController extends Controller
 			'agency_id'         => 	'required|integer|max:999999999',
 			'group_id'          => 	'required|integer|max:999999999',
             'table_id'          => 	'required|integer|max:999999999',
-            'turn_id'          => 	'required|integer|max:999999999',
+            'turn_id'           => 	'required|integer|max:999999999',
+            'table_turn_id'     => 	'required|integer|max:999999999',
 			'photo'             => 	'nullable|string',
 			'email'             => 	'nullable|string|max:100',
 			'comments'          => 	'nullable|string|max:100',
@@ -116,7 +116,7 @@ class UserController extends Controller
 
         $photoname =  $username . '.jpeg';
 
-        if($this->storeImage($request->photo, $photoname, $request->rolename))
+        if($this->storeImage($request->photo, $photoname, 'operator'))
         {
             $request-> merge (['username' => $username, 'password' => $password, 'photo' => $photoname ]);
             $user = User::create($request->all());
@@ -131,22 +131,16 @@ class UserController extends Controller
             $this->setTableCoordinator($user);
         }
 
-        return [ 'msj' => "$request->rolename Agregado Correctamente", compact('user') ];
+        return [ 'msj' => ucfirst($request->rolename) . " Agregado Correctamente", compact('user') ];
     }
 
     public function setTableCoordinator($user)
     {
-        $table = $user->table;
+        $coordinator = $user->coordinator;
 
-        /* if($table->coordinator_id != $user->id)
-        {
-            if($table->coordinator_id != null)
-            {
-                User::find($table->coordinator_id)->update(['role_id' => 4]);
-            }
-           
-            $table->update(['coordinator_id' => $user->id]);
-        } */
+        User::where('table_turn_id', $user->table_turn_id)->where('id', '<>',$user->id )->update(['role_id' => 4]);
+        
+        $user->tableTurn->update(['coordinator_id' => $user->id]);
     }
     
 
@@ -169,7 +163,8 @@ class UserController extends Controller
 			'group_id'          => 	'required|integer|max:999999999',
             'group_id'          => 	'required|integer|max:999999999',
             'table_id'          => 	'required|integer|max:999999999',
-            'turn_id'          => 	'required|integer|max:999999999',
+            'turn_id'           => 	'required|integer|max:999999999',
+            'table_turn_id'     => 	'required|integer|max:999999999',
 			'photo'             => 	'nullable|string',
 			'email'             => 	'nullable|string|max:100',
 			'comments'          => 	'nullable|string|max:100',
@@ -177,11 +172,10 @@ class UserController extends Controller
         ]);
 
         if ($request->filled('password')) {
-            if( strlen($request->password) > 6)
-            {
-                $password  = Hash::make($request->password);
-                $request->merge(['password' => $password]);
-            }
+            $password  = Hash::make($request->password);
+            $request->merge(['password' => $password]);
+        } else {
+            $request->merge(['password' => $user->password]);
         }
 
         if ($request->filled('photo')) {
@@ -190,7 +184,7 @@ class UserController extends Controller
             {
                 $photoname =  $user->username . '.jpeg';
                 
-                if($this->storeImage($request->photo, $photoname, $request->rolename))
+                if($this->storeImage($request->photo, $photoname, 'operator'))
                 {
                     $request-> merge(['photo' => $photoname]);
                     
@@ -201,14 +195,14 @@ class UserController extends Controller
             }
         }
 
-        $update = $user->update($request->all());
-
-        if($user->role_id == 3)
+        if($request->role_id == 3 and $user->role_id != 3)
         {
             $this->setTableCoordinator($user);
         }
 
-        return [ 'msj' => "$request->rolename Actualizado Correctamente", compact('update') ];
+        $update = $user->update($request->all());
+
+        return [ 'msj' => ucfirst($request->rolename)." Actualizado Correctamente", compact('update') ];
     }
 
     public function goals(Request $request, User $user)
