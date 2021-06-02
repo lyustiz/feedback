@@ -22,13 +22,13 @@
                         <v-col cols="5" class="subtitle-2">Rol</v-col>
                         <v-col cols="7" class="font-weight-light">{{user.role.name}}</v-col>
                         <v-col cols="5"  class="subtitle-2">Grupo</v-col>
-                        <v-col cols="7" class="font-weight-light">{{user.group.name}}</v-col>
+                        <v-col cols="7" class="font-weight-light">{{(user.group) ? user.group.name : 'sin mesa' }}</v-col>
                         <v-col cols="5"  class="subtitle-2">Mesa</v-col>
-                        <v-col cols="7" class="font-weight-light">{{user.table.name}}</v-col>
+                        <v-col cols="7" class="font-weight-light">{{(user.table) ? user.table.name : 'sin mesa'}}</v-col>
                         <v-col cols="5"  class="subtitle-2">Gerente</v-col>
-                        <v-col cols="7" class="font-weight-light">{{user.table.manager.full_name}}</v-col>
+                        <v-col cols="7" class="font-weight-light">{{( user.table.manager )? user.table.manager.full_name : 'Disponible'}}</v-col>
                         <v-col cols="5"  class="subtitle-2">Coordinador</v-col>
-                        <v-col cols="7" class="font-weight-light">{{user.coordinator.full_name}}</v-col>
+                        <v-col cols="7" class="font-weight-light">{{(user.coordinator) ? user.coordinator.full_name :'Disponible' }}</v-col>
                     </v-row>
                 </v-col>
             </v-row>

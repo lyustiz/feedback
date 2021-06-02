@@ -60,7 +60,7 @@ class Table extends Model
 
     public function tableTurn()
     {
-        return $this->hasMany('App\Models\tableTurn');
+        return $this->hasMany('App\Models\TableTurn');
     }
 
 
