@@ -4,8 +4,8 @@
     <v-container fluid class="mt-n12">
       <v-row dense> 
 
-        <v-col cols="12" md="6" lg="4">
-          <v-card color="rgba(0,0,0,0.4)" class="rounded-lg ">
+        <v-col cols="12" md="6" lg="3">
+          <v-card color="rgba(0,0,0,0.4)" class="rounded-lg " min-height="90vh">
             <v-card-text>
             <v-row>
               <v-col>
@@ -21,11 +21,16 @@
           </v-card>
         </v-col>
 
-        <v-col cols="12" md="6" lg="4">
+        <v-col cols="12" md="6" lg="3">
             <AppOperatos></AppOperatos>
         </v-col>
 
-        <v-col cols="12" md="6" lg="4">
+
+        <v-col cols="12" md="6" lg="3">
+            <ListProfiles></ListProfiles>
+        </v-col>
+
+        <v-col cols="12" md="6" lg="3">
             <AppProfile></AppProfile>
         </v-col>
 
@@ -40,6 +45,7 @@
 import AppUser      from './components/AppUser'
 import AppDashBoard from './components/AppDashBoard'
 import AppOperatos  from './components/AppOperatos'
+import ListProfiles from './components/ListProfiles'
 import AppProfile   from './components/AppProfile'
 
 export default {
@@ -51,6 +57,7 @@ export default {
     AppDashBoard,
     AppOperatos,
     AppProfile,
+    ListProfiles
   },
   
   data: () => ({

@@ -2,12 +2,18 @@
   <v-card dark class="rounded-lg " color="rgba(0,0,0,0.4)">
     <v-subheader>
         <v-row class="title">
-            <v-col cols="auto" >
-              <v-icon left>mdi-table-furniture</v-icon>  Perfiles Mesa
+            <v-col>
+               Perfiles
             </v-col>
             <v-col cols="auto" > <v-btn icon :loading="loading"><v-icon  small @click="list()">mdi-reload</v-icon> </v-btn></v-col>
-            <v-spacer></v-spacer>
+            <v-col cols="auto">
+                <v-btn small :color="(myProfilesStarted.length > 0) ? 'error' : 'success'" @click="setPresence()" :loading="loading">
+                  <v-icon dark> {{ (myProfilesStarted.length > 0) ? 'mdi-stop' : 'mdi-play'}}</v-icon>
+                   {{ (myProfilesStarted.length > 0) ? 'pausar' : 'Iniciar' }} 
+                </v-btn>
+            </v-col>
         </v-row>
+        
 
     </v-subheader>
     <v-card-text class="pt-0 accounts-container custom-scroll">
@@ -15,10 +21,12 @@
       <v-list subheader two-line dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
 
         <v-list-item-group
-          color="green"
+          v-model="profile"
+          color=""
           multiple
+
         >
-        <v-list-item v-for="profile in profiles" :key="profile.id" :value="profile" inactive class="px-2">
+        <v-list-item v-for="profile in profiles" :key="profile.id" :value="profile" :color="myProfilesStarted.includes(profile.id) ? 'green':'blue'" > <!-- :disabled="!myProfilesStarted.includes(profile.id)" -->
           <v-list-item-avatar color="blue" size="60">
             <v-img :src="`/storage/photo/profile/${profile.photo || 'nophoto'}.jpg`" ></v-img> 
           </v-list-item-avatar>
@@ -66,36 +74,28 @@
               <v-list-item-subtitle class="pt-2">
                 <v-row>
                   <v-col>{{profile.name}}</v-col>
-                   <v-col cols="auto" v-if="profile.presence && !myProfilesStarted.includes(profile.id)" @click="confirmStop(profile)">
-                     <list-simple-icon icon="mdi-lock-open-variant" label="Liberar Perfil" color="amber darken-3" :size="22"></list-simple-icon>
+                  <v-col cols="auto" v-if="profile.presence">
+                    <v-icon :color="( myProfilesStarted.includes(profile.id) ) ? 'yellow' : 'red'" size="20"> 
+                      {{(myProfilesStarted.includes(profile.id)) ? 'mdi-account-star' : 'mdi-lock'  }}
+                    </v-icon> 
                   </v-col>
                   <v-col cols="auto">
                     <v-icon :color="(profile.presence) ? 'green' : 'red'" size="20"> 
                       {{(profile.presence) ? 'mdi-checkbox-blank-circle' : 'mdi-checkbox-blank-circle-outline'}}
                     </v-icon> 
                   </v-col>
-                 
                 </v-row>
               
               </v-list-item-subtitle>
             </v-list-item-content>
-            <v-list-item-icon class="pt-4">
-              <v-btn x-small fab color="red" @click="stopPresence(profile)" v-if="profile.presence && (myProfilesStarted.includes(profile.id))" :loading="loading">
-                <v-icon>mdi-stop</v-icon>
-              </v-btn>
-              <v-btn class="no-drop" icon v-else-if="profile.presence && (!myProfilesStarted.includes(profile.id))">
-                <v-icon color="red" size="32">mdi-lock</v-icon>
-              </v-btn>
-              <v-btn x-small fab color="success" @click="startPresence(profile)" v-else  :loading="loading">
-                <v-icon>mdi-play</v-icon>
-              </v-btn>
+            <v-list-item-icon>
+                <v-icon class="mt-6">mdi-dots-vertical</v-icon>
             </v-list-item-icon>
         </v-list-item>
         </v-list-item-group>
       </v-list>
       
     </v-card-text>
-    <app-confirm :confirm="confirm" :title="title" :message="message" @closeConfirm="confirmation($event)"></app-confirm>
   </v-card>
 </template>
 
@@ -112,16 +112,14 @@ export default {
   },
 
   computed: {
-
-    user(){
-      return this.$store.getters['getUser']
+    profile()
+    {
+      return this.$store.getters['getProfile']
     },
-
     token()
     {
       return this.$store.getters['getAmolatinaToken']
     },
-
     started()
     {
       return this.myProfilesStarted.length > 0
@@ -138,20 +136,15 @@ export default {
       id: 	      null,
       user_id: 	  null,
       profiles_id: [],
-      user_presence_id: null,
       token: null
     },
     isReload: null,
-    title: null,
-    confirm: false,
-    message: null,
-    profile: null
   }),
 
   methods: {
 
     list() {
-        this.getResource(`profile/coordinator`).then( data => {
+        this.getResource(`profile/user/${this.userId}`).then( data => {
           this.profiles = data
           this.setActives()
         })
@@ -181,10 +174,15 @@ export default {
 
     },
 
-    startPresence(profile)
+    startPresence()
     {
-      this.form.profiles_id = [profile] 
-
+      if(this.profilesAvailable.length < 1 )
+      {
+        this.showError('No existen perfiles Disponibles')
+        this.list()
+        return
+      }
+      this.form.profiles_id = this.profilesAvailable 
       this.storeResource('userPresence', this.form)
       .then(data => {
         this.showMessage(data.msj)
@@ -195,7 +193,7 @@ export default {
       });
     },
 
-    stopPresence(profile)
+    stopPresence()
     {
       if(this.myProfilesStarted.length < 1 )
       {
@@ -203,9 +201,7 @@ export default {
         this.list()
         return
       }
-
-      this.form.user_presence_id = profile.presence.id
-      this.updateResource('userPresence/stop/unique', this.form)
+      this.updateResource('userPresence/stop', this.form)
       .then(data => {
         this.showMessage(data.msj)
       })
@@ -232,34 +228,8 @@ export default {
           this.profilesAvailable.push(profile.id)
         }
       }, this);
-    },
-
-    confirmStop(profile)
-    {
-      this.title   = 'Confirmacion'
-      this.message = `Desea liberar el perfil ${profile.name}`
-      this.confirm = true
-      this.profile = profile
-    },
-
-    confirmation(confirm){
-      if(confirm){
-        this.form.user_presence_id = this.profile.presence.id
-        this.updateResource('userPresence/stop/unique', this.form)
-        .then(data => {
-          this.showMessage(data.msj)
-        })
-        .finally( () => 
-        {
-          this.list()
-        });
-      } 
-      this.confirm = false
-      this.profile = null
     }
-  },
-
- 
+  }
 }
 </script>
 

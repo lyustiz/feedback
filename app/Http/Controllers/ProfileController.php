@@ -63,6 +63,9 @@ class ProfileController extends Controller
                         ->whereHas('user', function (Builder $query) use($user) {
                             $query->where('user.table_id', $user->table_id);
                         })
+                        ->whereDoesntHave('userProfile', function (Builder $query) use($user) {
+                            $query->where('user_id', $user->id);
+                        })
                         ->withSum(['presenceDay'], 'profit')
                         ->withSum(['presenceDay'], 'writeoff')
                         ->get();

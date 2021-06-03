@@ -6,15 +6,14 @@
           Operadores
         </v-col>
         <v-col cols="auto">
-         <!--  <v-btn icon><v-icon size="33" @click="addOperator()">mdi-account-plus</v-icon></v-btn> -->
           <v-btn icon @click="list()" :loading="loading"><v-icon size="32">mdi-reload</v-icon></v-btn>
         </v-col>
       </v-row>
       </v-subheader>
     <v-card-text class="pt-0 accounts-container custom-scroll">
-      <v-list subheader two-line dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
-        <v-list-item v-for="operator in operatos" :key="operator.id" > 
-          <v-list-item-avatar color="blue" size="60" class="elevation-2">
+      <v-list subheader dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
+        <v-list-item v-for="operator in operatos" :key="operator.id" class="px-2" > 
+          <v-list-item-avatar color="blue" size="50" class="elevation-2">
               <v-img :src="`/storage/photo/operator/${operator.photo || 'nophoto.png'}`" ></v-img>
           </v-list-item-avatar>
           <v-list-item-content>
@@ -23,7 +22,7 @@
                   <v-col cols="auto">
                     <v-tooltip bottom color="blue">
                     <template v-slot:activator="{ on, attrs }">
-                      <span v-on="on" v-bind="attrs">{{ operator.presence_day_sum_bonus || 0 }}  /  {{ operator.goal_day || 0 }}</span>
+                      <span v-on="on" v-bind="attrs"> {{ formatNumber(operator.presence_day_sum_bonus || 0) }}  /  {{ operator.goal_day || 0 }}</span>
                     </template>
                     <span>Meta Dia</span>
                     </v-tooltip>
@@ -32,7 +31,7 @@
                   <v-col cols="auto">
                     <v-tooltip bottom color="green">
                     <template v-slot:activator="{ on, attrs }">
-                      <span v-on="on" v-bind="attrs">{{ operator.presence_month_sum_bonus || 0 }}  /  {{ operator.goal_month || 0 }}</span>
+                      <span v-on="on" v-bind="attrs">{{ formatNumber(operator.presence_month_sum_bonus || 0) }}  /  {{ operator.goal_month || 0 }}</span>
                     </template>
                     <span>Meta Mes</span>
                     </v-tooltip>
@@ -74,13 +73,7 @@
 
                   <v-col cols="auto" class="px-2">
                     <v-badge v-if="operator.penalty_month.length > 0" offset-x="10" offset-y="12" color="rgba(0,0,0,0.15)" :content="operator.penalty_month.length">  
-                      <list-simple-icon icon="mdi-account-cancel" label="Multas del Mes" color="red"></list-simple-icon>
-                    </v-badge> 
-                  </v-col>
-
-                  <v-col cols="auto" class="px-2">
-                    <v-badge v-if="operator.table" offset-x="10" offset-y="12" color="rgba(0,0,0,0.15)" :content="operator.table.value">  
-                      <list-simple-icon  v-if="operator.table" icon="mdi-table-furniture" :label="operator.table.name" color="amber"></list-simple-icon>
+                      <list-simple-icon icon="mdi-account-cancel" label="Multas del Mes" color="red" size="16"></list-simple-icon>
                     </v-badge> 
                   </v-col>
 
@@ -89,8 +82,8 @@
 
                     <v-menu right bottom offset-x :disabled="operator.profile.length < 1">
                       <template v-slot:activator="{ on }">
-                          <v-badge  :value="operator.profile.length > 0" offset-x="10" offset-y="12" color="rgba(0,0,0,0.15)" :content="operator.profile.length">  
-                            <list-simple-icon v-on="on" icon="mdi-account-multiple-outline" label="perfiles" color="green"></list-simple-icon>
+                          <v-badge  :value="operator.profile.length > 0" offset-x="8" offset-y="12" color="rgba(0,0,0,0.15)" :content="operator.profile.length">  
+                            <list-simple-icon v-on="on" icon="mdi-account-multiple-outline" label="perfiles" color="green" :size="18"></list-simple-icon>
                           </v-badge>
                       </template>
                       <v-card>

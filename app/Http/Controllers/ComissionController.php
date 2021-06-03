@@ -41,7 +41,6 @@ class ComissionController extends Controller
             $start_at     = Carbon::parse($current->comission_at)->toDateTimeLocalString('millisecond');
             $end_at       = Carbon::now('UTC')->toDateTimeLocalString('millisecond');
             $response     = $this->getDetailCommisions($token, $amolatina_id, $start_at, $end_at, $current->positive );
-            //return [ $response, $token, $amolatina_id, $start_at, $end_at, $current->positive ]; 
             if($response['ok']) {
                 $commisions = $response['body'];
                 $stored[$start_at.'-'.$end_at] = count($this->storeCommision($commisions, $current->positive)) * 500;
@@ -103,11 +102,12 @@ class ComissionController extends Controller
     public function storeCommision($commisions, $positive = null)
     {
         $data = [];
+
         foreach ($commisions as $row) {
 
             $comission_at = new \DateTime($row['timestamp']);
            
-            $data[] = [
+            $data[$row['commission-id']] = [
                 'comission_id' => $row['commission-id'],
                 'agency_id'    => $row['agency-id'],
                 'positive'     => $positive,
@@ -127,6 +127,8 @@ class ComissionController extends Controller
         }
 
         $data = collect($data); 
+
+        $data = $data->unique('comission_id');
 
         $chunks = $data->chunk(500);
 

@@ -4,7 +4,7 @@
     <v-card dark class="rounded-lg " color="rgba(0,0,0,0.4)" v-if="user">
         <v-card-title class="subtitle-2">
             <v-row dense>
-                <v-col>{{user.full_name}} ({{user.username}}) <v-btn icon :loading="loading" small @click="list()"><v-icon>mdi-refresh</v-icon></v-btn></v-col>
+                <v-col>{{user.name}} ({{user.username}}) <v-btn icon :loading="loading" small @click="list()"><v-icon>mdi-refresh</v-icon></v-btn></v-col>
                 <v-col cols="auto"><v-btn icon color="success"><v-icon>mdi-dots-vertical</v-icon></v-btn></v-col>
             </v-row>
         </v-card-title>
@@ -12,7 +12,7 @@
 
             <v-row>
                 <v-col cols="auto">
-                    <v-avatar color="blue" size="100" class="elevation-2">
+                    <v-avatar color="blue" size="70" class="elevation-2">
                         <v-img :src="`/storage/photo/operator/${user.photo || 'nophoto.png'}`" ></v-img>
                     </v-avatar>
                 </v-col>
@@ -30,7 +30,7 @@
                 </v-col>
             </v-row>
 
-            <v-row>
+            <v-row no-gutters>
                 <v-col class="text-center">
                     <v-subheader>Meta Dia</v-subheader>
                     <v-progress-circular

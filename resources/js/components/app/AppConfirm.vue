@@ -4,11 +4,11 @@
 
         <v-card>
 
-        <app-simple-toolbar :title="titulo" @closeModal="$emit('closeConfirm', false)"></app-simple-toolbar> 
+        <app-simple-toolbar :title="title" @closeModal="$emit('closeConfirm', false)"></app-simple-toolbar> 
         
     
         <v-alert type="info" icon="mdi-comment-question" prominent outlined class="mt-3 mx-3">
-            {{mensaje}}
+            {{message}}
         </v-alert>
        
         <v-card-actions>
@@ -48,12 +48,12 @@ export default {
             default: false
         },
 
-        titulo: {
+        title: {
             type: String,
             default: 'Confirmacion'
         },
 
-        mensaje: {
+        message: {
             type: String,
             default: null
         },

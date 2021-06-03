@@ -55,7 +55,7 @@ class ComissionDetail
 
             $comission_at = new \DateTime($row['timestamp']);
            
-            $data[] = [
+            $data[$row['commission-id']] = [
                 'comission_id' => $row['commission-id'],
                 'agency_id'    => $row['agency-id'],
                 'positive'     => $positive,
@@ -75,6 +75,8 @@ class ComissionDetail
         }
 
         $data = collect($data); 
+
+        $data = $data->unique('comission_id');
 
         $chunks = $data->chunk(500);
 

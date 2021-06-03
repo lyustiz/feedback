@@ -4,15 +4,15 @@
       DashBoard
     </v-card-title>
     <v-card-text>
-      <v-row>
+      <v-row dense>
         <v-col>
           <v-card color="blue" v-ripple @click="navigateToName('client')">
             <v-card-text>
-              <v-row>
-                <v-col>
+              <v-row dense>
+                <v-col cols="auto">
                   <v-icon size="34">mdi-account-cash</v-icon>
                 </v-col>
-                <v-col class="pt-4">Clientes</v-col>
+                <v-col >Clientes</v-col>
               </v-row>
             </v-card-text>
           </v-card>
@@ -20,11 +20,11 @@
         <v-col>
           <v-card color="green" v-ripple @click="navigateToName('comission')">
             <v-card-text>
-              <v-row>
-                <v-col>
+              <v-row dense>
+                <v-col cols="auto">
                   <v-icon size="34">mdi-sack</v-icon>
                 </v-col>
-                <v-col class="pt-4">Ganancias</v-col>
+                <v-col>Bonus</v-col>
               </v-row>
             </v-card-text>
           </v-card>
