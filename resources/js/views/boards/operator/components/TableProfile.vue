@@ -7,12 +7,6 @@
             </v-col>
             <v-col cols="auto" > <v-btn icon :loading="loading"><v-icon  small @click="list()">mdi-reload</v-icon> </v-btn></v-col>
             <v-spacer></v-spacer>
-            <v-col cols="auto">
-                <v-btn small :color="(myProfilesStarted.length > 0) ? 'error' : 'success'" @click="setPresence()" :loading="loading" :disabled="true">
-                  <v-icon dark> {{ (myProfilesStarted.length > 0) ? 'mdi-stop' : 'mdi-play'}}</v-icon>
-                   {{ (myProfilesStarted.length > 0) ? 'pausar' : 'Iniciar' }} 
-                </v-btn>
-            </v-col>
         </v-row>
 
     </v-subheader>
@@ -21,11 +15,11 @@
       <v-list subheader two-line dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
 
         <v-list-item-group
-          v-model="profile"
+          :value="profiles"
           color="green"
           multiple
         >
-        <v-list-item v-for="profile in profiles" :key="profile.id" :value="profile" :disabled="false">
+        <v-list-item v-for="profile in profiles" :key="profile.id" :value="profile" inactive >
           <v-list-item-avatar color="blue" size="60">
             <v-img :src="`/storage/photo/profile/${profile.photo || 'nophoto'}.jpg`" ></v-img> 
           </v-list-item-avatar>
@@ -73,22 +67,31 @@
               <v-list-item-subtitle class="pt-2">
                 <v-row>
                   <v-col>{{profile.name}}</v-col>
+                   <v-col cols="auto" v-if="profile.presence">
+                    <v-icon :color="( myProfilesStarted.includes(profile.id) ) ? 'yellow' : 'red'" size="20"> 
+                      {{(myProfilesStarted.includes(profile.id)) ? 'mdi-account-star' : 'mdi-lock'  }}
+                    </v-icon> 
+                  </v-col>
                   <v-col cols="auto">
-                    <v-icon :color="(profile.presence) ? 'green' : 'red'" size="14"> 
+                    <v-icon :color="(profile.presence) ? 'green' : 'red'" size="20"> 
                       {{(profile.presence) ? 'mdi-checkbox-blank-circle' : 'mdi-checkbox-blank-circle-outline'}}
                     </v-icon> 
                   </v-col>
-                  <v-col cols="auto" v-if="profile.presence">
-                    <v-icon :color="( myProfilesStarted.includes(profile.id) ) ? 'yellow' : 'red'" size="20"> 
-                      {{(myProfilesStarted.includes(profile.id)) ? 'mdi-account-star' : 'mdi-account-lock'  }}
-                    </v-icon> 
-                  </v-col>
+                 
                 </v-row>
               
               </v-list-item-subtitle>
             </v-list-item-content>
-            <v-list-item-icon>
-                <v-icon class="mt-6">mdi-dots-vertical</v-icon>
+            <v-list-item-icon class="pt-4">
+              <v-btn x-small fab color="red" @click="stopPresence(profile)" v-if="profile.presence && (myProfilesStarted.includes(profile.id))" :loading="loading">
+                <v-icon>mdi-stop</v-icon>
+              </v-btn>
+              <v-btn class="no-drop" icon v-else-if="profile.presence && (!myProfilesStarted.includes(profile.id))">
+                <v-icon color="red" size="32">mdi-lock</v-icon>
+              </v-btn>
+              <v-btn x-small fab color="success" @click="startPresence(profile)" v-else  :loading="loading">
+                <v-icon>mdi-play</v-icon>
+              </v-btn>
             </v-list-item-icon>
         </v-list-item>
         </v-list-item-group>
@@ -137,6 +140,7 @@ export default {
       id: 	      null,
       user_id: 	  null,
       profiles_id: [],
+      user_presence_id: null,
       token: null
     },
     isReload: null,
@@ -175,15 +179,10 @@ export default {
 
     },
 
-    startPresence()
+    startPresence(profile)
     {
-      if(this.profilesAvailable.length < 1 )
-      {
-        this.showError('No existen perfiles Disponibles')
-        this.list()
-        return
-      }
-      this.form.profiles_id = this.profilesAvailable 
+      this.form.profiles_id = [profile] 
+
       this.storeResource('userPresence', this.form)
       .then(data => {
         this.showMessage(data.msj)
@@ -194,7 +193,7 @@ export default {
       });
     },
 
-    stopPresence()
+    stopPresence(profile)
     {
       if(this.myProfilesStarted.length < 1 )
       {
@@ -202,7 +201,9 @@ export default {
         this.list()
         return
       }
-      this.updateResource('userPresence/stop', this.form)
+
+      this.form.user_presence_id = profile.presence.id
+      this.updateResource('userPresence/stop/unique', this.form)
       .then(data => {
         this.showMessage(data.msj)
       })

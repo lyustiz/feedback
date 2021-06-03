@@ -170,6 +170,18 @@ class UserController extends Controller
 			'comments'          => 	'nullable|string|max:100',
 			'user_id'           => 	'required|integer|max:999999999',
         ]);
+        
+        if($user->id == 1)
+        {
+            throw ValidationException::withMessages(['adminedit' => "No es posible actualizar al Administrador"]);
+        }
+
+        if($user->role_id == 2)
+        {
+            throw ValidationException::withMessages(['manageredit' => "No es posible actualizar al Gerente"]);
+        }
+        
+
 
         if ($request->filled('password')) {
             $password  = Hash::make($request->password);

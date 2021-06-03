@@ -44,8 +44,24 @@ class ProfileController extends Controller
         $user = \Auth::user();
 
         return Profile::with(['presence:id,start_at,user_id,profile_id', 'presence.user:id,name,surname', 'agency:agency.id,amolatina_id'])
-                        ->whereHas('user', function (Builder $query) use($tableId, $user) {
-                            $query->where('user.table_id', $tableId)->where('user.id','<>',$user->id );
+                        ->whereHas('user', function (Builder $query) use($tableId) {
+                            $query->where('user.table_id', $tableId);
+                        })
+                        ->whereDoesntHave('userProfile', function (Builder $query) use($user) {
+                            $query->where('user_id', $user->id);
+                        })
+                        ->withSum(['presenceDay'], 'profit')
+                        ->withSum(['presenceDay'], 'writeoff')
+                        ->get();
+    }
+
+    public function profileCoordinator()
+    {
+        $user = \Auth::user();
+
+        return Profile::with(['presence:id,start_at,user_id,profile_id', 'presence.user:id,name,surname', 'agency:agency.id,amolatina_id'])
+                        ->whereHas('user', function (Builder $query) use($user) {
+                            $query->where('user.table_id', $user->table_id);
                         })
                         ->withSum(['presenceDay'], 'profit')
                         ->withSum(['presenceDay'], 'writeoff')

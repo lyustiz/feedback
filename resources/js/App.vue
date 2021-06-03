@@ -106,6 +106,8 @@ export default {
     .pointer{
         cursor: pointer;
     }
+    
+    .no-drop {cursor: no-drop;}
 
     .custom-scroll::-webkit-scrollbar {
         width: 8px;

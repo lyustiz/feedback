@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\UserPresence;
 use App\Models\Profile;
+use App\Models\Comission;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -40,43 +41,34 @@ class UserPresenceController extends Controller
 			'profiles_id'        => 'required|array',
         ]);
 
-        $profilesStarted = $this->profilePrecense($request->profiles_id);
+        $profiles = Profile::whereIn('id', $request->profiles_id)->doesntHave('presence')->get();
 
         $userPresence = [];
 
-        foreach ($request->profiles_id as $profile_id) {
-            if( !in_array($profile_id, $profilesStarted) )
-            {
-                $userPresence[] = [
-                    'user_id'    => $request->user_id,
-                    'profile_id' => $profile_id,
-                    'start_at'   => Carbon::now('UTC')->toDateTimeLocalString('millisecond'), // date("Y-m-d H:i:s"), //check zona horaria
-                    'active'     => 1,
-                    'status_id'  => 3,
-                    'user_id_ed' => $request->user_id,
-                    'created_at' => date("Y-m-d H:i:s")
-                ];
-            }
+        foreach ($profiles as $profile) {
+
+            $userPresence[] = [
+                'user_id'      => $request->user_id,
+                'profile_id'   => $profile->id,
+                'amolatina_id' => $profile->amolatina_id,
+                'start_at'     => Carbon::now('UTC')->toDateTimeLocalString('millisecond'),
+                'active'       => 1,
+                'status_id'    => 3,
+                'user_id_ed'   => $request->user_id,
+                'created_at'   => date("Y-m-d H:i:s")
+            ];
         }
 
         if(count($userPresence) < 1)
         {
-            throw ValidationException::withMessages(['error' => 'No existen perfiles Disponibles' ]);
+            throw ValidationException::withMessages(['error' => 'Perfil(es) no Disponibles' ]);
         }
 
         $insert = UserPresence::insert($userPresence);
 
-        return [ 'msj' => 'Perfiles Iniciados', 'userPresence' => $userPresence, 'insert' => $insert ];
+        return [ 'msj' => 'Perfil(es) Iniciado(s)', 'userPresence' => $userPresence, 'insert' => $insert ];
     }
 
-    public function profilePrecense($profiles)
-    {
-        return  UserPresence::select('profile_id')
-                            ->whereIn('profile_id',  $profiles)
-                            ->started(true)->get()->pluck('profile_id')->toArray();
-    }
-
-    
 
     /**
      * Display the specified resource.
@@ -87,6 +79,48 @@ class UserPresenceController extends Controller
     public function show(UserPresence $userPresence)
     {
         return $userPresence;
+    }
+
+    public function stopUnique(Request $request)
+    {
+        $validate = request()->validate([
+            'user_presence_id' => 'required|integer|max:999999999',
+            'user_id'          => 'required|integer|max:999999999',
+        ]);
+
+        $end_at = Carbon::now('UTC')->toDateTimeLocalString('millisecond');
+
+        $estimate = \DB::select( \DB::raw("SELECT total.id, 
+                                            SUM(IF(total.positive=0, total.points, 0)) write_off, 
+                                            SUM(IF(total.positive=1, total.points, 0)) points, 
+                                            SUM(total.share) share, 
+                                            SUM(total.profit) profit
+                                    FROM ( SELECT up.id, c.positive, c.points, c.share, c.profit 
+                                             FROM comission c
+                                             JOIN user_presence up ON up.amolatina_id = c.profile_id
+                                            WHERE c.comission_at > up.start_at
+                                              AND up.id = :user_presence_id) total
+                                    GROUP BY total.id"), 
+                                    array('user_presence_id' => $request->user_presence_id)
+                                    );
+        
+        $userPresence = UserPresence::find($request->user_presence_id)->update([
+                                    'bonus'     => isset($estimate[0]) ? $estimate[0]->points : 0,
+                                    'writeoff'  => isset($estimate[0]) ? $estimate[0]->write_off : 0,
+                                    'shared'    => isset($estimate[0]) ? $estimate[0]->share : 0,
+                                    'profit'    => isset($estimate[0]) ? $estimate[0]->profit : 0,
+                                    'end_at'    => $end_at,
+                                    'comments'  => 'stop unique',
+                                    'active'    => 0,
+                                    'status_id' => 4,
+                                    ]);
+
+        if( $userPresence == null )
+        {
+            throw ValidationException::withMessages(['error' => 'Perfil no Disponible' ]);
+        }                                           
+                                    
+        return [ 'msj' => 'Perfile Finalizado' , compact('userPresence')];
     }
 
     /**
@@ -100,7 +134,6 @@ class UserPresenceController extends Controller
     {
         $validate = request()->validate([
             'user_id'        =>  'required|integer|max:999999999',
-            'token'          =>  'required',
         ]);
 
         $estimates = \DB::select( \DB::raw("SELECT total.id, 

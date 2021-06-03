@@ -96,6 +96,7 @@ Route::get('/profile/import/photo',             'ProfileController@importProfile
 Route::get('/profile/import/agency/{agency}',   'ProfileController@profileImport');
 Route::get('/profile/table/{table}',            'ProfileController@profileTable');
 Route::get('/profile/user/{user}',              'ProfileController@profileUser');
+Route::get('/profile/coordinator',              'ProfileController@profileCoordinator');
 Route::apiResource('/profile',                  'ProfileController');
 
 
@@ -128,19 +129,18 @@ Route::apiResource('/group',     'GroupController');
 Route::apiResource('/country',     'CountryController');
 Route::apiResource('/userAgency',     'UserAgencyController');
 
+Route::get('/userPresence/estimate',      'UserPresenceController@presenceEstimate');
+Route::put('/userPresence/stop/unique',   'UserPresenceController@stopUnique');
+Route::put('/userPresence/stop',          'UserPresenceController@stop');
+Route::apiResource('/userPresence',       'UserPresenceController');
 
 
-Route::get('/userPresence/estimate', 'UserPresenceController@presenceEstimate');
-Route::put('/userPresence/stop',     'UserPresenceController@stop');
-Route::apiResource('/userPresence',  'UserPresenceController');
+Route::get('/client/all/photo',           'ClientController@importClientPhoto');
+Route::get('/client/all/detail',          'ClientController@detailClients');
+Route::get('/client/top/Agency/{agency}', 'ClientController@topAgency');
+Route::apiResource('/client',             'ClientController');
 
-
-Route::get('/client/all/photo',               'ClientController@importClientPhoto');
-Route::get('/client/all/detail',              'ClientController@detailClients');
-Route::get('/client/top/Agency/{agency}',     'ClientController@topAgency');
-Route::apiResource('/client',     'ClientController');
-
-Route::get('/tableTurn/combo/{table}',     'TableTurnController@combo');
-Route::apiResource('/tableTurn',     'TableTurnController');
+Route::get('/tableTurn/combo/{table}',    'TableTurnController@combo');
+Route::apiResource('/tableTurn',          'TableTurnController');
 //newRoutes
 });

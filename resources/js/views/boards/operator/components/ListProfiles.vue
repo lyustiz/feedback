@@ -75,14 +75,14 @@
               <v-list-item-subtitle class="pt-2">
                 <v-row>
                   <v-col>{{profile.name}}</v-col>
-                  <v-col cols="auto">
-                    <v-icon :color="(profile.presence) ? 'green' : 'red'" size="14"> 
-                      {{(profile.presence) ? 'mdi-checkbox-blank-circle' : 'mdi-checkbox-blank-circle-outline'}}
-                    </v-icon> 
-                  </v-col>
                   <v-col cols="auto" v-if="profile.presence">
                     <v-icon :color="( myProfilesStarted.includes(profile.id) ) ? 'yellow' : 'red'" size="20"> 
-                      {{(myProfilesStarted.includes(profile.id)) ? 'mdi-account-star' : 'mdi-account-lock'  }}
+                      {{(myProfilesStarted.includes(profile.id)) ? 'mdi-account-star' : 'mdi-lock'  }}
+                    </v-icon> 
+                  </v-col>
+                  <v-col cols="auto">
+                    <v-icon :color="(profile.presence) ? 'green' : 'red'" size="20"> 
+                      {{(profile.presence) ? 'mdi-checkbox-blank-circle' : 'mdi-checkbox-blank-circle-outline'}}
                     </v-icon> 
                   </v-col>
                 </v-row>

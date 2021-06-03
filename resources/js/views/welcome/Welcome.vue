@@ -2,37 +2,23 @@
 <v-app class="transparent">
   <v-main>
     <v-container fluid class="mt-n12">
-      <v-row dense> 
-
+        <v-row dense> 
         <v-col class="text-center">
-
-          <v-card>
+          <v-card min-height="90vh" color="rgba(0,0,0,0.4)" dark>
             <v-card-title >
-
               <v-row>
-                <v-col cols="auto"> 
-                  <v-avatar
-                size="avatarSize"
-                color="red"
-              >
-                <v-icon size="110">mdi-bitcoin</v-icon>
-              </v-avatar>
-                  
+                <v-col cols="12"> 
+                  <v-avatar size="avatarSize" color="red">
+                    <v-icon size="110">mdi-bitcoin</v-icon>
+                  </v-avatar>
                 </v-col>
                 <v-col class="display-4">
                   CriptoWeb
                 </v-col>
               </v-row>
-
-              
-              
             </v-card-title>
           </v-card>
-      
         </v-col>
-
-       
-
       </v-row>
     </v-container>
   </v-main>
