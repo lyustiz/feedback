@@ -83,9 +83,16 @@
               <v-btn x-small fab color="red" @click="stopPresence(profile)" v-if="profile.presence && (myProfilesStarted.includes(profile.id))" :loading="loading">
                 <v-icon>mdi-stop</v-icon>
               </v-btn>
-              <v-btn class="no-drop" icon v-else-if="profile.presence && (!myProfilesStarted.includes(profile.id))">
-                <v-icon color="red" size="32">mdi-lock</v-icon>
-              </v-btn>
+
+              <v-tooltip bottom color="red" v-else-if="profile.presence && (!myProfilesStarted.includes(profile.id))">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn class="no-drop" icon >
+                    <v-icon  v-on="on" v-bind="attrs" color="red" size="32">mdi-lock</v-icon>
+                  </v-btn>
+                </template>
+                <span><v-icon size="16" left>mdi-account</v-icon>   {{profile.presence.user.full_name}}</span>
+              </v-tooltip>
+             
               <v-btn x-small fab color="success" @click="startPresence(profile)" v-else  :loading="loading">
                 <v-icon>mdi-play</v-icon>
               </v-btn>
