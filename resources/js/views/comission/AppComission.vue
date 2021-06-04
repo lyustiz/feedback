@@ -1,7 +1,93 @@
 <template>
 
    <v-card color="transparent" flat dark min-height="93vh">
-       <v-card-title >
+
+    <v-card-title > 
+            commisions
+    </v-card-title>  
+
+    <v-card-text>
+        <v-row dense>
+            <v-col cols="3">
+
+                <v-row dense>
+                    <v-col>
+                            <v-select
+                            v-model="agency"
+                            label="Agencias"
+                            item-text="name"
+                            :items="agencies"
+                            :loading="loading"
+                            hide-details
+                            outlined
+                            filled
+                            dense
+                            return-object
+                            ></v-select>
+                    </v-col>
+
+                    <v-col cols="12">
+                        <ComissionCalendar></ComissionCalendar>
+                    </v-col>
+                    <v-col cols="12">
+                        <v-radio-group v-model="filterType" dense hide-details class="" row color="primary">
+                            <v-radio
+                                v-for="type in types"
+                                :key="type"
+                                :label="type"
+                                :value="type"
+                                class="mb-0 caption"
+                            ></v-radio>
+                        </v-radio-group>
+                    </v-col>
+                    <v-col cols="12">
+                        <v-select
+                            v-model="filters"
+                            item-text="name"
+                            item-value="value"
+                            :items="itemsFilters"
+                            label="Filtro"
+                            multiple
+                           outlined
+                            filled
+                            dense
+                            chips
+                            deletable-chips
+                            single-line
+                            class="ma-0"
+                            color="blue"
+                        >
+                            <template v-slot:selection="{ item }">
+                                <v-tooltip bottom color="amber">
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-chip outlined v-on="on" v-bind="attrs" small class="caption" close :color="item.color" @click:close="remove(item)">
+                                            <v-icon dark v-text="item.icon"></v-icon> 
+                                        </v-chip>
+                                    </template>
+                                    <span class="caption">{{item.name}}</span>  
+                                </v-tooltip>
+                            </template>
+                            
+                        </v-select>
+                    </v-col>
+
+                </v-row>
+
+            </v-col>
+
+            <v-col cols="auto">
+                
+
+
+            </v-col>
+        </v-row>
+
+
+
+        
+    </v-card-text> 
+
+     <!--   
            <v-row no-gutters>
                <v-col>Total: {{ formatNumber(commisions.total || 0 ) }}</v-col>
                <v-col>
@@ -77,7 +163,7 @@
        </v-card-text>
        <v-overlay absolute :opacity="0.4" :value="loading">
         <v-icon size="50" class="mdi-spin">mdi-loading</v-icon>
-      </v-overlay>
+      </v-overlay> -->
    </v-card>
 
 </template>
@@ -85,16 +171,18 @@
 <script>
 import AppData from '@mixins/AppData';
 import ComisionCard  from './components/ComisionCard';
+import ComissionCalendar from './components/ComissionCalendar'
 export default {
 
     mixins:     [ AppData ],
 
     components: { 
-        ComisionCard 
+        ComisionCard,
+        ComissionCalendar
     },
 
     created(){
-        this.list()
+       /*  this.list() */
     },
 
     watch:{
@@ -107,7 +195,11 @@ export default {
         itemsFilters()
         {
             return this.services.filter(service => service.type == this.filterType )
-        }
+        },
+        agencies()
+        {
+            return this.$store.getters['getAgencyManage']
+        },
     },
 
     data: () => ({
@@ -115,6 +207,7 @@ export default {
         url: 'comission',
         filterType: 'bonus',
         types: [ 'bonus',  'writeoff'],
+        agency: null,
         filters:[],
         services: [
             {name: 'ONLINE_CHAT',         value: "dialogs.messages:intervals",       type: 'bonus',     color: 'blue', icon: 'mdi-cellphone-message'},

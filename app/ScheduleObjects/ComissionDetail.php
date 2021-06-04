@@ -14,7 +14,7 @@ class ComissionDetail
 
         $currents = Comission::with(['agency:id,amolatina_id,name,token'])
                              ->groupBy('agency_id', 'positive')
-                             ->get(['agency_id','positive', \DB::raw('MAX(comission_at) as comission_at')]); 
+                             ->get([ 'agency_id','positive', \DB::raw('MAX(comission_at) as comission_at') ,\DB::raw('MAX(comission_id) as comission_id') ]); 
 
         $stored = []; 
 
@@ -28,7 +28,7 @@ class ComissionDetail
 
             if($response['ok']) {
                 $commisions = $response['body'];
-                $stored[$start_at.'-'.$end_at] = count($this->storeCommision($commisions, $current->positive)) * 500;
+                $stored[$start_at.'-'.$end_at] = count($this->storeCommision($commisions, $current->positive, $current->comission_id)) * 500;
             } else {
                 $stored[$start_at . '-' . $end_at . '-' . $current->positive] = $response;
             }
@@ -48,30 +48,33 @@ class ComissionDetail
         return   Amolatina::getDataUrl( $token, $url, $params);
     }
 
-    public function storeCommision($commisions, $positive = null)
+    public function storeCommision($commisions, $positive = null, $commision_id)
     {
         $data = [];
         foreach ($commisions as $row) {
 
-            $comission_at = new \DateTime($row['timestamp']);
-           
-            $data[$row['commission-id']] = [
-                'comission_id' => $row['commission-id'],
-                'agency_id'    => $row['agency-id'],
-                'positive'     => $positive,
-                'curator_id'   => isset($row['curator-id']) ? $row['curator-id'] : 0 ,
-                'profile_id'   => isset($row['user-id'])    ? $row['user-id'] : 0, 
-                'user_id'      => isset($row['user-id'])    ? $row['user-id'] : 0,
-                'client_id'    => isset($row['target-id'])  ? $row['target-id'] : 0, 
-                'service'      => $row['service'],
-                'fact'         => $row['fact'],
-                'points'       => $row['points'],
-                'profit'       => $row['profit'],
-                'share'        => $row['share'],
-                'comission_at' => $comission_at,
-                'user_id_ed'   => 1,
-                'created_at'   => date('Y-m-d H:i:s')
-            ];
+            if( $row['commission-id'] >  $commision_id )
+            {
+                $comission_at = new \DateTime($row['timestamp']);
+            
+                $data[$row['commission-id']] = [
+                    'comission_id' => $row['commission-id'],
+                    'agency_id'    => $row['agency-id'],
+                    'positive'     => $positive,
+                    'curator_id'   => isset($row['curator-id']) ? $row['curator-id'] : 0 ,
+                    'profile_id'   => isset($row['user-id'])    ? $row['user-id'] : 0, 
+                    'user_id'      => isset($row['user-id'])    ? $row['user-id'] : 0,
+                    'client_id'    => isset($row['target-id'])  ? $row['target-id'] : 0, 
+                    'service'      => $row['service'],
+                    'fact'         => $row['fact'],
+                    'points'       => $row['points'],
+                    'profit'       => $row['profit'],
+                    'share'        => $row['share'],
+                    'comission_at' => $comission_at,
+                    'user_id_ed'   => 1,
+                    'created_at'   => date('Y-m-d H:i:s')
+                ];
+            }
         }
 
         $data = collect($data); 
