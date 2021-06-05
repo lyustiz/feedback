@@ -63,6 +63,8 @@ import Absence      from '@views/absence/absence.vue';
 import AbsenceType  from '@views/absenceType/absenceType.vue';
 import Client       from '@views/client/AppClient';
 import TableTurn  from '@views/tableTurn/tableTurn.vue';
+import Horary  from '@views/horary/horary.vue';
+import Service  from '@views/service/service.vue';
 //newImport
 
 let isAuthenticated = true;
@@ -394,6 +396,18 @@ export default new Router({
     name: 'tableTurn',
     icon: 'bubble_chart',
     component: TableTurn,
+},
+{
+    path: '/horary',
+    name: 'horary',
+    icon: 'bubble_chart',
+    component: Horary,
+},
+{
+    path: '/service',
+    name: 'service',
+    icon: 'bubble_chart',
+    component: Service,
 },
 //newRoutes
 

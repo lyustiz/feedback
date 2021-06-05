@@ -28,6 +28,11 @@ class ProfileController extends Controller
                         ->get();
     }
 
+    public function list()
+    {
+        return Profile::orderBy('name')->get();
+    }
+
     public function profileUser($userId)
     {
         return Profile::with(['presence:id,start_at,user_id,profile_id', 'presence.user:id,name,surname', 'agency:agency.id,amolatina_id'])

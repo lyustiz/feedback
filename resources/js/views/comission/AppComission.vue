@@ -1,14 +1,13 @@
 <template>
 
    <v-card color="transparent" flat dark min-height="93vh">
-
-    <v-card-title > 
-            commisions
-    </v-card-title>  
-
     <v-card-text>
         <v-row dense>
-            <v-col cols="3">
+            <v-col cols="auto">
+
+                <v-card color="rgba(0,0,0,0.4)" width="20vw" class="pa-2">
+
+                    <v-subheader>Comisiones</v-subheader>
 
                 <v-row dense>
                     <v-col>
@@ -23,14 +22,17 @@
                             filled
                             dense
                             return-object
+                            @change="list()"
+                            autofocus
+                            :rules="[rules.required]"
                             ></v-select>
                     </v-col>
 
                     <v-col cols="12">
-                        <ComissionCalendar></ComissionCalendar>
+                        <ComissionCalendar @onUpdateDate="setDay($event)"></ComissionCalendar>
                     </v-col>
                     <v-col cols="12">
-                        <v-radio-group v-model="filterType" dense hide-details class="" row color="primary">
+                        <v-radio-group v-model="serviceType" dense hide-details class="" row color="primary" @change="list()">
                             <v-radio
                                 v-for="type in types"
                                 :key="type"
@@ -42,13 +44,13 @@
                     </v-col>
                     <v-col cols="12">
                         <v-select
-                            v-model="filters"
+                            v-model="serviceSelected"
                             item-text="name"
                             item-value="value"
-                            :items="itemsFilters"
-                            label="Filtro"
+                            :items="itemsService"
+                            label="Servicio"
                             multiple
-                           outlined
+                            outlined
                             filled
                             dense
                             chips
@@ -56,6 +58,7 @@
                             single-line
                             class="ma-0"
                             color="blue"
+                            @change="list()"
                         >
                             <template v-slot:selection="{ item }">
                                 <v-tooltip bottom color="amber">
@@ -71,100 +74,144 @@
                         </v-select>
                     </v-col>
 
+                    <v-col cols="12">
+                        <v-autocomplete
+                            v-model="profile"
+                            label="Perfiles"
+                            item-text="name"
+                            no-data-text="No existen perfiles Disponibles"
+                            :items="profilesAgency"
+                            :disabled="loading"
+                            :loading="loading"
+                            hide-details
+                            outlined
+                            filled
+                            dense
+                            clearable
+                            return-object
+                            @change="list()"
+                        >
+                            <template v-slot:item="{item}">
+                            <v-row dense class="grey lighten-5 subtitle-1">
+                                <v-col cols="auto">
+                                    <v-avatar color="grey" class="elevation-3" :size="30">
+                                    <v-img :src="`/storage/photo/profile/${item.photo || 'nophoto'}.jpg`" ></v-img>
+                                    </v-avatar>
+                                </v-col>
+                                <v-col>
+                                {{item.name}}
+                                </v-col>
+                                <v-col cols="auto">
+                                    <list-icon :data="sexIcons" :value="item.gender"></list-icon>
+                                </v-col>
+                            </v-row>
+                            </template>
+                        </v-autocomplete>
+                    </v-col>
+
                 </v-row>
+                </v-card>
 
             </v-col>
 
-            <v-col cols="auto">
-                
+            <v-col>
+                <v-card color="rgba(0,0,0,0.4)" class="pa-2" max-height="92vh" mix-height="88vh">
+                    <v-card-title class="pa-1">
+                        <v-row no-gutters>
+                                <v-col cols="auto">Registros</v-col>
+                                <v-col></v-col>
+                                <v-col cols="auto">                  
+                                    <v-btn v-if="comissions.prev_page_url" :loading="loading" icon color="blue" @click="goTo(comissions.prev_page_url)"><v-icon>mdi-arrow-left-drop-circle-outline</v-icon></v-btn>
+                                    <v-btn v-if="comissions.next_page_url" :loading="loading" icon color="blue" @click="goTo(comissions.next_page_url)"><v-icon>mdi-arrow-right-drop-circle-outline</v-icon></v-btn>
+                                </v-col>
+                        </v-row>
+                    </v-card-title>
+                    <v-card-text class="comission-container custom-scroll">
+                        <v-row dense>
+                            <v-col cols="4" v-for="comission in comissions.data" :key="comission.id">
+                                <v-card color="rgba(0,0,0,0.4)" class="ma-1 rounded-lg">
+                                    <v-row dense>
+                                        <v-col cols="5">
+                                            <v-row no-gutters >
+                                                <v-col cols="12" class="caption text-center">{{comission.client_id}}</v-col>
+                                                <v-col cols="12" class="text-center">
+                                                    <v-row no-gutters justify="center">
+                                                        <v-col cols="auto">
+                                                            <v-avatar color="blue" class="elevation-3" :size="30">
+                                                                <v-img :src="`/storage/photo/client/${(comission.client) ? comission.client.photo || 'nophoto' : 'nophoto'}.jpg`" ></v-img>
+                                                            </v-avatar>
+                                                        </v-col>
+                                                        <v-col cols="auto" v-if="comission.client">
+                                                            <v-badge v-if="comission.client.crown > 0" offset-x="6" offset-y="12" color="rgba(0,0,0,0.15)" :content="comission.client.crown">  
+                                                                <list-simple-icon icon="mdi-crown" :label="formatNumber(comission.client.points)" color="amber" :size="20"></list-simple-icon>
+                                                            </v-badge> 
+                                                        </v-col>
+                                                    </v-row>
+                                                </v-col>
+                                                <v-col cols="12" class="caption text-center">{{(comission.client) ? comission.client.name : '-'}}</v-col>
+                                            </v-row>
+                                        </v-col>
+                                        <v-col class="text-center">
 
-
+                                            <v-row no-gutters>
+                                                <v-col cols="12" class="text-detail" :class="(comission.positive = 1) ? 'white--text' : 'red--text' ">
+                                                     {{ hourFromDateTime(comission.comission_at) }}
+                                                </v-col>
+                                                <v-col cols="12">
+                                                    <list-simple-icon  
+                                                        :size="32"
+                                                        :icon="comission.has_service.icon" 
+                                                        :label="comission.has_service.name"
+                                                        :color="comission.has_service.color"
+                                                        v-if="comission.has_service"
+                                                    > </list-simple-icon>
+                                                    <list-simple-icon  
+                                                        :size="32"
+                                                        icon="mdi-comment-question" 
+                                                        :label="comission.service"
+                                                        color="amber"
+                                                        v-else
+                                                    > </list-simple-icon>
+                                                </v-col>
+                                                <v-col cols="12" class="text-detail" :class="(comission.positive = 1) ? 'white--text' : 'red--text' ">
+                                                    {{ formatNumber(comission.points) }}
+                                                </v-col>
+                                            </v-row>
+                                            
+                                        </v-col>
+                                        <v-col cols="5">
+                                            <v-row no-gutters>
+                                                <v-col cols="12" class="caption text-center">{{comission.profile_id}}</v-col>
+                                                <v-col cols="12" class="text-center">
+                                                    <v-avatar color="grey" class="elevation-3" :size="30">
+                                                        <v-img :src="`/storage/photo/profile/${(comission.profile) ? comission.profile.photo || 'nophoto' : 'no-photo'}.jpg`" ></v-img>
+                                                    </v-avatar>
+                                                    </v-col>
+                                                <v-col cols="12" class="caption text-center">{{(comission.profile) ? comission.profile.name : ''}}</v-col>
+                                            </v-row>
+                                        </v-col>
+                                    </v-row>
+                                </v-card>
+                            </v-col>
+                        </v-row>
+                    </v-card-text>
+                </v-card>
             </v-col>
         </v-row>
 
 
-
+        <v-overlay  :opacity="0.4" :value="loading">
+        <v-icon size="50" class="mdi-spin">mdi-loading</v-icon>
+      </v-overlay>
         
     </v-card-text> 
 
-     <!--   
-           <v-row no-gutters>
-               <v-col>Total: {{ formatNumber(commisions.total || 0 ) }}</v-col>
-               <v-col>
-                   <v-btn :loading="loading" icon color="blue" @click="goTo(commisions.first_page_url)"><v-icon>mdi-chevron-double-left</v-icon></v-btn>
-                   <v-btn :loading="loading" icon color="blue" @click="goTo(commisions.prev_page_url)"><v-icon>mdi-chevron-left</v-icon></v-btn>
-                   <v-chip small color="blue">{{commisions.current_page}} of {{commisions.last_page}} </v-chip>
-                   <v-btn :loading="loading" icon color="blue" @click="goTo(commisions.next_page_url )"><v-icon>mdi-chevron-right</v-icon></v-btn>
-                   <v-btn :loading="loading" icon color="blue" @click="goTo(commisions.last_page_url )"><v-icon>mdi-chevron-double-right</v-icon></v-btn>
-               </v-col>
-               <v-col>
-                   <v-btn icon color="success" :loading="loading" @click="getdetail()"><v-icon>mdi-refresh</v-icon></v-btn>
-               </v-col>
-               <v-col>
-                   <v-row no-gutters>
-                       <v-col cols="auto">
-                           <v-radio-group v-model="filterType" dense hide-details class="mt-n2 mr-2">
-                                <v-radio
-                                    v-for="type in types"
-                                    :key="type"
-                                    :label="type"
-                                    :value="type"
-                                    class="my-2n mb-0 caption"
-                                ></v-radio>
-                            </v-radio-group>
-                       </v-col>
-                       <v-col>
-                           <v-select
-                                v-model="filters"
-                                item-text="name"
-                                item-value="value"
-                                :items="itemsFilters"
-                                label="Filtro"
-                                multiple
-                                dense
-                                hide-details
-                                chips
-                                deletable-chips
-                                single-line
-                                class="ma-0"
-                                color="blue"
-                                solo
-                                rounded
-                            >
 
-                            <template v-slot:selection="{ item }">
-                                <v-tooltip bottom color="amber">
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-chip outlined v-on="on" v-bind="attrs" small class="caption" close :color="item.color" @click:close="remove(item)">
-                                            <v-icon dark v-text="item.icon"></v-icon> 
-                                        </v-chip>
-                                    </template>
-                                    <span class="caption">{{item.name}}</span>  
-                                </v-tooltip>
-                            </template>
-
-                            
-                            </v-select>
-                       </v-col>
-                   </v-row>
-                   
-                   
-
-               </v-col>
-           </v-row>
-           
-       </v-card-title>
-       <v-card-text>
-           <v-row dense>
-               <v-col cols="12" md="4" v-for="comission in commisions.data" :key="comission.id">
-                    <ComisionCard :comission="comission" :services="services"></ComisionCard>
-               </v-col>
-           </v-row>
-       </v-card-text>
-       <v-overlay absolute :opacity="0.4" :value="loading">
-        <v-icon size="50" class="mdi-spin">mdi-loading</v-icon>
-      </v-overlay> -->
+       
    </v-card>
+        
+       
+               
 
 </template>
 
@@ -182,60 +229,103 @@ export default {
     },
 
     created(){
-       /*  this.list() */
+       this.getProfiles()
+       this.getServices()
     },
 
     watch:{
-        filterType()  {
-            this.filters = []
+        serviceType()  {
+            this.serviceSelected = []
         }
     },
 
     computed:{
-        itemsFilters()
+        itemsService()
         {
-            return this.services.filter(service => service.type == this.filterType )
+            return this.services.filter(service => service.type == this.serviceType )
         },
+
         agencies()
         {
             return this.$store.getters['getAgencyManage']
         },
+
+        profilesAgency()
+        {
+            return  (this.agency) ?  this.profiles.filter( profile => profile.agency_id == this.agency.id) : this.profiles
+        },
     },
 
     data: () => ({
-        commisions: [],
-        url: 'comission',
-        filterType: 'bonus',
+        comissions: [],
+        profiles: [],
+        url: 'comission/list',
         types: [ 'bonus',  'writeoff'],
-        agency: null,
-        filters:[],
-        services: [
-            {name: 'ONLINE_CHAT',         value: "dialogs.messages:intervals",       type: 'bonus',     color: 'blue', icon: 'mdi-cellphone-message'},
-            {name: 'CHAT_MESSAGE',        value: "dialogs.messages:messages",        type: 'bonus',     color: 'blue', icon: 'mdi-message-bulleted'},
-            {name: 'RECEIVED_EMAIL',      value: "dialogs.letters:send",             type: 'bonus',     color: 'blue', icon: 'mdi-email-receive-outline'},
-            {name: 'SENT_EMAIL',          value: "dialogs.letters:read",             type: 'bonus',     color: 'blue', icon: 'mdi-email-send-outline'},
-            {name: 'VIEWED_ATTACHMENT',   value: "dialogs.attachments",              type: 'bonus',     color: 'blue', icon: 'mdi-image-search'},
-            {name: 'VIDEO_STREAM',        value: "videostream",                      type: 'bonus',     color: 'blue', icon: 'mdi-video-box'},
-            {name: 'PROFILE_VIDEO',       value: "paidresource:video",               type: 'bonus',     color: 'blue', icon: 'mdi-message-video'},
-            {name: 'PRESENT',             value: "present",                          type: 'bonus',     color: 'blue', icon: 'mdi-gift'},
-            {name: 'MANUAL_BONUS',        value: "manual",                           type: 'bonus',     color: 'blue', icon: 'mdi-trophy'},
-            {name: 'GIFT',                value: "cheers",                           type: 'bonus',     color: 'blue', icon: 'mdi-wallet-giftcard'},
-            {name: 'MISSED_INVITE',       value: "dialogs.interval.added:missed",    type: 'writeoff',  color: 'red', icon: 'mdi-account-cancel'},
-            {name: 'MISSED_ANSWER',       value: "dialogs.interval.answer:missed",   type: 'writeoff',  color: 'red', icon: 'mdi-message-bulleted-off'},
-            {name: 'MISSED_MESSAGE',      value: "",                                 type: 'writeoff',  color: 'red', icon: 'mdi-email-alert'},
-            {name: 'UNANSWERED_EMAIL',    value: "dialogs.letter:missed",            type: 'writeoff',  color: 'red', icon: 'mdi-email-alert'},
-            {name: 'MISSED_EMAIL',        value: "dialogs.letter:missed.hopelessly", type: 'writeoff',  color: 'red', icon: 'mdi-email-alert'},
-            {name: 'MISSED_VIDEO_INVITE', value: "dialogs.media:missed",             type: 'writeoff',  color: 'red', icon: 'mdi-video-box-off'},
-            {name: 'MISSED_PRESENT',      value: "present:missed",                   type: 'writeoff',  color: 'red', icon: 'mdi-gift-outline'},
-            {name: 'MANUAL_WRITEOFF',     value: "manual",                           type: 'writeoff',  color: 'red', icon: 'mdi-gavel'}   
-        ]
+        serviceType: 'bonus',
+        services: [ ],
+        agency:  null,
+        day:     new Date().toISOString().substr(0, 10),
+        serviceSelected: [],
+        profile: null,
+        filter:[]
     }),
 
     methods:
     {
         list() {
-            this.getResource(this.url).then(data =>{
-                this.commisions = data
+
+            if(this.agency)
+            {
+                let filters = this.setFilters()
+                this.getResource(`${this.url}${filters}`).then(data =>{
+                    this.comissions = data
+                })
+            }
+        },
+
+        setDay(day)
+        {
+            this.day = day
+            this.list()
+        },
+
+        setFilters()
+        {   
+            this.filter['agency']   = this.agency.amolatina_id 
+            this.filter['day']      = this.day 
+            this.filter['service']  = this.serviceSelected 
+            this.filter['profile']  = (this.profile) ? this.profile.amolatina_id : null
+            this.filter['positive'] = (this.serviceType == 'bonus') ? 1 : 0;
+            return this.buildQuery(this.filter);
+        },
+
+        buildQuery(filter)
+        {
+           let query = this.url.includes('?') ? '&' : '';
+
+           for (const key in filter) {
+               if(filter[key] != null) {
+                    if( Array.isArray(filter[key]) ) {
+                        for ( const value of filter[key] ) {
+                            query += (query == '&') ?  `${key}[]=${value}` : `&${key}[]=${value}`
+                        }
+                    } else {
+                        query += (query == '&') ?  `${key}=${filter[key]}` : `&${key}=${filter[key]}`
+                    }
+               }
+           }
+           return  ( query.includes('?')  || this.url.includes('?')) ? query : `?${query}`
+        },
+
+        getProfiles() {
+            this.getResource(`profile/list`).then(data =>{
+                this.profiles = data
+            })
+        },
+
+        getServices() {
+            this.getResource(`service`).then(data =>{
+                this.services = data
             })
         },
 
@@ -251,12 +341,21 @@ export default {
 
         goTo(url)
         {
+            console.log(url);
             if(!url) return
-            this.url = url
-            this.list()
+            if(this.agency)
+            {
+                let filters = this.setFilters()
+                this.getResource(`${url}${filters}`).then(data =>{
+                    this.comissions = data
+                })
+            }
         },
 
- 
+        getService(selected)
+        {
+            return this.services.find( service => service.value == selected )
+        }
     }
 }
 
@@ -264,4 +363,8 @@ export default {
 </script>
 
 <style>
+.comission-container {
+    max-height: 74vh;
+    overflow-y: auto;
+}
 </style>

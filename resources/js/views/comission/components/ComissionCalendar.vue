@@ -7,10 +7,11 @@
             v-model="today"
             :events="events"
             color="indigo"
-            class="rounded-xl"
+            class="rounded-lg"
             elevation="3"
             @change="$emit('onUpdateDate', $event)"
             :first-day-of-week="1"
+            :max="today"
             light
         ></v-date-picker>
 

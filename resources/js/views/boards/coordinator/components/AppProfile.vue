@@ -64,7 +64,7 @@
               
               </v-list-item-title>
               <v-list-item-subtitle class="pt-2">
-                <v-row>
+                <v-row dense>
                   <v-col>{{profile.name}}</v-col>
                    <v-col cols="auto" v-if="profile.presence && !myProfilesStarted.includes(profile.id)" @click="confirmStop(profile)">
                      <list-simple-icon icon="mdi-lock-open-variant" label="Liberar Perfil" color="amber darken-3" :size="22"></list-simple-icon>

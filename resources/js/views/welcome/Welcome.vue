@@ -8,11 +8,11 @@
             <v-card-title >
               <v-row>
                 <v-col cols="12"> 
-                  <v-avatar size="avatarSize" color="red">
-                    <v-icon size="110">mdi-bitcoin</v-icon>
+                  <v-avatar class="pointer" size="120" color="red" @click="navigateToName('login')">
+                    <img src="/images/logo.jpg" alt="criptoWeb">
                   </v-avatar>
                 </v-col>
-                <v-col class="display-4">
+                <v-col class="display-2">
                   CriptoWeb
                 </v-col>
               </v-row>

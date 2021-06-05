@@ -180,40 +180,6 @@ class UserPresenceController extends Controller
 
          return [ 'msj' => 'Perfiles Finalizados' , compact('updates')];
 
-       
-/* 
-        $searches = UserPresence::select('user_presence.start_at', 'agency.amolatina_id', 'agency.token')
-                                ->join('profile', 'profile.id', '=', 'user_presence.profile_id')
-                                ->join('agency', 'agency.id', '=', 'profile.agency_id')
-                                ->where('user_presence.status_id', 3)
-                                ->where('user_presence.user_id', $request->user_id)
-                                ->distinct()
-                                ->get();
-
-        $userPresences = UserPresence::with(['profile:profile.id,amolatina_id', 'profile.agency:agency.id,amolatina_id'])
-                        ->where( 'status_id' , 3)
-                        ->get();                        
-
-        $end_at = Carbon::now('UTC')->toDateTimeLocalString('millisecond');
-
-        $updates = [];
-                
-        foreach ($searches as $search) {
-            
-            $response = $this->getProfileCommisions($search->token, $search->amolatina_id, $search->start_at, $end_at);
-
-            if($response['ok'])
-            {
-                $commissions = $response['body']['commissions'];
-
-                $updates[$search->name][$search->start_at] = $this->setPrecenseCommisions($userPresences, $commissions, $search->start_at, $end_at, true);
-
-            } else {
-                $updates[$search->name][$search->start_at] = ['error'];
-            }
-        }
-
-        return [ 'msj' => 'Perfiles Finalizados' , compact('updates')]; */
     }
 
     public function presenceEstimate()

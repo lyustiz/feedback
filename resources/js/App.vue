@@ -146,4 +146,10 @@ export default {
     .custom-scroll-dark::-webkit-scrollbar-thumb:hover {
         background: white;
     }
+
+    .text-detail {
+        font-size: .55rem!important;
+        letter-spacing: .0333333333em!important;
+        line-height: 1.25rem;
+    }
 </style>

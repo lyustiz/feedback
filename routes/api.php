@@ -97,6 +97,7 @@ Route::get('/profile/import/agency/{agency}',   'ProfileController@profileImport
 Route::get('/profile/table/{table}',            'ProfileController@profileTable');
 Route::get('/profile/user/{user}',              'ProfileController@profileUser');
 Route::get('/profile/coordinator',              'ProfileController@profileCoordinator');
+Route::get('/profile/list',                    'ProfileController@list');
 Route::apiResource('/profile',                  'ProfileController');
 
 
@@ -119,7 +120,8 @@ Route::apiResource('/curator',                  'CuratorController');
 Route::apiResource('/spending',                 'SpendingController');
 
 
-Route::get('/comission/detail',                'ComissionController@comissionDetail');
+Route::get('/comission/list',          'ComissionController@list');
+Route::get('/comission/detail',                 'ComissionController@comissionDetail');
 Route::apiResource('/comission',                'ComissionController');
 
 
@@ -142,5 +144,7 @@ Route::apiResource('/client',             'ClientController');
 
 Route::get('/tableTurn/combo/{table}',    'TableTurnController@combo');
 Route::apiResource('/tableTurn',          'TableTurnController');
+Route::apiResource('/horary',     'HoraryController');
+Route::apiResource('/service',     'ServiceController');
 //newRoutes
 });

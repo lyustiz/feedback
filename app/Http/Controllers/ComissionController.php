@@ -21,8 +21,48 @@ class ComissionController extends Controller
     {
         return Comission::with(['profile:id,amolatina_id,name,photo,gender'])
                         ->orderBy('comission_at', 'desc')
-                        ->paginate(21)
+                        ->cursorPaginate(50)
                         ->withPath('comission');  
+    }
+
+    public function list(Request $request)
+    {
+        $commision =  Comission::with([
+                            'profile:id,amolatina_id,name,photo,gender', 
+                            'client:id,amolatina_id,name,photo,gender,points,crown', 
+                            'hasService'
+                        ]);
+                        
+        if($request->filled('agency'))   
+        {
+            $commision->where('agency_id',$request->agency);
+        }
+
+        if($request->filled('day'))   
+        {
+            $start_at = Carbon::parse($request->day);
+            $end_at   = Carbon::parse($request->day)->addDay();
+            $commision->whereBetween('comission_at', [ $start_at, $end_at ]);
+        }
+        
+        if($request->filled('positive'))   
+        {
+            $commision->where('positive', $request->positive);
+        } 
+        
+        if($request->filled('service'))   
+        {
+            $commision->whereIn('service', $request->service);
+        } 
+
+        if($request->filled('profile'))   
+        {
+            $commision->where('profile_id', $request->profile);
+        } 
+
+        return $commision->orderBy('comission_at', 'desc')->cursorPaginate(50)->withPath('comission/list');
+                        
+                          
     }
 
     public function comissionDetail()

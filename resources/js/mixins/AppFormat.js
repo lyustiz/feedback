@@ -194,6 +194,13 @@ export default {
             return date
         },
 
+        hourFromDateTime(date)
+        {
+            if (!date) return null
+            date = date.substr(-8)
+            return date
+        },
+
         sumDateDays(date, days)
         {
             let newDate  = new Date(date)
