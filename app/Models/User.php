@@ -145,7 +145,7 @@ class User extends Authenticatable
         return $this->HasMany('App\Models\Penalty')->whereBetween('day', [
                                                                             Carbon::now()->startOfMonth(), 
                                                                             Carbon::now()->endOfMonth()
-                                                                        ]);;
+                                                                        ]);
     }
 
     public function absence()
@@ -158,7 +158,7 @@ class User extends Authenticatable
         return $this->HasMany('App\Models\Absence')->whereBetween('day', [
                                                                             Carbon::now()->startOfMonth(), 
                                                                             Carbon::now()->endOfMonth()
-                                                                            ]);;
+                                                                            ]);
     }
 
     public function profile()

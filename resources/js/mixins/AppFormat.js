@@ -108,6 +108,14 @@ export default {
             return `${day}/${month}/${year}`
         },
 
+        formatDateString (date)
+        {
+            if (!date) return null
+            date = date.substr(0,10)
+            const [year, month, day] = date.split('-')
+            return `${day}/${month}/${year}`
+        },
+
         dayFromDate(date)
         {
             if (!date) return null

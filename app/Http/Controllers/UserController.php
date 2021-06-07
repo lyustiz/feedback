@@ -67,6 +67,18 @@ class UserController extends Controller
                     ->get(); 
     }
 
+    public function statistics($tableId)
+    {
+        return User::with( 'profile.presenceDay.comissionDay', 'role', 'turn:id,name', 'penaltyMonth.penaltyType', 'presenceDay')
+                    ->withSum(['presenceDay', 'presenceMonth' ], 'profit')
+                    ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
+                    ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
+                    ->operator(true)
+                    ->where('table_turn_id', $tableId)
+                    ->orderBy('name')
+                    ->get(); 
+    }
+
     public function userWiths($request)
     {
         $withs = [];

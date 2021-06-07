@@ -21,6 +21,13 @@ class TableController extends Controller
                     ->get();
     }
 
+    public function list()
+    {
+        return Table::with([ 'manager', 'turn:turn.id,turn.name', 'coordinator' ])
+                    ->active(true)
+                    ->get();
+    }
+
     public function tablesDetails()
     {
         return Table::with(['manager', 'tableTurn.turn'  , 'tableTurn.coordinator', 'tableTurn.operator.profile' ])

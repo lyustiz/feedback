@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class UserPresence extends Model
 {
@@ -43,8 +44,6 @@ class UserPresence extends Model
         return $query->addSelect('id', 'name');
     }
 
-    
-
     public function status()
     {
         return $this->BelongsTo('App\Models\Status');
@@ -63,6 +62,27 @@ class UserPresence extends Model
     public function userEd()
     {
         return $this->BelongsTo('App\Models\User', 'user_id_ed');
+    }
+
+    public function comission()
+    {
+        return $this->Hasmany('App\Models\Comission', 'profile_id', 'amolatina_id');
+    }
+
+    public function comissionDay()
+    {
+        return $this->Hasmany('App\Models\Comission', 'profile_id', 'amolatina_id')->whereBetween('comission_at', [
+            Carbon::now()->startOfDay(), 
+            Carbon::now()->endOfDay()
+            ]);
+    }
+
+    public function comissionMonth()
+    {
+        return $this->Hasmany('App\Models\Comission', 'profile_id', 'amolatina_id')->whereBetween('comission_at', [
+            Carbon::now()->startOfMonth(), 
+            Carbon::now()->endOfMonth()
+            ]);
     }
 
 }

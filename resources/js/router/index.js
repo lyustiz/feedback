@@ -6,7 +6,7 @@ Vue.use(Router)
 import Welcome         from '@views/welcome/Welcome';
 import Home            from '@views/home/Home';
 
-
+//board
 import AdminBoard       from '@views/boards/admin/AdminBoard.vue'
 import OperatorBoard    from '@views/boards/operator/OperatorBoard.vue'
 import CoordinatorBoard from '@views/boards/coordinator/CoordinatorBoard.vue'
@@ -20,8 +20,9 @@ import PageNotFound    from  '@views/404/NotFound'
 import Crud            from  '@views/crud/crud'
 
 
-//boards
+//user precence
 
+import UserPresence    from '@views/userPresence/AppUserPresence.vue';
 
 
 //data
@@ -58,7 +59,7 @@ import UserProfile  from '@views/userProfile/userProfile.vue';
 import Group        from '@views/group/group.vue';
 import Country      from '@views/country/country.vue';
 import UserAgency   from '@views/userAgency/userAgency.vue';
-import UserPresence from '@views/userPresence/userPresence.vue';
+
 import Absence      from '@views/absence/absence.vue';
 import AbsenceType  from '@views/absenceType/absenceType.vue';
 import Client       from '@views/client/AppClient';
@@ -369,7 +370,7 @@ export default new Router({
 
 {
     path: '/userPresence',
-    name: 'userPresence',
+    name: 'user-presence',
     icon: 'bubble_chart',
     component: UserPresence,
 },

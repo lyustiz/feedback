@@ -84,8 +84,10 @@ Route::apiResource('/absenceType',     'AbsenceTypeController');
 
 // user
 Route::put('/user/{user}/goals',                'UserController@goals');
+
 Route::get('/user/list',                        'UserController@list');
 Route::get('/user/list/table',                  'UserController@listTable');
+Route::get('/user/statistics/{table}',          'UserController@statistics');
 Route::apiResource('/user',                     'UserController');
 Route::apiResource('/userProgress',             'UserProgressController');
 
@@ -120,21 +122,24 @@ Route::apiResource('/curator',                  'CuratorController');
 Route::apiResource('/spending',                 'SpendingController');
 
 
-Route::get('/comission/list',          'ComissionController@list');
+Route::get('/comission/list',                   'ComissionController@list');
 Route::get('/comission/detail',                 'ComissionController@comissionDetail');
 Route::apiResource('/comission',                'ComissionController');
 
 
-Route::get('/table/detail',     'TableController@tablesDetails');
-Route::apiResource('/table',     'TableController');
-Route::apiResource('/group',     'GroupController');
-Route::apiResource('/country',     'CountryController');
-Route::apiResource('/userAgency',     'UserAgencyController');
+Route::get('/table/detail',                     'TableController@tablesDetails');
 
-Route::get('/userPresence/estimate',      'UserPresenceController@presenceEstimate');
-Route::put('/userPresence/stop/unique',   'UserPresenceController@stopUnique');
-Route::put('/userPresence/stop',          'UserPresenceController@stop');
-Route::apiResource('/userPresence',       'UserPresenceController');
+Route::get('/table/list',               'TableController@list');
+Route::apiResource('/table',                    'TableController');
+
+Route::apiResource('/group',                    'GroupController');
+Route::apiResource('/country',                  'CountryController');
+Route::apiResource('/userAgency',               'UserAgencyController');
+
+Route::get('/userPresence/estimate',            'UserPresenceController@presenceEstimate');
+Route::put('/userPresence/stop/unique',         'UserPresenceController@stopUnique');
+Route::put('/userPresence/stop',                'UserPresenceController@stop');
+Route::apiResource('/userPresence',             'UserPresenceController');
 
 
 Route::get('/client/all/photo',           'ClientController@importClientPhoto');

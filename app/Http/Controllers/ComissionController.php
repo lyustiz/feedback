@@ -83,7 +83,7 @@ class ComissionController extends Controller
             $response     = $this->getDetailCommisions($token, $amolatina_id, $start_at, $end_at, $current->positive );
             if($response['ok']) {
                 $commisions = $response['body'];
-                $stored[$start_at.'-'.$end_at] = count($this->storeCommision($commisions, $current->positive, $current->comission_id)) * 500;
+                $stored[$start_at.'-'.$end_at.'-'.$amolatina_id] = count($this->storeCommision($commisions, $current->positive, $current->comission_id)) * 500;
             } else {
                 $stored[$start_at . '-' . $end_at . '-' . $current->positive] = $response;
             }

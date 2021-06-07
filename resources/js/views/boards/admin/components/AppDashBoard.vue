@@ -31,13 +31,13 @@
         </v-col>
 
         <v-col>
-          <v-card color="red" v-ripple @click="navigateToName('table-detail')">
+          <v-card color="red" v-ripple @click="navigateToName('user-presence')">
             <v-card-text>
               <v-row dense>
                 <v-col>
-                  <v-icon size="34">mdi-sitemap</v-icon>
+                  <v-icon size="34">mdi-face-agent</v-icon>
                 </v-col>
-                <v-col class="pt-4">Estructura</v-col>
+                <v-col class="pt-4">Progreso</v-col>
               </v-row>
             </v-card-text>
           </v-card>
