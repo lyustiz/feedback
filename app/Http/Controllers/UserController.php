@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 
 
+
 class UserController extends Controller
 {
     use UserTrait;
@@ -69,12 +70,14 @@ class UserController extends Controller
 
     public function statistics($tableId)
     {
-        return User::with( 'profile.presenceDay.comissionDay', 'role', 'turn:id,name', 'penaltyMonth.penaltyType', 'presenceDay')
+        return User::with([ 'profile.presenceDay', 'role', 'turn:id,name', 'penaltyMonth.penaltyType', 'presenceDay' ])
                     ->withSum(['presenceDay', 'presenceMonth' ], 'profit')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
                     ->operator(true)
-                    ->where('table_turn_id', $tableId)
+                    ->whereHas('tableTurn', function (Builder $query) use($tableId) {
+                        $query->where('table_id', $tableId);
+                    })
                     ->orderBy('name')
                     ->get(); 
     }

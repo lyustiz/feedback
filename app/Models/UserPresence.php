@@ -66,8 +66,21 @@ class UserPresence extends Model
 
     public function comission()
     {
-        return $this->Hasmany('App\Models\Comission', 'profile_id', 'amolatina_id');
+        return $this->HasMany('App\Models\Comission', 'profile_id', 'amolatina_id');
     }
+
+   /*  public function comission()
+	{
+		return $this->hasManyThrough(
+			'App\Models\Comission', //final
+            'App\Models\PresenceComission', //intermedia
+            'user_presence_id', // fk en intermedia
+            'id', // laocal en orPigen
+            'id', // local en final
+			'comission_id' // fk en intermedia
+		);
+	} */
+
 
     public function comissionDay()
     {

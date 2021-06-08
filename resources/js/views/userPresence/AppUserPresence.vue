@@ -100,7 +100,7 @@
                                   </v-avatar>
                                 </v-col>
                                 <v-col>
-                                  {{user.name}}
+                                  {{user.full_name}}
                                 </v-col>
                                 <v-col cols="auto">
                                     <v-icon size="20" color="green" left>mdi-cash-plus</v-icon>
@@ -165,20 +165,9 @@
                                                     </v-row>
                                                 </v-expansion-panel-header>  
                                                 <v-expansion-panel-content>
-                                                    <v-row v-for="comission in presence.comission_day" :key="comission.id">
-                                                        <v-col>
-                                                            {{ comission.comission_at }}
-                                                        </v-col>
-                                                        <v-col>
-                                                            {{ comission.points }}
-                                                        </v-col>
-                                                        <v-col>
-                                                            {{  comission.service }}
-                                                        </v-col>
-                                                        <v-col>
-                                                            {{  comission.user_id }}
-                                                        </v-col>
-                                                    </v-row>
+                                              
+                                                    <ComissionPresence :presence="presence"></ComissionPresence>
+
                                                 </v-expansion-panel-content>
                                             
                                             </v-expansion-panel> 
@@ -196,71 +185,7 @@
                       </v-expansion-panels>
 
 
-                               <!--  <v-card color="rgba(0,0,0,0.4)" class="ma-1 rounded-lg">
-                                    <v-row dense>
-                                        <v-col cols="5">
-                                            <v-row no-gutters >
-                                                <v-col cols="12" class="caption text-center">{{presence.client_id}}</v-col>
-                                                <v-col cols="12" class="text-center">
-                                                    <v-row no-gutters justify="center">
-                                                        <v-col cols="auto">
-                                                            <v-avatar color="blue" class="elevation-3" :size="30">
-                                                                <v-img :src="`/storage/photo/client/${(presence.client) ? presence.client.photo || 'nophoto' : 'nophoto'}.jpg`" ></v-img>
-                                                            </v-avatar>
-                                                        </v-col>
-                                                        <v-col cols="auto" v-if="presence.client">
-                                                            <v-badge v-if="presence.client.crown > 0" offset-x="6" offset-y="12" color="rgba(0,0,0,0.15)" :content="presence.client.crown">  
-                                                                <list-simple-icon icon="mdi-crown" :label="formatNumber(presence.client.points)" color="amber" :size="20"></list-simple-icon>
-                                                            </v-badge> 
-                                                        </v-col>
-                                                    </v-row>
-                                                </v-col>
-                                                <v-col cols="12" class="caption text-center">{{(presence.client) ? presence.client.name : '-'}}</v-col>
-                                            </v-row>
-                                        </v-col>
-                                        <v-col class="text-center">
-
-                                            <v-row no-gutters>
-                                                <v-col cols="12" class="text-detail" :class="(presence.positive = 1) ? 'white--text' : 'red--text' ">
-                                                     {{ hourFromDateTime(presence.presence_at) }}
-                                                </v-col>
-                                                <v-col cols="12">
-                                                    <list-simple-icon  
-                                                        :size="32"
-                                                        :icon="presence.has_service.icon" 
-                                                        :label="presence.has_service.name"
-                                                        :color="presence.has_service.color"
-                                                        v-if="presence.has_service"
-                                                    > </list-simple-icon>
-                                                    <list-simple-icon  
-                                                        :size="32"
-                                                        icon="mdi-comment-question" 
-                                                        :label="presence.service"
-                                                        color="amber"
-                                                        v-else
-                                                    > </list-simple-icon>
-                                                </v-col>
-                                                <v-col cols="12" class="text-detail" :class="(presence.positive = 1) ? 'white--text' : 'red--text' ">
-                                                    {{ formatNumber(presence.points) }}
-                                                </v-col>
-                                            </v-row>
-                                            
-                                        </v-col>
-                                        <v-col cols="5">
-                                            <v-row no-gutters>
-                                                <v-col cols="12" class="caption text-center">{{presence.profile_id}}</v-col>
-                                                <v-col cols="12" class="text-center">
-                                                    <v-avatar color="grey" class="elevation-3" :size="30">
-                                                        <v-img :src="`/storage/photo/profile/${(presence.profile) ? presence.profile.photo || 'nophoto' : 'no-photo'}.jpg`" ></v-img>
-                                                    </v-avatar>
-                                                    </v-col>
-                                                <v-col cols="12" class="caption text-center">{{(presence.profile) ? presence.profile.name : ''}}</v-col>
-                                            </v-row>
-                                        </v-col>
-                                    </v-row>
-                                </v-card> -->
-                            
-                       
+                             
                     </v-card-text>
                 </v-card>
             </v-col>
@@ -285,12 +210,14 @@
 <script>
 import AppData from '@mixins/AppData';
 import ComissionCalendar from './components/ComissionCalendar'
+import ComissionPresence from './components/ComissionPresence.vue'
 export default {
 
     mixins:     [ AppData ],
 
     components: { 
-        ComissionCalendar
+        ComissionCalendar, 
+        ComissionPresence
     },
 
     created(){

@@ -25,6 +25,16 @@ class ComissionController extends Controller
                         ->withPath('comission');  
     }
 
+    public function comissionPresence($precenseId)
+    {       
+        return Comission::with(['client', 'hasService'])
+                        ->join('user_presence', 'comission.profile_id', '=', 'user_presence.amolatina_id')
+                        ->where('user_presence.id', $precenseId)
+                        ->whereRaw('comission.comission_at >= user_presence.start_at' )
+                        ->whereRaw('comission.comission_at <= IFNULL(user_presence.end_at, UTC_TIMESTAMP())' )
+                        ->get();
+    }
+
     public function list(Request $request)
     {
         $commision =  Comission::with([
