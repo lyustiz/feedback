@@ -70,7 +70,7 @@ class UserController extends Controller
 
     public function statistics($tableId)
     {
-        return User::with([ 'profile.presenceDay', 'role', 'turn:id,name', 'penaltyMonth.penaltyType', 'presenceDay' ])
+        $users =  User::with([ 'profile', 'role', 'turn:id,name', 'penaltyMonth.penaltyType', 'presenceDay' ])
                     ->withSum(['presenceDay', 'presenceMonth' ], 'profit')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
@@ -79,8 +79,41 @@ class UserController extends Controller
                         $query->where('table_id', $tableId);
                     })
                     ->orderBy('name')
-                    ->get(); 
+                    ->get()->toArray(); 
+
+        foreach ($users as $keyu => $user ) {
+            if(isset($user['profile']))
+            {
+                foreach ($user['profile'] AS $keyp => $profile)
+                {
+                    $profilePresence = $this->getProfilePresence($profile, $user['presence_day']);
+                    $users[$keyu]['profile'][$keyp]['presence'] = $profilePresence['presence'];
+                    $users[$keyu]['profile'][$keyp]['sumBonus'] = $profilePresence['sumBonus'];
+                    $users[$keyu]['profile'][$keyp]['countWriteoff'] = $profilePresence['countWriteoff'];
+                }
+            }
+        }
+
+        return $users;
     }
+
+    public function getProfilePresence($profile, $presences)
+    {
+        $profilePresence = [];
+        $sumBonus        = 0;
+        $countWriteoff    = 0;
+        foreach ($presences as $presence) {
+            if($presence['profile_id'] == $profile['id'])
+            {
+                $profilePresence[] = $presence;
+                $sumBonus      += $presence['bonus'];
+                $countWriteoff += ($presence['writeoff'] > 0 ) ? 1: 0;
+            }
+        }
+        return [ 'presence' => $profilePresence, 'sumBonus' => $sumBonus, 'countWriteoff' =>  $countWriteoff];
+    }
+
+
 
     public function userWiths($request)
     {

@@ -7,7 +7,17 @@
 
                 <v-card color="rgba(0,0,0,0.4)" width="20vw" class="pa-2">
 
-                    <v-subheader>Comisiones</v-subheader>
+                    <v-subheader>
+                        <v-row no-gutters>
+                            <v-col>
+                                Comisiones
+                            </v-col>
+                             <v-col>
+                                <v-btn small icon color="success" :loading="loading" @click="getUsers()"> <v-icon>mdi-reload</v-icon></v-btn>
+                            </v-col>
+                        </v-row>
+                       
+                        </v-subheader>
 
                 <v-row dense>
                     <v-col>
@@ -29,41 +39,6 @@
                         ></v-select>
                     </v-col>
 
-                    <!-- <v-col cols="12">
-                        <v-autocomplete
-                            v-model="user"
-                            label="Perfiles"
-                            item-text="name"
-                            no-data-text="No existen perfiles Disponibles"
-                            :items="users"
-                            :disabled="loading"
-                            :loading="loading"
-                            hide-details
-                            outlined
-                            filled
-                            dense
-                            clearable
-                            return-object
-                            @change="list()"
-                        >
-                            <template v-slot:item="{item}">
-                            <v-row dense class="grey lighten-5 subtitle-1">
-                                <v-col cols="auto">
-                                    <v-avatar color="grey" class="elevation-3" :size="30">
-                                    <v-img :src="`/storage/photo/operator/${item.photo || 'nophoto'}`" ></v-img>
-                                    </v-avatar>
-                                </v-col>
-                                <v-col>
-                                {{item.name}}
-                                </v-col>
-                                <v-col cols="auto">
-                                    {{item.username}}
-                                </v-col>
-                            </v-row>
-                            </template>
-                        </v-autocomplete>
-                    </v-col>
- -->
                     <v-col cols="12">
                         <ComissionCalendar @onUpdateDate="setDay($event)"></ComissionCalendar>
                     </v-col>
@@ -132,11 +107,11 @@
                                         </v-col>
                                         <v-col cols="auto">
                                             <v-icon size="20" color="green" left>mdi-cash-plus</v-icon>
-                                            {{totalBonusProfile(profile)}}
+                                            {{formatNumber(profile.sumBonus || 0.00)}}
                                         </v-col>
                                         <v-col cols="auto">
                                             <v-icon size="20" color="red" class="ml-2"  left>mdi-cash-remove</v-icon>
-                                            {{totalWriteOffProfile(profile)}}
+                                           {{profile.countWriteoff || 0}}
                                         </v-col>
                                     </v-row>
 
@@ -146,7 +121,7 @@
 
                                         <v-expansion-panels> 
 
-                                            <v-expansion-panel v-for="presence in profile.presence_day" :key="presence.id"> 
+                                            <v-expansion-panel v-for="presence in profile.presence" :key="presence.id"> 
 
                                                 <v-expansion-panel-header>            
                                                     <v-row>
@@ -367,30 +342,33 @@ export default {
 
       totalWriteOffTable(users)
       {
-       let writeoff = 0.00
+       let writeoff = 0
         for (const user of users) {
             for (const precense of user.presence_day) { 
-               writeoff += (precense.writeoff) ? parseFloat(precense.writeoff) : 0.00
+               writeoff += (precense.writeoff) ? 1 : 0
             }  
         }
-        return this.formatNumber(writeoff)
+        return writeoff
       },
 
-      totalBonusProfile(profile)
+      totalBonusProfile(profile, precenses)
       {
         let bonus = 0.00
-        for (const precense of profile.presence_day) {
-          bonus += (precense.bonus) ? parseFloat(precense.bonus) : 0.00
+        for (const precense of precenses) {
+          if(precense.profile_id = profile.id)
+          {
+            bonus += (precense.bonus) ? parseFloat(precense.bonus) : 0.00
+          }
         }
         return this.formatNumber(bonus)
       },
 
       totalWriteOffProfile(profile){
-        let writeoff = 0.00
+        let writeoff = 0
         for (const precense of profile.presence_day) {
-          writeoff += (precense.writeoff) ? parseFloat(precense.writeoff) : 0.00
+          writeoff += (precense.writeoff)  ? 1 : 0
         }
-        return this.formatNumber(writeoff)
+        return writeoff
       }
     }
 }
