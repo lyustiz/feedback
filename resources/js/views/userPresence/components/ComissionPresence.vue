@@ -1,7 +1,20 @@
 <template>
 
   <v-expansion-panel-content>
-       <v-subheader>Detalle</v-subheader>
+       <v-subheader>
+         <v-row no-gutters>
+           <v-col>Detalle</v-col>
+           <v-col>
+             <v-icon size="16" color="green" left>mdi-cash-plus</v-icon>
+              {{formatNumber(bonus || 0.00)}}
+           </v-col>
+           <v-col>
+             <v-icon size="16" color="red" class="ml-2"  left>mdi-cash-remove</v-icon>
+              {{ writeoff || 0}}
+           </v-col>
+         </v-row>
+         </v-subheader>
+      
       <v-row v-for="comission in comissions" :key="comission.comission_id">
 
           <v-col cols="auto">
@@ -57,7 +70,9 @@ export default {
   },
 
   data: () => ({
-    comissions: []
+    comissions: [],
+    bonus: 0.0,
+    writeoff: 0
   }),
 
   created() {
@@ -71,9 +86,24 @@ export default {
         {
             this.getResource(`comission/presence/${this.presence.id}`).then(data =>{
                 this.comissions = data
+                this.setTotals()
             })
         }
     },
+
+    setTotals()
+    {
+        for (const comission of this.comissions) {
+          console.log(comission, comission.points)
+          if(comission.positive == 1)
+          {
+            this.bonus = parseFloat(comission.points) + this.bonus
+          } else{
+            this.writeoff = (parseFloat(comission.points) > 0) ? 1 : 0
+          }
+        }
+    },
+
   }
 
 

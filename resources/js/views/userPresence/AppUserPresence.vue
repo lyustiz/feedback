@@ -132,7 +132,7 @@
                                                             {{presence.end_at || 'activo'}}
                                                         </v-col>
                                                         <v-col>
-                                                            {{  presence.bonus }}
+                                                            {{  formatNumber(presence.bonus) }}
                                                         </v-col>
                                                         <v-col>
                                                             {{  presence.writeoff }}
