@@ -173,6 +173,37 @@ class User extends Authenticatable
 		);
 	}
 
+
+    public function profilePrecenseDay()
+	{
+		return $this->hasManyThrough(
+			'App\Models\Profile', //final
+            'App\Models\UserPresence', //intermedia
+            'user_id', // fk en intermedia
+            'id', // laocal en origen
+            'id', // local en final
+			'profile_id' // fk en intermedia
+		)->whereBetween('start_at', [
+            Carbon::now()->startOfDay(), 
+            Carbon::now()->endOfDay()
+        ])->distinct();
+	}
+
+    public function profilePrecenseMonth()
+	{
+		return $this->hasManyThrough(
+			'App\Models\Profile', //final
+            'App\Models\UserPresence', //intermedia
+            'user_id', // fk en intermedia
+            'id', // laocal en origen
+            'id', // local en final
+			'profile_id' // fk en intermedia
+		)->whereBetween('start_at', [
+            Carbon::now()->startOfMonth(), 
+            Carbon::now()->endOfMonth()
+        ]);
+	}
+
     public function agency()
 	{
 		return $this->hasManyThrough(
@@ -196,6 +227,8 @@ class User extends Authenticatable
 			'agency_id' // fk en intermedia
 		);
 	}
+
+
 
     public function presenceDay()
     {

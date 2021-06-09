@@ -70,11 +70,10 @@ class UserController extends Controller
 
     public function statistics($tableId)
     {
-        $users =  User::with([ 'profile', 'role', 'turn:id,name', 'penaltyMonth.penaltyType', 'presenceDay' ])
-                    ->withSum(['presenceDay', 'presenceMonth' ], 'profit')
+        $users =  User::with([ 'profilePrecenseDay', 'role', 'turn:id,name', 'penaltyMonth.penaltyType', 'presenceDay', 'profile' ])
                     ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
-                    ->operator(true)
+                    ->role([3,4])
                     ->whereHas('tableTurn', function (Builder $query) use($tableId) {
                         $query->where('table_id', $tableId);
                     })
@@ -82,14 +81,14 @@ class UserController extends Controller
                     ->get()->toArray(); 
 
         foreach ($users as $keyu => $user ) {
-            if(isset($user['profile']))
+            if(isset($user['profile_precense_day']))
             {
-                foreach ($user['profile'] AS $keyp => $profile)
+                foreach ($user['profile_precense_day'] AS $keyp => $profile)
                 {
                     $profilePresence = $this->getProfilePresence($profile, $user['presence_day']);
-                    $users[$keyu]['profile'][$keyp]['presence'] = $profilePresence['presence'];
-                    $users[$keyu]['profile'][$keyp]['sumBonus'] = $profilePresence['sumBonus'];
-                    $users[$keyu]['profile'][$keyp]['countWriteoff'] = $profilePresence['countWriteoff'];
+                    $users[$keyu]['profile_precense_day'][$keyp]['presence'] = $profilePresence['presence'];
+                    $users[$keyu]['profile_precense_day'][$keyp]['sumBonus'] = $profilePresence['sumBonus'];
+                    $users[$keyu]['profile_precense_day'][$keyp]['countWriteoff'] = $profilePresence['countWriteoff'];
                 }
             }
         }

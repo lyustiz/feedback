@@ -83,7 +83,7 @@
                                 </v-col>
                                 <v-col cols="auto">
                                     <v-icon size="20" color="red" class="ml-2" left>mdi-cash-remove</v-icon>
-                                    {{formatNumber(user.presence_day_sum_writeoff || 0.00)}}
+                                    {{parseInt(user.presence_day_sum_writeoff || 0)}}
                                 </v-col>
                             </v-row>
                             </v-expansion-panel-header>
@@ -91,7 +91,7 @@
 
                               <v-expansion-panels>
 
-                                <v-expansion-panel v-for="profile in user.profile" :key="profile.id" class="blue-grey darken-4">
+                                <v-expansion-panel v-for="profile in user.profile_precense_day" :key="profile.id" class="blue-grey darken-4">
                                   
                                   <v-expansion-panel-header>
 
@@ -103,7 +103,9 @@
                                         </v-col>
 
                                         <v-col>
-                                            {{profile.name}}
+                                            {{profile.name}} 
+                                            <list-simple-icon icon="mdi-check-circle-outline" label="Asignado" color="green" :size="16" v-if="isAssigned( user.profile, profile)"></list-simple-icon>
+                                            <list-simple-icon icon="mdi-alert-circle-outline" label="No asignado" color="amber" :size="16" v-else></list-simple-icon>
                                         </v-col>
                                         <v-col cols="auto">
                                             <v-icon size="20" color="green" left>mdi-cash-plus</v-icon>
@@ -369,6 +371,10 @@ export default {
           writeoff += (precense.writeoff)  ? 1 : 0
         }
         return writeoff
+      },
+
+      isAssigned( profilesAssigned, profile) {
+        return profilesAssigned.some( (item)=>  item.id == profile.id)
       }
     }
 }
