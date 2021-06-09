@@ -23,7 +23,7 @@
             </v-avatar>
           </v-col>
           <v-col>
-              {{(comission.client) ? comission.client.name : '-'}}
+              {{(comission.client) ? (comission.client.name || comission.client.amolatina_id ): comission.client_id}}
           </v-col>
           <v-col>
               {{  (comission.comission_at) ? UTCToLocalDate(comission.comission_at) : "0000"  }} 

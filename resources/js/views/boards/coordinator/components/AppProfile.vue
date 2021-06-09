@@ -27,25 +27,25 @@
                   <v-col cols="auto">
                     <v-tooltip bottom color="blue">
                     <template v-slot:activator="{ on, attrs }">
-                      <span v-on="on" v-bind="attrs">{{ profile.presence_day_sum_profit || 0 }}  /  {{ 200 }}</span>
+                      <span v-on="on" v-bind="attrs">{{ (profile.presence) ? formatNumber(profile.presence.bonus) || 0 : 0 }}</span>
                     </template>
-                    <span>Ganacias Dia</span>
+                    <span>Ganacias Sesion</span>
                     </v-tooltip>
                   </v-col>
                   <v-spacer></v-spacer>
                   <v-col cols="auto">
                     <v-tooltip bottom color="red">
                     <template v-slot:activator="{ on, attrs }">
-                      <span v-on="on" v-bind="attrs">{{profile.presence_day_sum_writeoff}}</span>
+                      <span v-on="on" v-bind="attrs">{{ (profile.presence) ? parseInt(profile.presence.writeoff || 0) : 0 }}</span>
                     </template>
-                    <span>Perdidas Dia</span>
+                    <span>Perdidas Sesion</span>
                     </v-tooltip>
                   </v-col>
               </v-row>
               <v-row no-gutters>
                   <v-col>
                   <v-progress-linear
-                  :value="profile.presence_day_sum_profit*100/200 || 0"
+                  :value="(profile.presence) ? formatNumber(profile.presence.bonus) || 0 : 0"
                   color="blue"
                   height="8"
                   class="mb-2 mt-1"
@@ -53,7 +53,7 @@
               </v-col>
                <v-col>
                   <v-progress-linear
-                  :value="profile.presence_day_sum_writeoff*(-1) || 0"
+                  :value="(profile.presence) ? parseInt(profile.presence.writeoff || 0) : 0"
                   color="red"
                   height="8"
                   class="mb-2 mt-1"

@@ -36,11 +36,19 @@ class ProfileController extends Controller
     public function profileUser($userId)
     {
         return Profile::with(['presence:id,start_at,user_id,profile_id', 'presence.user:id,name,surname', 'agency:agency.id,amolatina_id'])
-                        ->whereHas('user', function (Builder $query) use($userId) {
+                        ->whereHas('user', function (Builder $query) use ($userId) {
                             $query->where('user.id', $userId);
                         })
-                        ->withSum(['presenceDay'], 'profit')
-                        ->withSum(['presenceDay'], 'writeoff')
+                        ->withSum([
+                            'presenceDay' => function (Builder $query)  use ($userId) {
+                                $query->where('user_id', $userId);
+                            },
+                        ], 'bonus')
+                        ->withSum([
+                            'presenceDay' => function (Builder $query)  use ($userId) {
+                                $query->where('user_id', $userId);
+                            },
+                        ], 'writeoff')
                         ->get();
     }
 
@@ -48,15 +56,15 @@ class ProfileController extends Controller
     {
         $user = \Auth::user();
 
-        return Profile::with(['presence:id,start_at,user_id,profile_id', 'presence.user:id,name,surname', 'agency:agency.id,amolatina_id'])
+        return Profile::with(['presence', 'presence.user:id,name,surname', 'agency:agency.id,amolatina_id'])
                         ->whereHas('user', function (Builder $query) use($tableId) {
                             $query->where('user.table_id', $tableId);
                         })
                         ->whereDoesntHave('userProfile', function (Builder $query) use($user) {
                             $query->where('user_id', $user->id);
                         })
-                        ->withSum(['presenceDay'], 'profit')
-                        ->withSum(['presenceDay'], 'writeoff')
+                        ->withSum([ 'presenceDay' ], 'bonus')
+                        ->withSum([ 'presenceDay' ], 'writeoff')
                         ->get();
     }
 
@@ -64,15 +72,15 @@ class ProfileController extends Controller
     {
         $user = \Auth::user();
 
-        return Profile::with(['presence:id,start_at,user_id,profile_id', 'presence.user:id,name,surname', 'agency:agency.id,amolatina_id'])
+        return Profile::with(['presence', 'presence.user:id,name,surname', 'agency:agency.id,amolatina_id'])
                         ->whereHas('user', function (Builder $query) use($user) {
                             $query->where('user.table_id', $user->table_id);
                         })
                         ->whereDoesntHave('userProfile', function (Builder $query) use($user) {
                             $query->where('user_id', $user->id);
                         })
-                        ->withSum(['presenceDay'], 'profit')
-                        ->withSum(['presenceDay'], 'writeoff')
+                        ->withSum([ 'presenceDay' ], 'bonus')
+                        ->withSum([ 'presenceDay' ], 'writeoff')
                         ->get();
     }
 

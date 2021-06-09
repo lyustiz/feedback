@@ -87,7 +87,7 @@ export default {
 
   props:{
     profile:{
-      type: Array,
+      type: [Array, Object],
       default: () => {}
     }
   },

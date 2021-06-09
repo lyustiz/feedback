@@ -111,7 +111,7 @@
                                         </v-col>
                                         <v-col cols="auto">
                                             <v-icon size="20" color="red" class="ml-2"  left>mdi-cash-remove</v-icon>
-                                           {{profile.countWriteoff || 0}}
+                                           {{ parseInt( profile.countWriteoff || 0)}}
                                         </v-col>
                                     </v-row>
 
@@ -132,10 +132,10 @@
                                                             {{UTCToLocalDate(presence.end_at) || 'activo'}}
                                                         </v-col>
                                                         <v-col>
-                                                            {{  formatNumber(presence.bonus) }}
+                                                            {{  formatNumber(presence.bonus || 0) }}
                                                         </v-col>
                                                         <v-col>
-                                                            {{  presence.writeoff }}
+                                                            {{ parseInt(presence.writeoff || 0) }}
                                                         </v-col>
                                                     </v-row>
                                                 </v-expansion-panel-header>  

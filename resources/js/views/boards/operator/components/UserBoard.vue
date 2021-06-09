@@ -58,12 +58,26 @@
                         :rotate="-90"
                         :size="80"
                         :width="8"
-                        :value=" (user.presence_day_sum_writeoff)*(-1) "
+                        :value=" (user.presence_day_sum_writeoff) "
                         color="red">
                         <v-row no-gutters>
-                                <v-col cols="12" class="caption">{{ formatNumber(user.presence_day_sum_writeoff) }}</v-col>
-                                <v-col cols="12" class="title">{{ formatNumber(user.presence_month_sum_writeoff) }}</v-col>
-                            </v-row>
+                            <v-col cols="12" class="caption">
+                                <v-tooltip bottom color="red">
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <span v-on="on" v-bind="attrs">{{ parseInt(user.presence_day_sum_writeoff || 0) }}</span>
+                                    </template>
+                                    <span>Perdidas Dia</span>
+                                </v-tooltip>
+                            </v-col>
+                            <v-col cols="12" class="title">
+                                <v-tooltip bottom color="red">
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <span v-on="on" v-bind="attrs">{{ parseInt(user.presence_month_sum_writeoff || 0) }}</span>
+                                    </template>
+                                    <span>Perdidas Mes</span>
+                                </v-tooltip>
+                            </v-col>
+                        </v-row>
                     </v-progress-circular>
                 </v-col>
                 <v-col class="text-center">

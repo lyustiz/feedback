@@ -68,13 +68,13 @@ class ClientController extends Controller
     public function setDataClient($client, $clientDetail)
     {
         return   $data = [
-            'name'     => $clientDetail['name'],
-            'birthday' => (isset($clientDetail['birthday'])) ?  Carbon::parse($clientDetail['birthday'])->format('Y-m-d') : null,
-            'age'      => (isset($clientDetail['birthday'])) ?  Carbon::parse($clientDetail['birthday'])->age : null,
+            'name'     => (isset($clientDetail['name']))      ? $clientDetail['name'] : $client->amolatina_id,
+            'birthday' => (isset($clientDetail['birthday']))  ? Carbon::parse($clientDetail['birthday'])->format('Y-m-d') : null,
+            'age'      => (isset($clientDetail['birthday']))  ? Carbon::parse($clientDetail['birthday'])->age : null,
             'photo'    => (isset($clientDetail['thumbnail'])) ? $clientDetail['thumbnail'] : null,
-            'gender'   => (isset($clientDetail['gender'])) ? $clientDetail['gender'] : null,
-            'country'  => (isset($clientDetail['country'])) ? $clientDetail['country'] : null,
-            'city'     => (isset($clientDetail['city'])) ? $clientDetail['city'] : null,
+            'gender'   => (isset($clientDetail['gender']))    ? $clientDetail['gender'] : null,
+            'country'  => (isset($clientDetail['country']))   ? $clientDetail['country'] : null,
+            'city'     => (isset($clientDetail['city']))      ? $clientDetail['city'] : null,
         ];
     }
 
