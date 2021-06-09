@@ -42,7 +42,7 @@
                   <v-col cols="auto">
                     <v-tooltip bottom color="blue">
                     <template v-slot:activator="{ on, attrs }">
-                      <span v-on="on" v-bind="attrs">{{ (profile.profile_progress) ? profile.profile_progress.points_day : 0 }}  /  {{ profile.month || 600}}</span>
+                      <span v-on="on" v-bind="attrs">{{ (profile.profile_progress) ? formatNumber(profile.profile_progress.points_day) : 0 }}  /  {{ profile.month || 600}}</span>
                     </template>
                     <span>Meta Dia</span>
                     </v-tooltip>
@@ -51,7 +51,7 @@
                   <v-col cols="auto">
                     <v-tooltip bottom color="green">
                     <template v-slot:activator="{ on, attrs }">
-                      <span v-on="on" v-bind="attrs">{{ (profile.profile_progress) ? profile.profile_progress.points_month : 0 }}  /  {{ profile.month || 2000}}</span>
+                      <span v-on="on" v-bind="attrs">{{ (profile.profile_progress) ? formatNumber(profile.profile_progress.points_month) : 0 }}  /  {{ profile.month || 2000}}</span>
                     </template>
                     <span>Meta Mes</span>
                     </v-tooltip>

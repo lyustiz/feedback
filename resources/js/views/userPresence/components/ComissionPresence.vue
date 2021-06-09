@@ -26,7 +26,7 @@
               {{(comission.client) ? comission.client.name : '-'}}
           </v-col>
           <v-col>
-              {{ comission.comission_at }}
+              {{  (comission.comission_at) ? UTCToLocalDate(comission.comission_at) : "0000"  }} 
           </v-col>
           <v-col :class="(comission.positive = 1) ? 'green--text' : 'red--text' " >
               {{ formatNumber(comission.points) }}
@@ -94,12 +94,11 @@ export default {
     setTotals()
     {
         for (const comission of this.comissions) {
-          console.log(comission, comission.points)
           if(comission.positive == 1)
           {
             this.bonus = parseFloat(comission.points) + this.bonus
           } else{
-            this.writeoff = (parseFloat(comission.points) > 0) ? 1 : 0
+            this.writeoff = this.writeoff + 1
           }
         }
     },

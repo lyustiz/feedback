@@ -72,5 +72,10 @@ class Comission extends Model
         return $this->BelongsTo('App\Models\Service', 'service', 'value');
     }
 
+    public function userPresence()
+    {
+        return $this->hasmanny('App\Models\Service', 'service', 'value');
+    }
+
 
 }

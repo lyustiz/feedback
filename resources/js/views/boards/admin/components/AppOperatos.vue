@@ -25,7 +25,7 @@
                   <v-col cols="auto">
                     <v-tooltip bottom color="blue">
                     <template v-slot:activator="{ on, attrs }">
-                      <span v-on="on" v-bind="attrs">{{ operator.presence_day_sum_bonus || 0 }}  /  {{ operator.goal_day || 0 }}</span>
+                      <span v-on="on" v-bind="attrs">{{ formatNumber(operator.presence_day_sum_bonus || 0) }}  /  {{ operator.goal_day || 0 }}</span>
                     </template>
                     <span>Meta Dia</span>
                     </v-tooltip>
@@ -34,7 +34,7 @@
                   <v-col cols="auto">
                     <v-tooltip bottom color="green">
                     <template v-slot:activator="{ on, attrs }">
-                      <span v-on="on" v-bind="attrs">{{ operator.presence_month_sum_bonus || 0 }}  /  {{ operator.goal_month || 0 }}</span>
+                      <span v-on="on" v-bind="attrs">{{ formatNumber(operator.presence_month_sum_bonus || 0) }}  /  {{ operator.goal_month || 0 }}</span>
                     </template>
                     <span>Meta Mes</span>
                     </v-tooltip>
@@ -43,7 +43,7 @@
               <v-row no-gutters>
                   <v-col>
                     <v-progress-linear
-                    :value="operator.presence_day_sum_bonus*100/operator.goal_day || 0"
+                    :value="formatNumber(operator.presence_day_sum_bonus*100/operator.goal_day || 0)"
                     color="blue"
                     height="8"
                     class="mb-2 mt-1"
@@ -51,7 +51,7 @@
                   </v-col>
                   <v-col>
                     <v-progress-linear
-                    :value="operator.presence_month_sum_bonus*100/operator.goal_month || 0"
+                    :value="formatNumber(operator.presence_month_sum_bonus*100/operator.goal_month || 0)"
                     color="green"
                     height="8"
                     class="mb-2 mt-1"

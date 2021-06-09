@@ -21,12 +21,6 @@
       
       <v-list subheader two-line dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
 
-        <v-list-item-group
-          v-model="profile"
-          color=""
-          multiple
-
-        >
         <v-list-item v-for="profile in profiles" :key="profile.id" :value="profile" :color="myProfilesStarted.includes(profile.id) ? 'green':'blue'" > <!-- :disabled="!myProfilesStarted.includes(profile.id)" -->
           <v-list-item-avatar color="blue" size="60">
             <v-img :src="`/storage/photo/profile/${profile.photo || 'nophoto'}.jpg`" ></v-img> 
@@ -73,38 +67,75 @@
               
               </v-list-item-title>
               <v-list-item-subtitle class="pt-2">
-                <v-row>
-                  <v-col>{{profile.name}}</v-col>
-                  <v-col cols="auto" v-if="profile.presence">
-                    <v-icon :color="( myProfilesStarted.includes(profile.id) ) ? 'yellow' : 'red'" size="20"> 
-                      {{(myProfilesStarted.includes(profile.id)) ? 'mdi-account-star' : 'mdi-lock'  }}
-                    </v-icon> 
+                <v-row dense>
+
+                   <v-col>{{profile.name}}</v-col>
+
+                  <v-col cols="auto" v-if="myProfilesStarted.includes(profile.id)" @click="showDetails(profile)">
+                    <list-simple-icon icon="mdi-magnify" label="Detalles Puntos" color="blue darken-3" :size="22"></list-simple-icon>
                   </v-col>
+
                   <v-col cols="auto">
                     <v-icon :color="(profile.presence) ? 'green' : 'red'" size="20"> 
                       {{(profile.presence) ? 'mdi-checkbox-blank-circle' : 'mdi-checkbox-blank-circle-outline'}}
                     </v-icon> 
                   </v-col>
+
                 </v-row>
               
               </v-list-item-subtitle>
             </v-list-item-content>
             <v-list-item-icon>
-                <v-icon class="mt-6">mdi-dots-vertical</v-icon>
+                 <v-tooltip bottom color="green" v-if="profile.presence && (myProfilesStarted.includes(profile.id))">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn v-on="on" v-bind="attrs" x-small fab color="green" :loading="loading">
+                    <v-icon>mdi-check</v-icon>
+                  </v-btn>
+                </template>
+                <span>Iniciado</span>
+              </v-tooltip>
+
+              <v-tooltip bottom color="red" v-else-if="profile.presence && (!myProfilesStarted.includes(profile.id))">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn class="no-drop" icon >
+                    <v-icon  v-on="on" v-bind="attrs" color="red" size="32">mdi-lock</v-icon>
+                  </v-btn>
+                </template>
+                <span><v-icon size="16" left>mdi-account</v-icon>   {{profile.presence.user.full_name}}</span>
+              </v-tooltip>
+
+             <v-tooltip bottom color="blue" v-else>
+                <template v-slot:activator="{ on, attrs }">
+              <v-btn v-on="on" v-bind="attrs" x-small icon color="blue" :loading="loading">
+                <v-icon size="34">mdi-progress-clock</v-icon>
+              </v-btn>
+              </template>
+                <span>Pendiente</span>
+              </v-tooltip>
             </v-list-item-icon>
         </v-list-item>
-        </v-list-item-group>
+
       </v-list>
       
     </v-card-text>
+
+    <v-dialog v-model="dialogDetail" scrollable width="90vw">
+       <UserPrecenseList :profile="profile" v-if="dialogDetail" @closeDialog="closeDialog()"></UserPrecenseList>
+    </v-dialog>
+
   </v-card>
 </template>
 
 <script>
 import AppData from '@mixins/AppData';
+import UserPrecenseList from '@views/userPresence/components/UserPrecenseList.vue'
 export default {
 
   mixins: [AppData],
+
+  components:{
+    UserPrecenseList
+  },
 
   created() {
     this.list()
@@ -113,10 +144,6 @@ export default {
   },
 
   computed: {
-    profile()
-    {
-      return this.$store.getters['getProfile']
-    },
     token()
     {
       return this.$store.getters['getAmolatinaToken']
@@ -140,6 +167,12 @@ export default {
       token: null
     },
     isReload: null,
+    title: null,
+    confirm: false,
+    message: null,
+    profile: null,
+    dialogDetail: false,
+    profile: null
   }),
 
   methods: {
@@ -229,7 +262,20 @@ export default {
           this.profilesAvailable.push(profile.id)
         }
       }, this);
+    },
+
+    showDetails(profile)
+    {
+      this.profile = profile
+      this.dialogDetail = true
+    },
+
+    closeDialog()
+    {
+      this.profile = null
+      this.dialogDetail = false
     }
+
   }
 }
 </script>

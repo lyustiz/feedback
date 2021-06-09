@@ -137,6 +137,7 @@ Route::apiResource('/country',                  'CountryController');
 Route::apiResource('/userAgency',               'UserAgencyController');
 
 Route::get('/userPresence/estimate',            'UserPresenceController@presenceEstimate');
+Route::get('/userPresence/user/{user}/profile/{profile}',                'UserPresenceController@presenceUserProfile');
 Route::put('/userPresence/stop/unique',         'UserPresenceController@stopUnique');
 Route::put('/userPresence/stop',                'UserPresenceController@stop');
 Route::apiResource('/userPresence',             'UserPresenceController');

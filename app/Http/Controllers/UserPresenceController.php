@@ -28,6 +28,15 @@ class UserPresenceController extends Controller
                     ->get();
     }
 
+    public function presenceUserProfile($userId, $profileId)
+    {
+        return UserPresence::with([])
+                    ->where('user_id', $userId)
+                    ->where('profile_id', $profileId)
+                    ->whereBetween('start_at', [ Carbon::now()->startOfDay(), Carbon::now()->endOfDay() ])
+                    ->get();
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -120,7 +129,7 @@ class UserPresenceController extends Controller
             throw ValidationException::withMessages(['error' => 'Perfil no Disponible' ]);
         }                                           
                                     
-        return [ 'msj' => 'Perfile Finalizado' , compact('userPresence')];
+        return [ 'msj' => 'Perfil Finalizado' , compact('userPresence')];
     }
 
     /**

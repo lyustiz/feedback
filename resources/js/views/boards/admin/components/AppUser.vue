@@ -59,7 +59,7 @@
       </v-col>
       <v-col>
         <v-row no-gutters v-if="progress.day"> 
-          <v-col cols="12"> Total: {{progress.day.points || 0}} |  Profit: {{progress.day.profit || 0}}</v-col>
+          <v-col cols="12"> Total: {{ formatNumber(progress.day.points) || 0}} |  Profit: {{ formatNumber(progress.day.profit) || 0}}</v-col>
           <v-col cols="12">
             <v-progress-linear height="10" :value="getPercent(progress.day.points, 2000)" :indeterminate="loading"></v-progress-linear>
           </v-col>
@@ -73,7 +73,7 @@
       </v-col>
       <v-col>
         <v-row no-gutters v-if="progress.day"> 
-          <v-col cols="12"> Total: {{progress.month.points || 0}} | Profit: {{progress.month.profit || 0}}</v-col>
+          <v-col cols="12"> Total: {{ formatNumber(progress.month.points) || 0}} | Profit: {{ formatNumber(progress.month.profit) || 0}}</v-col>
           <v-col cols="12">
             <v-progress-linear height="10" :value="getPercent(progress.month.points, 30000)" :indeterminate="loading"></v-progress-linear>
           </v-col>

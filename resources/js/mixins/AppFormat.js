@@ -229,9 +229,10 @@ export default {
                    .join(' ');
         },
 
-        convertUTCDateToLocalDate(date) {
-            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-            return date;
+        UTCToLocalDate(date) {
+            date    = new Date(Date.parse(date + ' UTC'))            
+            let options  = { year: '2-digit', month: '2-digit', day: '2-digit', hour:'2-digit', minute: '2-digit', second: '2-digit' };
+            return date.toLocaleDateString('es-VE', options)
         }
         
     },

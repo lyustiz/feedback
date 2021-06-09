@@ -99,6 +99,10 @@ export default {
         background: linear-gradient(107deg, rgb(37, 96, 159) 0%, rgb(20, 37, 54) 100%);
         }
 
+    .card-background{
+        background: rgba(0,0,0,0.4)
+    }
+
     .v-application{
         background: linear-gradient(107deg, rgb(37, 96, 159) 0%, rgb(20, 37, 54) 100%) !important;
     }
@@ -152,4 +156,6 @@ export default {
         letter-spacing: .0333333333em!important;
         line-height: 1.25rem;
     }
+
+    
 </style>

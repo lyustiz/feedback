@@ -16,7 +16,6 @@
 
         <v-list-item-group
           color="green"
-          multiple
         >
         <v-list-item v-for="profile in profiles" :key="profile.id" :value="profile" inactive class="px-2">
           <v-list-item-avatar color="blue" size="60">
@@ -65,10 +64,13 @@
               </v-list-item-title>
               <v-list-item-subtitle class="pt-2">
                 <v-row dense>
+                  
                   <v-col>{{profile.name}}</v-col>
-                   <v-col cols="auto" v-if="profile.presence && !myProfilesStarted.includes(profile.id)" @click="confirmStop(profile)">
+
+                  <v-col cols="auto" v-if="profile.presence && !myProfilesStarted.includes(profile.id)" @click="confirmStop(profile)">
                      <list-simple-icon icon="mdi-lock-open-variant" label="Liberar Perfil" color="amber darken-3" :size="22"></list-simple-icon>
                   </v-col>
+
                   <v-col cols="auto">
                     <v-icon :color="(profile.presence) ? 'green' : 'red'" size="20"> 
                       {{(profile.presence) ? 'mdi-checkbox-blank-circle' : 'mdi-checkbox-blank-circle-outline'}}

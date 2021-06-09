@@ -126,10 +126,10 @@
                                                 <v-expansion-panel-header>            
                                                     <v-row>
                                                         <v-col>
-                                                            {{presence.start_at}}
+                                                            {{UTCToLocalDate(presence.start_at)}} 
                                                         </v-col>
                                                         <v-col>
-                                                            {{presence.end_at || 'activo'}}
+                                                            {{UTCToLocalDate(presence.end_at) || 'activo'}}
                                                         </v-col>
                                                         <v-col>
                                                             {{  formatNumber(presence.bonus) }}
@@ -345,7 +345,7 @@ export default {
        let writeoff = 0
         for (const user of users) {
             for (const precense of user.presence_day) { 
-               writeoff += (precense.writeoff) ? 1 : 0
+               writeoff += (parseFloat(precense.writeoff) > 0) ? 1 : 0
             }  
         }
         return writeoff
