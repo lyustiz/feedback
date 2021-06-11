@@ -142,9 +142,10 @@ Route::put('/userPresence/stop/unique',         'UserPresenceController@stopUniq
 Route::put('/userPresence/stop',                'UserPresenceController@stop');
 Route::apiResource('/userPresence',             'UserPresenceController');
 
-
+Route::get('/client/contacted',           'ClientController@importClientPhoto');
 Route::get('/client/all/photo',           'ClientController@importClientPhoto');
 Route::get('/client/all/detail',          'ClientController@detailClients');
+Route::get('/client/contacted/agency/{agency}',           'ClientController@contactedAgency');
 Route::get('/client/top/Agency/{agency}', 'ClientController@topAgency');
 Route::apiResource('/client',             'ClientController');
 

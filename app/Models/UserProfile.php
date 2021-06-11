@@ -15,7 +15,8 @@ class UserProfile extends Model
                             'user_id',
 	 	 	 	 	 	 	'profile_id',
                             'agency_id',
-                            'goal',
+                            'goal_day',
+                            'goal_month',
 	 	 	 	 	 	 	'comments',
 	 	 	 	 	 	 	'status_id',
 	 	 	 	 	 	 	'user_id_ed'

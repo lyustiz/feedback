@@ -33,11 +33,29 @@ class Client extends Model
 	 	 	 	 	 	 	'updated_at'
                             ];
 
+    protected $pending    = 5;
+    protected $contacted  = 6;
+    protected $captured   = 7;
+    protected $discarted  = 8;
 
-
-    public function scopeActive($query, $active=false)
+    public function scopePending($query, $pending=false)
     {
-        return ($active) ?  $query->where('status_id', 1) : $query;
+        return ($pending) ?  $query->where('status_id', $this->pending) : $query;
+    }
+
+    public function scopeContacted($query, $contacted=false)
+    {
+        return ($contacted) ?  $query->where('status_id', $this->contacted) : $query;
+    }
+
+    public function scopeCaptured($query, $captured=false)
+    {
+        return ($captured) ?  $query->where('status_id', $this->captured) : $query;
+    }
+
+    public function scopeDiscarted($query, $discarted=false)
+    {
+        return ($discarted) ?  $query->where('status_id', $this->discarted) : $query;
     }
 
     public function scopeComboData($query)
@@ -58,5 +76,10 @@ class Client extends Model
     public function agency()
     {
         return $this->BelongsTo('App\Models\Agency');
+    }
+
+    public function comissionContacted()
+    {
+        return $this->HasOne('App\Models\Comission',  'client_id',  'amolatina_id');
     }
 }

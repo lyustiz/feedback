@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\AmolatinaDataTrait as Amolatina;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Builder;
 
 class ClientController extends Controller
 {
@@ -27,6 +28,51 @@ class ClientController extends Controller
         return Client::with([])
                     ->where('agency_id', $agencyId)
                     ->orderBy('profit', 'desc')
+                    ->get();
+    }
+
+    public function contactedAgency(Request $request, $agencyId)
+    {
+        $validate = request()->validate([
+			'type'  => 	'required|string',
+        ]);
+
+        switch ($request->type) {
+            case 'day':
+                $start_at = Carbon::now()->startOfDay();
+                $end_at   = Carbon::now()->endOfDay();
+                break;
+
+            case 'week':
+                $start_at = Carbon::now()->startOfWeek(Carbon::SUNDAY);
+                $end_at   = Carbon::now()->endOfWeek(Carbon::MONDAY);
+                break;
+
+            case 'month':
+                $start_at = Carbon::now()->startOfMonth();
+                $end_at   = Carbon::now()->endOfMonth();
+                break;
+            
+            default:
+                $start_at = Carbon::now()->startOfDay();
+                $end_at   = Carbon::now()->endOfDay();
+                break;
+        }
+        
+        
+        return Client::with([
+                                'comissionContacted' => function($query) use ( $agencyId ) {
+                                    $query->whereHas('agency', function (Builder $query) use($agencyId) {
+                                        $query->where('id', $agencyId);
+                                    });
+                                },
+                                'comissionContacted.profile',
+                                'comissionContacted.hasService'
+                            ])
+                    ->where('agency_id', $agencyId)
+                    ->whereBetween('contacted_at', [ $start_at,  $end_at ])
+                    ->whereIn('status_id', [6,7]) 
+                    ->orderBy('points', 'desc')
                     ->get();
     }
 
