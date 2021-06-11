@@ -13,7 +13,7 @@
                                 Comisiones
                             </v-col>
                              <v-col>
-                                <v-btn small icon color="success" :loading="loading" @click="getUsers()"> <v-icon>mdi-reload</v-icon></v-btn>
+                                <v-btn small icon color="success" :loading="loading" @click="list()"> <v-icon>mdi-reload</v-icon></v-btn>
                             </v-col>
                         </v-row>
                        
@@ -33,14 +33,14 @@
                           filled
                           dense
                           return-object
-                          @change="getUsers()"
+                          @change="list()"
                           autofocus
                           :rules="[rules.required]"
                         ></v-select>
                     </v-col>
 
                     <v-col cols="12">
-                        <ComissionCalendar @onUpdateDate="setDay($event)"></ComissionCalendar>
+                        <PresenceCalendar @onUpdateDate="setDay($event)"></PresenceCalendar>
                     </v-col>
 
                 </v-row>
@@ -79,11 +79,11 @@
                                 </v-col>
                                 <v-col cols="auto">
                                     <v-icon size="20" color="green" left>mdi-cash-plus</v-icon>
-                                    {{formatNumber(user.presence_day_sum_bonus || 0.00)}}
+                                    {{formatNumber(user.presence_sum_bonus || 0.00)}}
                                 </v-col>
                                 <v-col cols="auto">
                                     <v-icon size="20" color="red" class="ml-2" left>mdi-cash-remove</v-icon>
-                                    {{parseInt(user.presence_day_sum_writeoff || 0)}}
+                                    {{parseInt(user.presence_sum_writeoff || 0)}}
                                 </v-col>
                             </v-row>
                             </v-expansion-panel-header>
@@ -91,7 +91,7 @@
 
                               <v-expansion-panels>
 
-                                <v-expansion-panel v-for="profile in user.profile_precense_day" :key="profile.id" class="blue-grey darken-4">
+                                <v-expansion-panel v-for="profile in user.profile_precense" :key="profile.id" class="blue-grey darken-4">
                                   
                                   <v-expansion-panel-header>
 
@@ -186,26 +186,19 @@
 
 <script>
 import AppData from '@mixins/AppData';
-import ComissionCalendar from './components/ComissionCalendar'
+import PresenceCalendar from './components/PresenceCalendar.vue'
 import ComissionPresence from './components/ComissionPresence.vue'
 export default {
 
     mixins:     [ AppData ],
 
     components: { 
-        ComissionCalendar, 
+        PresenceCalendar, 
         ComissionPresence
     },
 
     created(){
       this.getTable()
-      this.getServices()
-    },
-
-    watch:{
-        serviceType()  {
-            this.serviceSelected = []
-        }
     },
 
     computed:{
@@ -215,18 +208,12 @@ export default {
         tables: [],
         users: [],
         table: null,
-        user: null,
-        presence:[],
-        profiles: [],
-        url: 'comission/list',
-        types: [ 'bonus',  'writeoff'],
-        serviceType: 'bonus',
-        services: [ ],
         agency:  null,
-        day:     new Date().toISOString().substr(0, 10),
-        serviceSelected: [],
+        start_at: new Date().toISOString().substr(0, 10),
+        end_at:  new Date().toISOString().substr(0, 10),
         profile: null,
         filter:[]
+
     }),
 
     methods:
@@ -237,45 +224,40 @@ export default {
         })
       },
 
-      getUsers()
+      list()
       {
         if(this.table){
-          this.getResource(`user/statistics/${this.table.id}`).then(data =>{
-              this.users = data
-          })
+            let filters = this.setFilters()
+            this.getResource(`user/statistics/${this.table.id}${filters}`).then(data =>{
+                this.users = data
+            })
         }
       },
       
-      list() {
-
-          if(this.agency)
+      setDay(days)
+      {          
+          if(Array.isArray(days))
           {
-              let filters = this.setFilters()
-              this.getResource(`${this.url}${filters}`).then(data =>{
-                  this.presence = data
-              })
+            this.start_at = days[0]
+            this.end_at   = days[1]
+          } else {
+            this.start_at = days
+            this.end_at   = days
           }
-      },
 
-      setDay(day)
-      {
-          this.day = day
           this.list()
       },
 
       setFilters()
       {   
-          this.filter['agency']   = this.agency.amolatina_id 
-          this.filter['day']      = this.day 
-          this.filter['service']  = this.serviceSelected 
-          this.filter['profile']  = (this.profile) ? this.profile.amolatina_id : null
-          this.filter['positive'] = (this.serviceType == 'bonus') ? 1 : 0;
+          this.filter['start_at']  = this.start_at 
+          this.filter['end_at']    = this.end_at 
           return this.buildQuery(this.filter);
       },
 
       buildQuery(filter)
       {
-          let query = this.url.includes('?') ? '&' : '';
+          let query = '';
 
           for (const key in filter) {
               if(filter[key] != null) {
@@ -288,54 +270,15 @@ export default {
                   }
               }
           }
-          return  ( query.includes('?')  || this.url.includes('?')) ? query : `?${query}`
-      },
-
-      getProfiles() {
-          this.getResource(`profile/list`).then(data =>{
-              this.profiles = data
-          })
-      },
-
-      getServices() {
-          this.getResource(`service`).then(data =>{
-              this.services = data
-          })
-      },
-
-      getdetail(){
-          this.getResource('comission/detail').then(data =>{
-          })
-      },
-
-      remove(item)
-      {
-          this.filters = this.filters.filter( f => f != item.value) 
-      },
-
-      goTo(url)
-      {
-          console.log(url);
-          if(!url) return
-          if(this.agency)
-          {
-              let filters = this.setFilters()
-              this.getResource(`${url}${filters}`).then(data =>{
-                  this.presence = data
-              })
-          }
-      },
-
-      getService(selected)
-      {
-          return this.services.find( service => service.value == selected )
+          return  ( query.includes('?') ) ? query : `?${query}`
       },
 
       totalBonusTable(users)
       {
+        if(users.length < 1) return
         let bonus = 0.00
         for (const user of users) {
-            for (const precense of user.presence_day) { 
+            for (const precense of user.presence) { 
                bonus += (precense.bonus) ? parseFloat(precense.bonus) : 0.00
             }  
         }
@@ -346,7 +289,7 @@ export default {
       {
        let writeoff = 0
         for (const user of users) {
-            for (const precense of user.presence_day) { 
+            for (const precense of user.presence) { 
                writeoff += (parseFloat(precense.writeoff) > 0) ? 1 : 0
             }  
         }
@@ -365,9 +308,10 @@ export default {
         return this.formatNumber(bonus)
       },
 
-      totalWriteOffProfile(profile){
+      totalWriteOffProfile(profile) 
+      {
         let writeoff = 0
-        for (const precense of profile.presence_day) {
+        for (const precense of profile.presence) {
           writeoff += (precense.writeoff)  ? 1 : 0
         }
         return writeoff

@@ -41,7 +41,7 @@
                         color="blue">
                             <v-row no-gutters>
                                 <v-col cols="12" class="caption">{{ formatNumber(user.presence_day_sum_bonus) }}</v-col>
-                                <v-col cols="12" class="title">200</v-col>
+                                <v-col cols="12" class="title">{{user.goal_day}}</v-col>
                             </v-row>
                     </v-progress-circular>
                 </v-col>  
@@ -87,11 +87,11 @@
                         :rotate="-90"
                         :size="80"
                         :width="8"
-                        :value="user.presence_month_sum_profit * 100 / user.goal_month "
+                        :value="user.presence_month_sum_bonus * 100 / user.goal_month "
                         color="green">
                         <v-row no-gutters>
-                            <v-col cols="12" class="caption">{{ formatNumber(user.presence_month_sum_profit) }}</v-col>
-                            <v-col cols="12" class="title">900</v-col>
+                            <v-col cols="12" class="caption">{{ formatNumber(user.presence_month_sum_bonus) }}</v-col>
+                            <v-col cols="12" class="title">{{user.goal_month}}</v-col>
                         </v-row>
                     </v-progress-circular>
                 </v-col>    

@@ -1,0 +1,55 @@
+<template>
+    <v-card>
+        <v-date-picker 
+            no-title
+            scrollable
+            full-width
+            :range="range"
+            v-model="days"
+            color="indigo"
+            class="rounded-lg"
+            elevation="3"
+            @change="$emit('onUpdateDate', $event)"
+            :first-day-of-week="1"
+            :max="maxDay"
+            light
+        ></v-date-picker>
+        <v-row dense justify="center">
+            <v-col cols="auto">
+                <v-switch color="blue" label="Seleccionar Rango" v-model="range" @change="days = null"></v-switch>
+            </v-col>
+        </v-row>
+        
+    </v-card>
+
+</template>
+
+<script>
+export default {
+
+    props:
+    {
+        month: {
+            type:     Array,
+            default: () => [] 
+        },
+    },
+
+    data()
+    {
+        return {
+            days:   null,
+            range: false,
+            maxDay: new Date().toISOString().substr(0, 10),
+        }
+    },
+
+}
+</script>
+
+<style>
+.clase-calendar {
+    height: 180px !important;
+}
+
+</style>

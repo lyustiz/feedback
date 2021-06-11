@@ -173,6 +173,18 @@ class User extends Authenticatable
 		);
 	}
 
+    public function profilePrecense()
+	{
+		return $this->hasManyThrough(
+			'App\Models\Profile', //final
+            'App\Models\UserPresence', //intermedia
+            'user_id', // fk en intermedia
+            'id', // laocal en origen
+            'id', // local en final
+			'profile_id' // fk en intermedia
+		)->distinct();
+	}
+
 
     public function profilePrecenseDay()
 	{
@@ -228,7 +240,10 @@ class User extends Authenticatable
 		);
 	}
 
-
+    public function presence()
+    {
+        return $this->HasMany('App\Models\UserPresence');
+    }
 
     public function presenceDay()
     {

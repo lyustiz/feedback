@@ -1,0 +1,9 @@
+   /* $users =  User::with([ 'profilePrecenseDay', 'role', 'turn:id,name', 'penaltyMonth.penaltyType', 'presenceDay', 'profile' ])
+                    ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
+                    ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
+                    ->role([3,4])
+                    ->whereHas('tableTurn', function (Builder $query) use($tableId) {
+                        $query->where('table_id', $tableId);
+                    })
+                    ->orderBy('name')
+                    ->get()->toArray();  */
