@@ -179,7 +179,6 @@ export default {
     title: null,
     confirm: false,
     message: null,
-    profile: null,
     dialogDetail: false,
     profile: null
   }),

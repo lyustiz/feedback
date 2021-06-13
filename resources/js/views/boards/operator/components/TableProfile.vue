@@ -66,11 +66,11 @@
               <v-list-item-subtitle class="pt-2">
                 <v-row>
                   <v-col>{{profile.name}}</v-col>
-                   <v-col cols="auto" v-if="profile.presence">
-                    <v-icon :color="( myProfilesStarted.includes(profile.id) ) ? 'yellow' : 'red'" size="20"> 
-                      {{(myProfilesStarted.includes(profile.id)) ? 'mdi-account-star' : 'mdi-lock'  }}
-                    </v-icon> 
+
+                  <v-col cols="auto" v-if="myProfilesStarted.includes(profile.id)" @click="showDetails(profile)">
+                    <list-simple-icon icon="mdi-magnify" label="Detalles Puntos" color="blue darken-3" :size="22"></list-simple-icon>
                   </v-col>
+
                   <v-col cols="auto">
                     <v-icon :color="(profile.presence) ? 'green' : 'red'" size="20"> 
                       {{(profile.presence) ? 'mdi-checkbox-blank-circle' : 'mdi-checkbox-blank-circle-outline'}}
@@ -106,14 +106,23 @@
       </v-list>
       
     </v-card-text>
+
+    <v-dialog v-model="dialogDetail" scrollable width="90vw">
+      <UserPrecenseList :profile="profile" v-if="dialogDetail" @closeDialog="closeDialog()"></UserPrecenseList>
+    </v-dialog>
   </v-card>
 </template>
 
 <script>
 import AppData from '@mixins/AppData';
+import UserPrecenseList from '@views/userPresence/components/UserPrecenseList.vue'
 export default {
 
   mixins: [AppData],
+
+  components:{
+    UserPrecenseList
+  },
 
   created() {
     this.list()
@@ -152,6 +161,8 @@ export default {
       token: null
     },
     isReload: null,
+    dialogDetail: false,
+    profile: null
   }),
 
   methods: {
@@ -238,6 +249,18 @@ export default {
           this.profilesAvailable.push(profile.id)
         }
       }, this);
+    },
+
+    showDetails(profile)
+    {
+      this.profile = profile
+      this.dialogDetail = true
+    },
+
+    closeDialog()
+    {
+      this.profile = null
+      this.dialogDetail = false
     }
   }
 }

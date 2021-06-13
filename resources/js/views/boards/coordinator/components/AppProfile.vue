@@ -71,6 +71,10 @@
                      <list-simple-icon icon="mdi-lock-open-variant" label="Liberar Perfil" color="amber darken-3" :size="22"></list-simple-icon>
                   </v-col>
 
+                  <v-col cols="auto" v-if="myProfilesStarted.includes(profile.id)" @click="showDetails(profile)">
+                    <list-simple-icon icon="mdi-magnify" label="Detalles Puntos" color="blue darken-3" :size="22"></list-simple-icon>
+                  </v-col>
+
                   <v-col cols="auto">
                     <v-icon :color="(profile.presence) ? 'green' : 'red'" size="20"> 
                       {{(profile.presence) ? 'mdi-checkbox-blank-circle' : 'mdi-checkbox-blank-circle-outline'}}
@@ -104,15 +108,26 @@
       </v-list>
       
     </v-card-text>
+
     <app-confirm :confirm="confirm" :title="title" :message="message" @closeConfirm="confirmation($event)"></app-confirm>
+
+    <v-dialog v-model="dialogDetail" scrollable width="90vw">
+      <UserPrecenseList :profile="profile" v-if="dialogDetail" @closeDialog="closeDialog()"></UserPrecenseList>
+    </v-dialog>
+
   </v-card>
 </template>
 
 <script>
 import AppData from '@mixins/AppData';
+import UserPrecenseList from '@views/userPresence/components/UserPrecenseList.vue'
 export default {
 
   mixins: [AppData],
+
+  components:{
+    UserPrecenseList
+  },
 
   created() {
     this.list()
@@ -154,6 +169,7 @@ export default {
     title: null,
     confirm: false,
     message: null,
+    dialogDetail: false,
     profile: null
   }),
 
@@ -265,6 +281,18 @@ export default {
       } 
       this.confirm = false
       this.profile = null
+    },
+
+    showDetails(profile)
+    {
+      this.profile = profile
+      this.dialogDetail = true
+    },
+
+    closeDialog()
+    {
+      this.profile = null
+      this.dialogDetail = false
     }
   },
 

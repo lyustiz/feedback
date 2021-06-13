@@ -153,7 +153,7 @@ class ClientController extends Controller
             }
         }
 
-        return [ 'msj' => 'importadas'. count($stored), 'stored' => $stored] ;
+        return [ 'msj' => 'importadas ' . count($stored), 'stored' => $stored] ;
     }
 
     public function getPhotoClient($client)
