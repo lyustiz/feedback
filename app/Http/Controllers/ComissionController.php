@@ -70,9 +70,10 @@ class ComissionController extends Controller
             $commision->where('profile_id', $request->profile);
         } 
 
-        return $commision->orderBy('comission_at', 'desc')->cursorPaginate(50)->withPath('comission/list');
-                        
-                          
+        $total =  ($request->positive == 1) ? $commision->sum('points') : $commision->count('points');
+
+        return [ 'total' => $total, 
+                 'paginate' => $commision->orderBy('comission_at', 'desc')->cursorPaginate(50)->withPath('comission/list')];
     }
 
     public function comissionDetail()

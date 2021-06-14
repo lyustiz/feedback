@@ -11,7 +11,7 @@
 
                 <v-row dense>
                     <v-col>
-                            <v-select
+                        <v-select
                             v-model="agency"
                             label="Agencias"
                             item-text="name"
@@ -25,7 +25,7 @@
                             @change="list()"
                             autofocus
                             :rules="[rules.required]"
-                            ></v-select>
+                        ></v-select>
                     </v-col>
 
                     <v-col cols="12">
@@ -119,7 +119,7 @@
                     <v-card-title class="pa-1">
                         <v-row no-gutters>
                                 <v-col cols="auto">Registros</v-col>
-                                <v-col></v-col>
+                                <v-col class="text-center"> {{ formatNumber(total)}}</v-col>
                                 <v-col cols="auto">                  
                                     <v-btn v-if="comissions.prev_page_url" :loading="loading" icon color="blue" @click="goTo(comissions.prev_page_url)"><v-icon>mdi-arrow-left-drop-circle-outline</v-icon></v-btn>
                                     <v-btn v-if="comissions.next_page_url" :loading="loading" icon color="blue" @click="goTo(comissions.next_page_url)"><v-icon>mdi-arrow-right-drop-circle-outline</v-icon></v-btn>
@@ -257,17 +257,18 @@ export default {
     },
 
     data: () => ({
-        comissions: [],
-        profiles: [],
-        url: 'comission/list',
-        types: [ 'bonus',  'writeoff'],
-        serviceType: 'bonus',
-        services: [ ],
-        agency:  null,
-        day:     new Date().toISOString().substr(0, 10),
+        comissions:      [],
+        total:           0,
+        profiles:        [],
+        url:             'comission/list',
+        types:           [ 'bonus',  'writeoff' ],
+        serviceType:     'bonus',
+        services:        [ ],
+        agency:          null,
+        day:             new Date().toISOString().substr(0, 10),
         serviceSelected: [],
-        profile: null,
-        filter:[]
+        profile:         null,
+        filter:          []
     }),
 
     methods:
@@ -278,7 +279,8 @@ export default {
             {
                 let filters = this.setFilters()
                 this.getResource(`${this.url}${filters}`).then(data =>{
-                    this.comissions = data
+                    this.comissions = data.paginate
+                    this.total = data.total
                 })
             }
         },
@@ -347,7 +349,8 @@ export default {
             {
                 let filters = this.setFilters()
                 this.getResource(`${url}${filters}`).then(data =>{
-                    this.comissions = data
+                    this.comissions = data.paginate
+                    this.total = data.total
                 })
             }
         },
