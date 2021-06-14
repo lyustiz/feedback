@@ -127,7 +127,15 @@ class User extends Authenticatable
 
     public function turn()
     {
-        return $this->BelongsTo('App\Models\Turn');
+        /* return $this->BelongsTo('App\Models\Turn'); */
+        return $this->hasOneThrough(
+			'App\Models\Turn', //final
+            'App\Models\TableTurn', //intermedia
+            'id', // fk en intermedia
+            'id', // laocal en origen
+            'table_turn_id', // local en final
+			'turn_id' // fk en intermedia
+		);
     }
 
     public function userProfile()

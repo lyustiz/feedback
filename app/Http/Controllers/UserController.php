@@ -84,7 +84,7 @@ class UserController extends Controller
             $end_at   = $tmp;
         } 
 
-        $users =  User::with([ 'role', 'turn:id,name', 'profile',
+        $users =  User::with([ 'role', 'turn:turn.id,name', 'profile',
                         'presence' => function($query) use ( $start_at, $end_at ) {
                             $query->whereBetween('start_at', [ $start_at, $end_at ]);
                         },

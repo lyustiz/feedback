@@ -12,7 +12,7 @@
                             <v-col>
                                 Comisiones
                             </v-col>
-                             <v-col>
+                             <v-col cols="auto">
                                 <v-btn small icon color="success" :loading="loading" @click="list()"> <v-icon>mdi-reload</v-icon></v-btn>
                             </v-col>
                         </v-row>
@@ -53,20 +53,27 @@
                     <v-card-title class="pa-1">
                         <v-row no-gutters>
                           <v-col>{{(table) ? table.name : 'Seleccione Mesa' }}</v-col>
+                          <v-col>
+                            <v-radio-group v-model="turn" row  dense hide-details class="mt-0" prepend-icon="mdi-close" @click:prepend="turn=null">
+                              <v-radio label="Mañana" value="1" color="yellow" ></v-radio>
+                              <v-radio label="Tarde" value="2" color="orange"></v-radio>
+                              <v-radio label="Noche" value="3" color="purple"></v-radio>
+                            </v-radio-group>
+                          </v-col>
                           <v-col cols="auto" v-if="table">
                               <v-icon size="20" color="green" left>mdi-cash-plus</v-icon>
-                              {{totalBonusTable(users)}}
+                              {{totalBonusTable(precense) || 0.00}}
                           </v-col>
                           <v-col cols="auto" v-if="table">
                               <v-icon size="20" color="red" class="ml-2" left>mdi-cash-remove</v-icon>
-                              {{totalWriteOffTable(users)}}
+                              {{totalWriteOffTable(precense) || 0}}
                           </v-col>
                         </v-row>
                     </v-card-title>
                     <v-card-text class="comission-container custom-scroll">
                         
                       <v-expansion-panels>
-                          <v-expansion-panel v-for="user in users" :key="user.id">
+                          <v-expansion-panel v-for="user in precense" :key="user.id">
                             <v-expansion-panel-header>
                               <v-row dense >
                                 <v-col cols="auto" >
@@ -202,6 +209,9 @@ export default {
     },
 
     computed:{
+      precense() {
+        return (this.turn) ? this.users.filter( user => ((user.turn) ? user.turn.id : 0) == this.turn ) : this.users
+      }
     },
 
     data: () => ({
@@ -212,7 +222,9 @@ export default {
         start_at: new Date().toISOString().substr(0, 10),
         end_at:  new Date().toISOString().substr(0, 10),
         profile: null,
-        filter:[]
+        filter:[],
+        turns: [],
+        turn: null
 
     }),
 
