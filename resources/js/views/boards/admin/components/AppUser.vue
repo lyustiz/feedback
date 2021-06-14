@@ -37,7 +37,6 @@
           filled
           dense
           return-object
-          @change="getTotalsCommisions($event)"
         ></v-select>
       </v-col>
     </v-row>
@@ -48,38 +47,42 @@
 <v-col cols="auto"><v-icon  small @click="getdata($event)">mdi-home-search-outline</v-icon></v-col>
         
 <!--         <v-col cols="auto"><v-icon  small @click="getCuratorsCommision($event)">mdi-home-search-outline</v-icon></v-col>
- -->        <v-col cols="auto"><v-icon  small @click="getTotalsCommisions($event)">mdi-reload</v-icon></v-col>
+ -->        <v-col cols="auto"><v-icon  small @click="updateTotalsCommision()" :disabled="progress.length<1">mdi-reload</v-icon></v-col>
       </v-row>
     </v-subheader>
     
 
-     <v-row >
-      <v-col cols="2" class="mt-3">
-        Dia
-      </v-col>
-      <v-col>
-        <v-row no-gutters v-if="progress.day"> 
-          <v-col cols="12"> Total: {{ formatNumber(progress.day.points) || 0}} |  Profit: {{ formatNumber(progress.day.profit) || 0}}</v-col>
-          <v-col cols="12">
-            <v-progress-linear height="10" :value="getPercent(progress.day.points, 2000)" :indeterminate="loading"></v-progress-linear>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+      <v-row v-for="progres in progress" :key="progres.id" dense>
+        <v-col class="caption">
+          {{progres.name}}
+        </v-col>
+       <v-col>
+          <v-progress-linear height="15" :value="getPercent(progres.day.points, 1000)" :indeterminate="loading">
+            {{ formatNumber(progres.day.points) || 0}}
+          </v-progress-linear>
+        </v-col>
+        <v-col>
+          <v-progress-linear color="green" height="15" :value="getPercent(progres.month.points, 30000)" :indeterminate="loading">
+            {{ formatNumber(progres.month.points) || 0}}
+          </v-progress-linear>
+        </v-col>
+      </v-row>
 
-    <v-row >
-      <v-col cols="2" class="mt-3">
-        Mes
-      </v-col>
-      <v-col>
-        <v-row no-gutters v-if="progress.day"> 
-          <v-col cols="12"> Total: {{ formatNumber(progress.month.points) || 0}} | Profit: {{ formatNumber(progress.month.profit) || 0}}</v-col>
-          <v-col cols="12">
-            <v-progress-linear height="10" :value="getPercent(progress.month.points, 30000)" :indeterminate="loading"></v-progress-linear>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+      <v-row dense>
+        <v-col class="caption">
+         Total
+        </v-col>
+       <v-col>
+          <v-progress-linear height="15" color="blue darken-1" :value="getPercent(totals.day.points, 2000)" :indeterminate="loading">
+            {{ formatNumber(totals.day.points) || 0}}
+          </v-progress-linear>
+        </v-col>
+        <v-col>
+          <v-progress-linear color="green darken-1" height="15" :value="getPercent(totals.month.points, 60000)" :indeterminate="loading">
+            {{ formatNumber(totals.month.points) || 0}}
+          </v-progress-linear>
+        </v-col>
+      </v-row>
 
     </v-card-text>
 
@@ -106,7 +109,11 @@ export default {
   mounted()
   {
     this.agency = this.agencies[0]
-    this.getTotalsCommisions()
+
+    for (const agency of this.agencies) {
+      this.getTotalsCommisions(agency)
+    }
+    
   },
 
   computed: 
@@ -124,15 +131,23 @@ export default {
     role()
     {
       return this.$store.getters['getRole']
+    },
+
+    totals()
+    {
+      let totals = { day:{ points: 0 }, month: { points: 0 } }
+      this.progress.forEach(progres => {
+        totals.day.points += (progres.day.points) ? progres.day.points : 0
+        totals.month.points += (progres.month.points) ? progres.month.points : 0
+      });
+      return totals
     }
+
   },
 
   data: () => ({
     agency: null,
-    progress: {
-      day:   null,
-      month: null,
-    },
+    progress: [],
     curatorDialog: false,
     tableDetailDialog: false,
     itemsMenu: [
@@ -158,30 +173,34 @@ export default {
       this.curatorDialog = true
     },
 
-    getTotalsCommisions(){
+    getTotalsCommisions(agency){
 
+       if(key > this.agencies.length) return
+       
+       let key = this.progress.length
 
-      this.progress.day =  {
-          "value":  0,
-          "points": 0,
-          "profit": 0,
-          "share":  0
-      }
+      this.$set(this.progress, key, { id: agency.id, name: agency.name, token: agency.token, amolatina_id: agency.amolatina_id , day: {points: 0}, month: {points: 0} })
+      
+      this.getResource(`agency/totals?type=day&token=${agency.token}&amolatina_id=${agency.amolatina_id}`).then( response => {
+        this.progress[key].day = response.data
+      })
 
-      this.progress.month =  {
-          "value":  0,
-          "points": 0,
-          "profit": 0,
-          "share":  0
-      }
+      this.getResource(`agency/totals?type=month&token=${agency.token}&amolatina_id=${agency.amolatina_id}`).then( response => {
+        this.progress[key].month = response.data
+      })
+    },
 
-        this.getResource(`agency/totals?type=day&token=${this.agency.token}&amolatina_id=${this.agency.amolatina_id}`).then( response => {
-          this.progress.day = response.data
+    updateTotalsCommision()
+    {
+      for (const [key, progres] of this.progress.entries()) {
+        this.getResource(`agency/totals?type=day&token=${progres.token}&amolatina_id=${progres.amolatina_id}`).then( response => {
+          this.progress[key].day = response.data
         })
 
-        this.getResource(`agency/totals?type=month&token=${this.agency.token}&amolatina_id=${this.agency.amolatina_id}`).then( response => {
-          this.progress.month = response.data
+        this.getResource(`agency/totals?type=month&token=${progres.token}&amolatina_id=${progres.amolatina_id}`).then( response => {
+          this.progress[key].month = response.data
         })
+      }
     },
 
     getPercent(value, goal)
