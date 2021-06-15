@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
     {
        // $schedule->call(new PresenceEstimate)->everyMinute();
 
-        $schedule->call(new ComissionDetail)->everyMinute()->name('ComissionDetail')->withoutOverlapping();
+        $schedule->call(new ComissionDetail)->everyMinute()->name('ComissionDetail2')->withoutOverlapping();
 
         $schedule->call(new ProfileProgressMonth)->everyMinute()->name('ProfileProgressMonth')->withoutOverlapping();
 
