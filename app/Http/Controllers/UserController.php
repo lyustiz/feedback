@@ -57,7 +57,7 @@ class UserController extends Controller
     {
         $coordinator = \Auth::user();
         
-        return User::with('group', 'table.manager', 'table.coordinator', 'profile', 'role', 'turn:id,name', 'penaltyMonth.penaltyType')
+        return User::with('group', 'table.manager', 'table.coordinator', 'profile', 'role', 'turn:turn.id,name', 'penaltyMonth.penaltyType')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'profit')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
