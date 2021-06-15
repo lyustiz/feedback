@@ -61,6 +61,11 @@ class Profile extends Model
         return $this->HasMany('App\Models\UserProfile');
     }
 
+    public function userProfileAssigned()
+    {
+        return $this->HasOne('App\Models\UserProfile');
+    }
+
     public function agency()
 	{
 		return $this->BelongsTo('App\Models\Agency');

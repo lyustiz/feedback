@@ -1,6 +1,6 @@
 <template>
   <v-card dark class="rounded-lg main-color" >
-    <v-subheader class="title">
+    <v-subheader class="subtitle-1">
         <v-row>
             <v-col cols="auto">
                 Asignar Perfiles
@@ -63,11 +63,45 @@
             </v-list-item-avatar>
             <v-list-item-content>
                 <v-list-item-title>
-                {{userProfile.name}}
+                  <v-row>
+                    <v-col>
+                      {{userProfile.name}}
+                    </v-col>
+                    <v-col>
+                      <v-text-field
+                          :rules="[rules.minNum(1)]"
+                          v-model="userProfile.goal_day"
+                          label="Meta Dia"
+                          type="number"
+                          dense
+                          filled
+                          outlined
+                          hide-details
+                      ></v-text-field>
+                    </v-col>
+                     <v-col>
+                      <v-text-field
+                          :rules="[rules.minNum(1)]"
+                          v-model="userProfile.goal_month"
+                          label="Meta Mes"
+                          type="number"
+                          dense
+                          filled
+                          outlined
+                          hide-details
+                      ></v-text-field>
+                    </v-col>
+                  </v-row>
+                
                 </v-list-item-title>
               </v-list-item-content>
               <v-list-item-action>
-                <v-btn icon small @click="remove(userProfile)"><v-icon color="red">mdi-delete </v-icon></v-btn>
+                <v-row>
+                  <v-col>
+                    <v-btn icon small @click="update(userProfile)" :loading="loading"><v-icon color="amber">mdi-lead-pencil</v-icon></v-btn>
+                    <v-btn icon small @click="remove(userProfile)" :loading="loading"><v-icon color="red">mdi-delete</v-icon></v-btn>
+                  </v-col>
+                </v-row>
               </v-list-item-action>
           </v-list-item>
         </v-list> 
@@ -135,6 +169,16 @@ export default {
         userProfile.id = userProfile.profile_id
         this.profiles.push(userProfile)
         this.$emit('onUpdateData')
+      })
+    },
+
+    update(userProfile)
+    {
+      if( parseInt(userProfile.goal_day) < 1 || parseInt(userProfile.goal_month) < 1) return
+      userProfile.user_id_ed = this.userId
+      
+      this.updateResource(`userProfile/${userProfile.id}`, userProfile ).then( data => {
+        this.showMessage(data.msj)
       })
     }
   }

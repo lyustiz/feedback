@@ -31,7 +31,7 @@
                   <v-col cols="auto">
                     <v-tooltip bottom color="blue">
                     <template v-slot:activator="{ on, attrs }">
-                      <span v-on="on" v-bind="attrs">{{ formatNumber(profile.presence_day_sum_bonus) || 0 }}  /  {{ 200 }}</span>
+                      <span v-on="on" v-bind="attrs">{{ formatNumber(profile.presence_day_sum_bonus) || 0 }}  /  {{ profile.user_profile_assigned.goal_day }}</span>
                     </template>
                     <span>Ganacias Dia</span>
                     </v-tooltip>
@@ -49,7 +49,7 @@
               <v-row no-gutters>
                   <v-col>
                   <v-progress-linear
-                  :value="profile.presence_day_sum_bonus*100/200 || 0"
+                  :value="profile.presence_day_sum_bonus*100/(profile.user_profile_assigned.goal_day) ? profile.user_profile_assigned.goal_day : 1  || 0"
                   color="blue"
                   height="8"
                   class="mb-2 mt-1"

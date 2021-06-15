@@ -35,7 +35,11 @@ class ProfileController extends Controller
 
     public function profileUser($userId)
     {
-        return Profile::with(['presence:id,start_at,user_id,profile_id', 'presence.user:id,name,surname', 'agency:agency.id,amolatina_id'])
+        return Profile::with([  'presence:id,start_at,user_id,profile_id', 'presence.user:id,name,surname', 'agency:agency.id,amolatina_id', 
+                                'userProfileAssigned' => function($query) use ( $userId ) {
+                                    $query->where('user_id', $userId);
+                                },
+                            ])
                         ->whereHas('user', function (Builder $query) use ($userId) {
                             $query->where('user.id', $userId);
                         })

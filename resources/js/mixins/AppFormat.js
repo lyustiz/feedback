@@ -209,6 +209,13 @@ export default {
             return date
         },
 
+        hourFromLocalTime(date)
+        {
+            if (!date) return null
+            date =  date.substr(-14, 8)
+            return date
+        },
+
         sumDateDays(date, days)
         {
             let newDate  = new Date(date)

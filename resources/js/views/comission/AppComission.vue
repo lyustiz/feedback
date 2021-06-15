@@ -155,7 +155,7 @@
 
                                             <v-row no-gutters>
                                                 <v-col cols="12" class="text-detail" :class="(comission.positive = 1) ? 'white--text' : 'red--text' ">
-                                                     {{ hourFromDateTime(comission.comission_at) }}
+                                                     {{ hourFromLocalTime(UTCToLocalDate(comission.comission_at)) }}
                                                 </v-col>
                                                 <v-col cols="12">
                                                     <list-simple-icon  

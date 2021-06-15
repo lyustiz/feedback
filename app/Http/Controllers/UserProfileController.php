@@ -23,7 +23,7 @@ class UserProfileController extends Controller
 
     public function assing($userId, $agencyId)
     {
-        $userProfile = UserProfile::select('id','user_id','profile_id','agency_id')
+        $userProfile = UserProfile::select('id','user_id','profile_id','agency_id','goal_day','goal_month')
                                         ->with(['profile:id,name,photo,gender,amolatina_id', 'agency:id,name'])
                                         ->where('user_id', $userId)
                                         ->get();
@@ -53,6 +53,8 @@ class UserProfileController extends Controller
                 'gender'       => $row->profile->gender,
                 'amolatina_id' => $row->profile->amolatina_id,
                 'agency_id'    => $row->profile->agency_id,
+                'goal_day'     => $row->goal_day,
+                'goal_month'   => $row->goal_month,
             ];
         }
 
@@ -152,16 +154,14 @@ class UserProfileController extends Controller
     public function update(Request $request, UserProfile $userProfile)
     {
         $validate = request()->validate([
-            'user_id'           => 	'required|integer|max:999999999',
-			'profile_id'        => 	'required|numeric|max:999999999',
-			'comments'          => 	'nullable|string|max:100',
-			'status_id'         => 	'required|integer|max:999999999',
-			'user_id_ed'        => 	'required|integer|max:999999999',
+            'goal_day'   => 'required|integer|max:999999999',
+            'goal_month' => 'required|integer|max:999999999',
+			'user_id_ed' => 'required|integer|max:999999999',
         ]);
 
         $userProfile = $userProfile->update($request->all());
 
-        return [ 'msj' => 'UserProfile Editado' , compact('userProfile')];
+        return [ 'msj' => 'Metas Actualizadas' , compact('userProfile')];
     }
 
     /**
