@@ -31,11 +31,11 @@ class Kernel extends ConsoleKernel
     {
        // $schedule->call(new PresenceEstimate)->everyMinute();
 
-        $schedule->call(new ComissionDetail)->everyMinute()->name('ComissionDetail2')->withoutOverlapping();
+        $schedule->call(new ComissionDetail)->everyMinute()->name('ComissionDetail2')->withoutOverlapping(1)->runInBackground();
 
-        $schedule->call(new ProfileProgressMonth)->everyMinute()->name('ProfileProgressMonth')->withoutOverlapping();
+        $schedule->call(new ProfileProgressMonth)->everyMinute()->name('ProfileProgressMonth')->withoutOverlapping(1);
 
-        $schedule->call(new ProfileProgressDay)->everyMinute()->name('ProfileProgressDay')->withoutOverlapping();
+        $schedule->call(new ProfileProgressDay)->everyMinute()->name('ProfileProgressDay')->withoutOverlapping(1);
     }
 
     /**

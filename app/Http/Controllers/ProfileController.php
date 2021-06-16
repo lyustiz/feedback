@@ -22,8 +22,10 @@ class ProfileController extends Controller
     public function index()
     {
         return Profile::with(['profileProgress'])
-                        ->withSum(['presenceMonth', 'presenceDay'], 'profit')
+                        ->withSum(['presenceMonth', 'presenceDay'], 'bonus')
                         ->withSum(['presenceMonth', 'presenceDay'], 'writeoff')
+                        ->withSum(['userProfile'], 'goal_day')  
+                        ->withSum(['userProfile'], 'goal_month')  
                         ->orderBy('name')
                         ->get();
     }

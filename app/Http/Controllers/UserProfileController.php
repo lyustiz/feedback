@@ -159,7 +159,7 @@ class UserProfileController extends Controller
 			'user_id_ed' => 'required|integer|max:999999999',
         ]);
 
-        $userProfile = $userProfile->update($request->all());
+        $userProfile = $userProfile->update($validate);
 
         return [ 'msj' => 'Metas Actualizadas' , compact('userProfile')];
     }

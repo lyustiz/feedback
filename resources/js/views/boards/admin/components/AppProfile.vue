@@ -42,7 +42,7 @@
                   <v-col cols="auto">
                     <v-tooltip bottom color="blue">
                     <template v-slot:activator="{ on, attrs }">
-                      <span v-on="on" v-bind="attrs">{{ (profile.profile_progress) ? formatNumber(profile.profile_progress.points_day) : 0 }}  /  {{ profile.month || 600}}</span>
+                      <span v-on="on" v-bind="attrs">{{ (profile.profile_progress) ? formatNumber(profile.profile_progress.points_day || 0) : 0 }}  /  {{ profile.user_profile_sum_goal_day || 100}}</span>
                     </template>
                     <span>Meta Dia</span>
                     </v-tooltip>
@@ -51,7 +51,7 @@
                   <v-col cols="auto">
                     <v-tooltip bottom color="green">
                     <template v-slot:activator="{ on, attrs }">
-                      <span v-on="on" v-bind="attrs">{{ (profile.profile_progress) ? formatNumber(profile.profile_progress.points_month) : 0 }}  /  {{ profile.month || 2000}}</span>
+                      <span v-on="on" v-bind="attrs">{{ (profile.profile_progress) ? formatNumber(profile.profile_progress.points_month || 0) : 0 }}  /  {{ profile.user_profile_sum_goal_month || 1000}}</span>
                     </template>
                     <span>Meta Mes</span>
                     </v-tooltip>
@@ -60,7 +60,7 @@
               <v-row no-gutters>
                   <v-col>
                     <v-progress-linear
-                    :value="( (profile.profile_progress) ? profile.profile_progress.points_day*100/900 : 0 ) "
+                    :value="( (profile.profile_progress) ? profile.profile_progress.points_day*100/profile.user_profile_sum_goal_day || 100 : 0 ) "
                     color="blue"
                     height="8"
                     class="mb-2 mt-1"
@@ -68,7 +68,7 @@
                 </v-col>
                 <v-col>
                     <v-progress-linear
-                    :value="( (profile.profile_progress) ? profile.profile_progress.points_month*100/2000 : 0 )"
+                    :value="( (profile.profile_progress) ? profile.profile_progress.points_month*100/profile.user_profile_sum_goal_month|| 1000 : 0 )"
                     color="green"
                     height="8"
                     class="mb-2 mt-1"
