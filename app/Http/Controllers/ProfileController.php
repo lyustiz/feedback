@@ -22,8 +22,6 @@ class ProfileController extends Controller
     public function index()
     {
         return Profile::with(['profileProgress'])
-                        ->withSum(['presenceMonth', 'presenceDay'], 'bonus')
-                        ->withSum(['presenceMonth', 'presenceDay'], 'writeoff')
                         ->withSum(['userProfile'], 'goal_day')  
                         ->withSum(['userProfile'], 'goal_month')  
                         ->orderBy('name')
@@ -147,20 +145,20 @@ class ProfileController extends Controller
 
     public function setDataProfile($newProfile, $profileDetail, $agency)
     {
-         return   $data = [
-                'agency_id'    => $agency->id,
-                'amolatina_id' => $profileDetail['id'],
-                'name'         => $profileDetail['name'],
-                'birthday'     => (isset($profileDetail['birthday'])) ?  Carbon::parse($profileDetail['birthday'])->format('Y-m-d') : null,
-                'age'          => (isset($newProfile['age'])) ? $newProfile['age'] : null,
-                'photo'        => (isset($newProfile['thumbnail'])) ? $newProfile['thumbnail'] : null,
-                'gender'       => (isset($profileDetail['gender'])) ? $profileDetail['gender'] : null,
-                'country'      => (isset($profileDetail['country'])) ? $profileDetail['country'] : null,
-                'city'         => (isset($profileDetail['city'])) ? $profileDetail['city'] : null,
-                'status_id'    => 1,
-                'user_id'      => 1,
-                'created_at'   => date('Y-m-d'),
-            ];
+        return   $data = [
+            'agency_id'    => $agency->id,
+            'amolatina_id' => $profileDetail['id'],
+            'name'         => $profileDetail['name'],
+            'birthday'     => (isset($profileDetail['birthday'])) ?  Carbon::parse($profileDetail['birthday'])->format('Y-m-d') : null,
+            'age'          => (isset($newProfile['age'])) ? $newProfile['age'] : null,
+            'photo'        => (isset($newProfile['thumbnail'])) ? $newProfile['thumbnail'] : null,
+            'gender'       => (isset($profileDetail['gender'])) ? $profileDetail['gender'] : null,
+            'country'      => (isset($profileDetail['country'])) ? $profileDetail['country'] : null,
+            'city'         => (isset($profileDetail['city'])) ? $profileDetail['city'] : null,
+            'status_id'    => 1,
+            'user_id'      => 1,
+            'created_at'   => date('Y-m-d'),
+        ];
     }
 
 

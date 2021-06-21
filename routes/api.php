@@ -129,29 +129,35 @@ Route::apiResource('/comission',                'ComissionController');
 
 Route::get('/table/detail',                     'TableController@tablesDetails');
 
-Route::get('/table/list',               'TableController@list');
+Route::get('/table/list',                       'TableController@list');
 Route::apiResource('/table',                    'TableController');
 
 Route::apiResource('/group',                    'GroupController');
 Route::apiResource('/country',                  'CountryController');
 Route::apiResource('/userAgency',               'UserAgencyController');
 
+Route::put('/userPresence/rebuild',             'UserPresenceController@rebuild');
 Route::get('/userPresence/estimate',            'UserPresenceController@presenceEstimate');
-Route::get('/userPresence/user/{user}/profile/{profile}',                'UserPresenceController@presenceUserProfile');
+Route::get('/userPresence/user/{user}/profile/{profile}',    'UserPresenceController@presenceUserProfile');
 Route::put('/userPresence/stop/unique',         'UserPresenceController@stopUnique');
 Route::put('/userPresence/stop',                'UserPresenceController@stop');
 Route::apiResource('/userPresence',             'UserPresenceController');
 
-Route::get('/client/contacted',           'ClientController@importClientPhoto');
-Route::get('/client/all/photo',           'ClientController@importClientPhoto');
-Route::get('/client/all/detail',          'ClientController@detailClients');
+Route::get('/client/contacted',                 'ClientController@importClientPhoto');
+Route::get('/client/all/photo',                 'ClientController@importClientPhoto');
+Route::get('/client/all/detail',                'ClientController@detailClients');
 Route::get('/client/contacted/agency/{agency}',           'ClientController@contactedAgency');
-Route::get('/client/top/Agency/{agency}', 'ClientController@topAgency');
-Route::apiResource('/client',             'ClientController');
+Route::get('/client/top/Agency/{agency}',       'ClientController@topAgency');
+Route::apiResource('/client',                   'ClientController');
 
-Route::get('/tableTurn/combo/{table}',    'TableTurnController@combo');
-Route::apiResource('/tableTurn',          'TableTurnController');
-Route::apiResource('/horary',     'HoraryController');
-Route::apiResource('/service',     'ServiceController');
+Route::get('/tableTurn/combo/{table}',         'TableTurnController@combo');
+Route::apiResource('/tableTurn',               'TableTurnController');
+Route::apiResource('/horary',                  'HoraryController');
+Route::apiResource('/service',                 'ServiceController');
+Route::apiResource('/goalType',     'GoalTypeController');
+
+
+Route::get('/agencyGoal/agency/{agency}',     'AgencyGoalController@byAgency');
+Route::apiResource('/agencyGoal',     'AgencyGoalController');
 //newRoutes
 });

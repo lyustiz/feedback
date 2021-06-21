@@ -66,6 +66,8 @@ import Client       from '@views/client/AppClient';
 import TableTurn  from '@views/tableTurn/tableTurn.vue';
 import Horary  from '@views/horary/horary.vue';
 import Service  from '@views/service/service.vue';
+import GoalType  from '@views/goalType/goalType.vue';
+import AgencyGoal  from '@views/agencyGoal/agencyGoal.vue';
 //newImport
 
 let isAuthenticated = true;
@@ -409,6 +411,18 @@ export default new Router({
     name: 'service',
     icon: 'bubble_chart',
     component: Service,
+},
+{
+    path: '/goalType',
+    name: 'goalType',
+    icon: 'bubble_chart',
+    component: GoalType,
+},
+{
+    path: '/agencyGoal',
+    name: 'agencyGoal',
+    icon: 'bubble_chart',
+    component: AgencyGoal,
 },
 //newRoutes
 

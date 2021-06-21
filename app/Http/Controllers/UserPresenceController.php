@@ -300,8 +300,40 @@ class UserPresenceController extends Controller
         return  $updates;
     }
 
-    
+    public function rebuild(Request $request)
+    {
+        set_time_limit ( 300 );
 
+        $validate = request()->validate([
+			'date'          => 	'required|date',
+        ]);
+
+        $date = Carbon::parse($request->date)->startOfDay();
+        
+        $rebuild = \DB::select( \DB::raw("UPDATE user_presence up INNER JOIN
+                                                    (	 SELECT up.id, 
+                                                                SUM(IF(c.positive = 1, c.points, 0)) points, 
+                                                                COUNT(IF(c.positive = 0, 1, null)) writeoff, 
+                                                                SUM(c.share) share, 
+                                                                SUM(c.profit) profit
+                                                           FROM user_presence up
+                                                           JOIN comission c ON c.profile_id = up.amolatina_id
+                                                          WHERE c.comission_at >= up.start_at
+                                                            AND c.comission_at <= up.end_at
+                                                            AND up.start_at    > date('$date')
+                                                            AND c.comission_at > date('$date')
+                                                       GROUP BY up.id ) as t2 ON t2.id = up.id
+                                              SET up.bonus = t2.points,
+                                                  up.writeoff =  t2.writeoff,
+                                                  up.shared   = t2.share,
+                                                  up.profit = t2.profit,
+                                                  up.updated_at = CURRENT_TIMESTAMP(),
+                                                  up.comments = 'repair'
+                                            WHERE up.status_id = 4
+                                              AND up.start_at > date('$date')"), []);
+
+        return [ 'msj' => "Progreso de Operadores Recalculado a partir de: $date" , compact('rebuild')]; 
+    }
 
     /**
      * Remove the specified resource from storage.

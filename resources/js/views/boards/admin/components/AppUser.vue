@@ -13,7 +13,7 @@
               </v-list-item-content>
               <v-list-item-icon>
                   <item-menu 
-                    :menus="itemsMenu" 
+                    :menus="gralMenu" 
                     iconColor="white" 
                     btnColor="transparent" 
                     :item="agency"
@@ -24,8 +24,8 @@
         </v-col>
       </v-row>
 
-    <v-row>
-      <v-col cols="12">
+    <v-row dense> 
+      <v-col >
         <v-select
           v-model="agency"
           label="Agencias"
@@ -38,6 +38,16 @@
           dense
           return-object
         ></v-select>
+      </v-col>
+      <v-col cols="auto">
+        <item-menu 
+          :menus="agencyMenu" 
+          iconColor="white" 
+          btnColor="transparent" 
+          :item="agency"
+          @onItemMenu="onItemMenu($event)"
+          icon-color="primary"
+        ></item-menu>
       </v-col>
     </v-row>
 
@@ -90,7 +100,14 @@
       <TableDetail v-if="tableDetailDialog" @closeDialog="closeDialog($event)" />
     </v-dialog> 
 
-    
+    <v-dialog v-model="rebuildPresenceDialog" scrollable persistent width="280">
+      <Rebuilpresence v-if="rebuildPresenceDialog" @closeDialog="closeDialog($event)" />
+    </v-dialog> 
+
+    <v-dialog v-model="agencyGoalDialog" scrollable persistent width="400">
+      <AppAgencyGoal v-if="agencyGoalDialog" :agency="agency" @closeDialog="closeDialog($event)" />
+    </v-dialog> 
+
   </v-card> 
             
 </template>
@@ -98,12 +115,16 @@
 <script>
 import AppData from '@mixins/AppData'
 import TableDetail from '@views/table/TableDetail'
+import Rebuilpresence from '@views/userPresence/components/RebuildPresence.vue'
+import AppAgencyGoal from '@views/agencyGoal/AppAgencyGoal.vue'
 export default {
 
   mixins: [AppData],
 
   components:{
-    TableDetail
+    TableDetail,
+    Rebuilpresence,
+    AppAgencyGoal
   },
 
   mounted()
@@ -150,12 +171,16 @@ export default {
     progress: [],
     curatorDialog: false,
     tableDetailDialog: false,
-    itemsMenu: [
+    rebuildPresenceDialog: false,
+    agencyGoalDialog: false,
+    agencyMenu: [
+      { action: 'showAgencyGoal', icon: 'mdi-flag-checkered', label: 'Metas Agencias', iconColor: 'amber' },
       { action: 'importProfile', icon: 'mdi-account-multiple-plus', label: 'Importar Nuevos Perfiles', iconColor: 'green' },
       { action: 'importProfilePhoto', icon: 'mdi-camera-account', label: 'Importar Fotos Perfiles', iconColor: 'green' },
+    ],
+    gralMenu: [
       { action: 'showTablesDetail', icon: 'mdi-sitemap', label: 'Organigrama', iconColor: 'blue' },
-
-      
+      { action: 'rebuildPrecense', icon: 'mdi-calendar-sync', label: 'Recalcular Progreso', iconColor: 'amber' },
     ],
   }),
 
@@ -230,11 +255,20 @@ export default {
       this.tableDetailDialog = true
     },
 
+    showAgencyGoal()
+    {
+      this.agencyGoalDialog = true
+    },
+
+    rebuildPrecense(){
+      this.rebuildPresenceDialog = true
+    },
+
     closeDialog(reload)
     {
-
-      this.tableDetailDialog   = false
-
+      this.tableDetailDialog     = false
+      this.rebuildPresenceDialog = false
+      this.agencyGoalDialog      = false
     },
 
     
