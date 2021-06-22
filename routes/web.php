@@ -30,7 +30,9 @@ Route::post('/login', function(Request $request ){
             
             if( in_array($user->role_id, [1,2])) //administrador - Gerente
             {
-                $user->load(['agencyManage:agency.id,name,amolatina_id,token' ]);
+                $user->load(['agencyManage:agency.id,name,amolatina_id,token', 
+                            'agencyManage.agencyGoal:agency_id,goal_type_id,value', 
+                            'agencyManage.agencyGoal.goalType:id,name,icon,color' ]);
             
             } else {  // coordinador - operador
 

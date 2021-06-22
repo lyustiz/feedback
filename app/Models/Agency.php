@@ -59,6 +59,11 @@ class Agency extends Model
         return $this->BelongsTo('App\Models\User');
     }
 
+    public function agencyGoal()
+    {
+        return $this->hasMany('App\Models\AgencyGoal');
+    }
+
     public function clients()
     {
         return $this->hasMany('App\Models\Client');

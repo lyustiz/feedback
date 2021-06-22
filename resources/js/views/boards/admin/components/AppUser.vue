@@ -76,6 +76,24 @@
             {{ formatNumber(progres.month.points) || 0}}
           </v-progress-linear>
         </v-col>
+        <v-col cols="auto" class="pa-0">
+
+          <v-tooltip bottom :color="goal.goal_type.color" v-for="goal in progres.agency_goal" :key="goal.id">
+            <template v-slot:activator="{ on, attrs }">
+              <v-progress-circular 
+                v-on="on"
+                v-bind="attrs"
+                :value="getPercent(progres.month.points, goal.value)" 
+                :size="18" 
+                :color="goal.goal_type.color" 
+                class="ml-1 pa-0" 
+                width="6">
+                <v-icon color="success" v-if="getPercent(progres.month.points, goal.value) >= 100">mdi-check-circle-outline</v-icon>
+              </v-progress-circular>
+            </template>
+              <span class="indigo--text font-weight-bold">{{goal.goal_type.name}} {{formatNumber(progres.month.points)}} / {{formatNumber(goal.value)}} ({{formatNumber(getPercent(progres.month.points, goal.value))}}%)</span>
+          </v-tooltip>
+        </v-col>
       </v-row>
 
       <v-row dense>
@@ -92,6 +110,11 @@
             {{ formatNumber(totals.month.points) || 0}}
           </v-progress-linear>
         </v-col>
+
+        <v-col cols="auto" class="pa-0">
+          <div class="fill-total"></div>
+        </v-col>
+        
       </v-row>
 
     </v-card-text>
@@ -200,11 +223,18 @@ export default {
 
     getTotalsCommisions(agency){
 
-       if(key > this.agencies.length) return
+      if(key > this.agencies.length) return
        
-       let key = this.progress.length
+      let key = this.progress.length
 
-      this.$set(this.progress, key, { id: agency.id, name: agency.name, token: agency.token, amolatina_id: agency.amolatina_id , day: {points: 0}, month: {points: 0} })
+      this.$set(this.progress, key, { 
+                                     id: agency.id, 
+                                     name: agency.name, 
+                                     token: agency.token, 
+                                     amolatina_id: agency.amolatina_id,
+                                     agency_goal: agency.agency_goal,
+                                     day: {points: 0}, 
+                                     month: {points: 0} })
       
       this.getResource(`agency/totals?type=day&token=${agency.token}&amolatina_id=${agency.amolatina_id}`).then( response => {
         this.progress[key].day = response.data
@@ -232,7 +262,7 @@ export default {
     {
       if(!goal)  return 0
       if(!value) return 0
-      return ( value * 100 / goal > 100) ? 100 :  value * 100 / goal
+      return ( ((value * 100) / goal) > 100) ? 100 :  (value * 100) / goal
     },
 
     importProfile(agency)
@@ -277,5 +307,8 @@ export default {
 </script>
 
 <style>
-
+.fill-total{
+  display: block;
+  width: 4.1rem;
+}
 </style>
