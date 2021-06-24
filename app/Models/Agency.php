@@ -21,6 +21,8 @@ class Agency extends Model
 	 	 	 	 	 	 	'password',
 	 	 	 	 	 	 	'amolatina_id',
                             'register_at',
+                            'goal_day',
+                            'goal_month',
 	 	 	 	 	 	 	'comments',
 	 	 	 	 	 	 	'status_id',
 	 	 	 	 	 	 	'user_id'

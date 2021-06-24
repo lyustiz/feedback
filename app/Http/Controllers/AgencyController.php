@@ -117,6 +117,21 @@ class AgencyController extends Controller
         return [ 'msj' => 'Agency Editado' , compact('agency')];
     }
 
+    public function agencyGoals(Request $request, Agency $agency)
+    {
+        $validate = request()->validate([
+            'goal_month' => 'required|integer|max:999999999',
+			'goal_day'   => 'required|integer|max:999999999',
+			'user_id'    => 'required|integer|max:999999999',
+        ]);
+       
+        $agency = $agency->update($validate);
+
+        return [ 'msj' => 'Metas de Agencia Actualizada' , compact('agency')];
+    }
+
+    
+
     /**
      * Remove the specified resource from storage.
      *

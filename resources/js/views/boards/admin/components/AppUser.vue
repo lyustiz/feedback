@@ -54,7 +54,8 @@
     <v-subheader>
       <v-row>
         <v-col>Ganancias</v-col>
-<v-col cols="auto"><v-icon  small @click="getdata($event)">mdi-home-search-outline</v-icon></v-col>
+        <v-col cols="auto"><v-icon color="red" small @click="rebuilMonth($event)">mdi-calendar-refresh</v-icon></v-col>
+        <v-col cols="auto"><v-icon  small @click="getdata($event)">mdi-home-search-outline</v-icon></v-col>
         
 <!--         <v-col cols="auto"><v-icon  small @click="getCuratorsCommision($event)">mdi-home-search-outline</v-icon></v-col>
  -->        <v-col cols="auto"><v-icon  small @click="updateTotalsCommision()" :disabled="progress.length<1">mdi-reload</v-icon></v-col>
@@ -128,7 +129,7 @@
     </v-dialog> 
 
     <v-dialog v-model="agencyGoalDialog" scrollable persistent width="400">
-      <AppAgencyGoal v-if="agencyGoalDialog" :agency="agency" @closeDialog="closeDialog($event)" />
+      <AgencyGoal v-if="agencyGoalDialog" :agency="agency" @closeDialog="closeDialog($event)" />
     </v-dialog> 
 
   </v-card> 
@@ -139,7 +140,7 @@
 import AppData from '@mixins/AppData'
 import TableDetail from '@views/table/TableDetail'
 import Rebuilpresence from '@views/userPresence/components/RebuildPresence.vue'
-import AppAgencyGoal from '@views/agencyGoal/AppAgencyGoal.vue'
+import AgencyGoal from '@views/agency/AgencyGoal.vue'
 export default {
 
   mixins: [AppData],
@@ -147,7 +148,7 @@ export default {
   components:{
     TableDetail,
     Rebuilpresence,
-    AppAgencyGoal
+    AgencyGoal
   },
 
   mounted()
@@ -214,6 +215,13 @@ export default {
         console.log(data)
       })
 
+    },
+
+    rebuilMonth()
+    {
+      this.getResource('comission/month').then( data => {
+        console.log(data)
+      })
     },
 
     getCuratorsCommision()

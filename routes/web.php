@@ -26,11 +26,11 @@ Route::post('/login', function(Request $request ){
         {
             $request->session()->regenerate();
             
-            $user->load(['agency:agency.id,name,amolatina_id,token' ]);
+            $user->load(['agency:agency.id,name,amolatina_id,token,agency.goal_day,agency.goal_month' ]);
             
             if( in_array($user->role_id, [1,2])) //administrador - Gerente
             {
-                $user->load(['agencyManage:agency.id,name,amolatina_id,token', 
+                $user->load(['agencyManage:agency.id,name,amolatina_id,token,agency.goal_day,agency.goal_month', 
                             'agencyManage.agencyGoal:agency_id,goal_type_id,value', 
                             'agencyManage.agencyGoal.goalType:id,name,icon,color' ]);
             

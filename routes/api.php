@@ -54,10 +54,11 @@ Route::apiResource('/tipoSuscripcion',          'TipoSuscripcionController');
 Route::apiResource('/vendedor',                 'VendedorController');
 
 
-Route::get('/agency/clients/top',        'AgencyController@agencyClientsTop');
-Route::get('/agency/clients',            'AgencyController@agencyClients');
-Route::get('/agency/totals',            'AgencyController@agencyTotals');
-Route::apiResource('/agency',                   'AgencyController');
+Route::get('/agency/clients/top',      'AgencyController@agencyClientsTop');
+Route::get('/agency/clients',          'AgencyController@agencyClients');
+Route::get('/agency/totals',           'AgencyController@agencyTotals');
+Route::put('/agency/{agency}/goals',  'AgencyController@agencyGoals');
+Route::apiResource('/agency',          'AgencyController');
 
 
 
@@ -122,6 +123,7 @@ Route::apiResource('/curator',                  'CuratorController');
 Route::apiResource('/spending',                 'SpendingController');
 
 Route::get('/comission/list',                   'ComissionController@list');
+Route::get('/comission/month',                  'ComissionController@fillComissionMonth');
 Route::get('/comission/detail',                 'ComissionController@comissionDetail');
 Route::get('/comission/presence/{presence}',    'ComissionController@comissionPresence');
 Route::apiResource('/comission',                'ComissionController');

@@ -137,6 +137,51 @@ class ComissionController extends Controller
         return $stored;
     }
 
+    public function fillComissionMonth()
+    {
+        set_time_limit ( 1900 );
+        
+        $startOfMonth = Carbon::now()->startOfMonth();
+        $days         = $startOfMonth->diffInDays(Carbon::now()) + 1;  
+
+        $delete       = Comission::whereDate('comission_at', '>' , $startOfMonth)->delete();
+
+        $currents     = Comission::with(['agency:id,amolatina_id,name,token'])
+                                 ->groupBy('agency_id', 'positive')
+                                 ->get(['agency_id', 'positive',  \DB::raw('MAX(comission_id) as comission_id') ]);
+     
+        $stored = [];            
+
+        foreach ($currents  as $current) {
+
+            $token        = $current->agency->token;
+            $amolatina_id = $current->agency->amolatina_id;
+            $positive     = $current->positive;
+
+            for ($i = 1; $i <= $days ; $i++) { 
+            
+                $start_at = $startOfMonth->startOfDay()->toISOString();
+    
+                $end_at   = $startOfMonth->endOfDay()->toISOString();
+    
+                $response = $this->getDetailCommisions($token, $amolatina_id, $start_at, $end_at, $positive );
+                
+                if($response['ok'])
+                {
+                    $commisions = $response['body'];
+                    $stored[$amolatina_id.'-'.$start_at.'-'.$end_at .'-'. $positive] = count($this->storeCommision($commisions, $positive, 0 ) ) * 500;
+                }
+                else {
+                    $stored[$amolatina_id.'-'.$start_at.'-'.$end_at] = $response;
+                }
+                $day = $startOfMonth->addDay();
+            }
+
+            $startOfMonth = Carbon::now()->startOfMonth();
+        }
+        return $stored;
+    }
+
     public function getDetailCommisions($token, $amolatinaId, $startAt, $endAt, $positive = 1)
     {
         $setup          = Amolatina::getSetup('credits-detail');

@@ -101,6 +101,18 @@ export default
 		{
 			state.agencyManage	= agency
 			localStorage.setItem("agencyManage", (agency)  ? JSON.stringify(agency): [])
+		},
+
+		updateAgencyManage( state, agency )
+		{
+			for (const [key, _agency] of state.agencyManage.entries()) {
+				console.log(_agency, agency, key)
+				if(_agency.id = agency.id)
+				{
+					state.agencyManage[key] = agency
+				}
+			}
+			localStorage.setItem("agencyManage", (state.agencyManage)  ? JSON.stringify(state.agencyManage): [])
 		}
 
     },
