@@ -91,6 +91,13 @@ export default
             this.report.show  = false
             this.report.table = null
             this.report.title = null
-        }
+        },
+
+        getPercent(value, goal)
+        {
+            if(!goal)  return 0
+            if(!value) return 0
+            return ( ((value * 100) / goal) > 100) ? 100 :  (value * 100) / goal
+        },
     }
 }

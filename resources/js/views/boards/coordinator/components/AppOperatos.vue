@@ -1,15 +1,34 @@
 <template>
   <v-card dark class="rounded-lg " color="rgba(0,0,0,0.4)">
-    <v-subheader>
-      <v-row no-gutters>
-        <v-col class="ml-2 title">
+      <v-row no-gutters class="mx-5 pt-2">
+        <v-col  class="subtitle-1">
           Operadores
         </v-col>
         <v-col cols="auto">
-          <v-btn icon @click="list()" :loading="loading"><v-icon size="32">mdi-reload</v-icon></v-btn>
+          <v-btn x-small icon @click="list()" :loading="loading"><v-icon size="16">mdi-reload</v-icon></v-btn>
         </v-col>
       </v-row>
-      </v-subheader>
+
+       <v-row no-gutters class="mx-5 my-2 subtitle-2">
+        <v-col cols="6">
+          Mesa Total Dia
+        </v-col>
+        <v-col cols="6">
+           <v-progress-linear color="blue darken-1" height="15" :value="getPercent(tableTotals.bonus_day/tableTotals.goal_day)" :indeterminate="loading">
+           {{formatNumber(tableTotals.bonus_day)}}
+          </v-progress-linear>
+        </v-col>
+
+        <v-col cols="6">
+          Mesa Total Mes
+        </v-col>
+        <v-col cols="6">
+          <v-progress-linear color="green darken-1" height="15" :value="getPercent(tableTotals.bonus_day/tableTotals.goal_month)" :indeterminate="loading">
+           {{ formatNumber(tableTotals.bonus_month)}}
+          </v-progress-linear>
+        </v-col>
+      </v-row>
+
     <v-card-text class="pt-0 accounts-container custom-scroll">
       <v-list subheader dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
         <v-list-item v-for="operator in operatos" :key="operator.id" class="px-2" > 
@@ -159,6 +178,21 @@ export default {
 
   created() {
     this.list()
+  },
+
+  computed: {
+    tableTotals()
+    {
+      let tableTotal = { bonus_day: 0, bonus_month: 0, goal_day: 1, goal_month: 1 }
+      
+      for (const operator of this.operatos) {
+        tableTotal.bonus_day   += operator.presence_day_sum_bonus ? parseFloat(operator.presence_day_sum_bonus) : 0
+        tableTotal.bonus_month += operator.presence_month_sum_bonus ? parseFloat(operator.presence_month_sum_bonus) : 0
+        tableTotal.goal_day    += operator.goal_day ? parseFloat(operator.goal_day) : 0
+        tableTotal.goal_month    += operator.goal_month ? parseFloat(operator.goal_month) : 0
+      }
+      return tableTotal
+    }
   },
 
   data: () => ({

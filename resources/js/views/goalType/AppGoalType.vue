@@ -12,9 +12,9 @@
         <v-card-text>
 
             <v-row v-for="item in items" :key="item.id" class="mt-4">
-                <v-col cols="3">{{ item.name }}</v-col>
+                <v-col cols="3" class="headline">{{ item.name }}</v-col>
                 <v-col cols="auto">
-                    <list-simple-icon :icon="item.icon" :label="item.name" :color="item.color" :size="30"></list-simple-icon>
+                    <list-simple-icon :icon="item.icon" :label="item.name" :color="item.color" :size="34"></list-simple-icon>
                 </v-col>
                 <v-col>
                     <v-text-field

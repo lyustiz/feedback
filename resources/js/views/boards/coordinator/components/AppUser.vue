@@ -96,9 +96,9 @@
                     </v-progress-circular>
                 </v-col>    
             </v-row>
-
-        
-
+            <v-row>
+                <v-col></v-col>
+            </v-row>
         </v-card-text>
     </v-card>
     
