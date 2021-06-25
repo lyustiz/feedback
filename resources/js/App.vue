@@ -16,6 +16,7 @@ export default {
         let menu            = localStorage.getItem('menu');
         let agency          = localStorage.getItem('agency');
         let agencyManage    = localStorage.getItem('agencyManage');
+        let goalType        = localStorage.getItem('goalType');
         let amolatina_token = localStorage.getItem('amolatina_token');
         
         if(auth==='true') // TODO:check expire
@@ -29,6 +30,7 @@ export default {
                             menu: JSON.parse(menu),
                             agency: JSON.parse(agency),
                             agencyManage:  (agencyManage) ? JSON.parse(agencyManage) : null,
+                            goalType:    (goalType) ? JSON.parse(goalType) : [],
                             amolatina_token: amolatina_token
                         };
             

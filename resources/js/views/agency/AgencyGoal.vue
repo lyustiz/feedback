@@ -127,7 +127,7 @@ export default {
             this.updateResource(`agency/${this.agency.id}/goals`, this.form).then( data => {
                 let agency =  JSON.parse(JSON.stringify(this.agency));
                 agency.goal_day = this.form.goal_day
-                agency.goal_day = this.form.goal_month
+                agency.goal_month = this.form.goal_month
                 this.$store.commit('updateAgencyManage' , agency)  
                 this.showMessage(data.msj)
             }) 

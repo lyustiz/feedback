@@ -55,7 +55,7 @@
       <v-row>
         <v-col>Ganancias</v-col>
         <v-col cols="auto"><v-icon color="red" small @click="rebuilMonth($event)">mdi-calendar-refresh</v-icon></v-col>
-        <v-col cols="auto"><v-icon  small @click="getdata($event)">mdi-home-search-outline</v-icon></v-col>
+        <v-col cols="auto"><v-icon  small @click="updateCommision($event)">mdi-home-search-outline</v-icon></v-col>
         
 <!--         <v-col cols="auto"><v-icon  small @click="getCuratorsCommision($event)">mdi-home-search-outline</v-icon></v-col>
  -->        <v-col cols="auto"><v-icon  small @click="updateTotalsCommision()" :disabled="progress.length<1">mdi-reload</v-icon></v-col>
@@ -68,32 +68,29 @@
           {{progres.name}}
         </v-col>
        <v-col>
-          <v-progress-linear height="15" :value="getPercent(progres.day.points, 1000)" :indeterminate="loading">
-            {{ formatNumber(progres.day.points) || 0}}
-          </v-progress-linear>
+         <v-tooltip bottom color="blue">
+            <template v-slot:activator="{ on, attrs }">
+              <v-progress-linear height="15" :value="getPercent(progres.day.points, progres.goal_day)" :indeterminate="loading"  v-on="on"  v-bind="attrs">
+                {{ formatNumber(progres.day.points) || 0}}
+              </v-progress-linear>
+            </template>
+              <span class="font-weight-bold">Meta Dia {{progres.goal_day}}</span>
+          </v-tooltip>
         </v-col>
         <v-col>
-          <v-progress-linear color="green" height="15" :value="getPercent(progres.month.points, 30000)" :indeterminate="loading">
+
+        <v-tooltip bottom color="green">
+            <template v-slot:activator="{ on, attrs }">  
+          <v-progress-linear color="green" height="15" :value="getPercent(progres.month.points, progres.goal_month)" :indeterminate="loading" v-on="on"  v-bind="attrs"> 
             {{ formatNumber(progres.month.points) || 0}}
           </v-progress-linear>
+          </template>
+              <span class="font-weight-bold">Meta Mes {{progres.goal_month}}</span>
+          </v-tooltip>
+
         </v-col>
         <v-col cols="auto" class="pa-0">
-
-          <v-tooltip bottom :color="goal.goal_type.color" v-for="goal in progres.agency_goal" :key="goal.id">
-            <template v-slot:activator="{ on, attrs }">
-              <v-progress-circular 
-                v-on="on"
-                v-bind="attrs"
-                :value="getPercent(progres.month.points, goal.value)" 
-                :size="18" 
-                :color="goal.goal_type.color" 
-                class="ml-1 pa-0" 
-                width="6">
-                <v-icon color="success" v-if="getPercent(progres.month.points, goal.value) >= 100">mdi-check-circle-outline</v-icon>
-              </v-progress-circular>
-            </template>
-              <span class="indigo--text font-weight-bold">{{goal.goal_type.name}} {{formatNumber(progres.month.points)}} / {{formatNumber(goal.value)}} ({{formatNumber(getPercent(progres.month.points, goal.value))}}%)</span>
-          </v-tooltip>
+          <div class="fill-total"></div>
         </v-col>
       </v-row>
 
@@ -113,9 +110,24 @@
         </v-col>
 
         <v-col cols="auto" class="pa-0">
-          <div class="fill-total"></div>
+          
+            <v-tooltip bottom :color="goal.color" v-for="goal in goalType" :key="goal.id">
+            <template v-slot:activator="{ on, attrs }">
+              <v-progress-circular 
+                v-on="on"
+                v-bind="attrs"
+                :value="getPercent(totals.month.points, goal.amount)" 
+                :size="18" 
+                :color="goal.color" 
+                class="ml-1 pa-0" 
+                width="6">
+                <v-icon color="success" v-if="getPercent(totals.month.points, goal.amount) >= 100">mdi-check-circle-outline</v-icon>
+              </v-progress-circular>
+            </template>
+              <span class="indigo--text font-weight-bold">{{goal.name}} {{formatNumber(totals.month.points)}} / {{formatNumber(goal.amount)}} ({{formatNumber(getPercent(totals.month.points, goal.amount))}}%)</span>
+          </v-tooltip>
+
         </v-col>
-        
       </v-row>
 
     </v-card-text>
@@ -132,6 +144,12 @@
       <AgencyGoal v-if="agencyGoalDialog" :agency="agency" @closeDialog="closeDialog($event)" />
     </v-dialog> 
 
+    <v-dialog v-model="agenciesGoalDialog" scrollable persistent width="400">
+      <AppGoalType v-if="agenciesGoalDialog" @closeDialog="closeDialog($event)" />
+    </v-dialog> 
+
+    
+
   </v-card> 
             
 </template>
@@ -141,6 +159,7 @@ import AppData from '@mixins/AppData'
 import TableDetail from '@views/table/TableDetail'
 import Rebuilpresence from '@views/userPresence/components/RebuildPresence.vue'
 import AgencyGoal from '@views/agency/AgencyGoal.vue'
+import AppGoalType from '@views/goalType/AppGoalType.vue'
 export default {
 
   mixins: [AppData],
@@ -148,7 +167,8 @@ export default {
   components:{
     TableDetail,
     Rebuilpresence,
-    AgencyGoal
+    AgencyGoal,
+    AppGoalType
   },
 
   mounted()
@@ -178,6 +198,11 @@ export default {
       return this.$store.getters['getRole']
     },
 
+    goalType()
+    {
+      return this.$store.getters['getGoalType']
+    },
+
     totals()
     {
       let totals = { day:{ points: 0 }, month: { points: 0 } }
@@ -197,8 +222,10 @@ export default {
     tableDetailDialog: false,
     rebuildPresenceDialog: false,
     agencyGoalDialog: false,
+    agenciesGoalDialog: false,
     agencyMenu: [
-      { action: 'showAgencyGoal', icon: 'mdi-flag-checkered', label: 'Metas Agencias', iconColor: 'amber' },
+      { action: 'showAgencyGoal', icon: 'mdi-flag', label: 'Metas Agencia', iconColor: 'amber' },
+      { action: 'showAgenciesGoal', icon: 'mdi-flag-checkered', label: 'Metas Agencias', iconColor: 'orange' },
       { action: 'importProfile', icon: 'mdi-account-multiple-plus', label: 'Importar Nuevos Perfiles', iconColor: 'green' },
       { action: 'importProfilePhoto', icon: 'mdi-camera-account', label: 'Importar Fotos Perfiles', iconColor: 'green' },
     ],
@@ -209,19 +236,26 @@ export default {
   }),
 
   methods:{
-    getdata()
+    updateCommision()
     {
-      this.getResource('comission/detail').then( data => {
-        console.log(data)
-      })
-
+      if(confirm('forzar actualizacion de facturacion'))
+      {
+        this.getResource('comission/detail').then( data => {
+          this.showMessage('Facturacion actualizada');
+        })
+      }
     },
 
     rebuilMonth()
     {
-      this.getResource('comission/month').then( data => {
-        console.log(data)
-      })
+      
+      if(confirm('desea reconstruir la facturacion del Mes Actual (esto podria tomar hasta 10 min) '))
+      {
+        this.getResource('comission/month').then( data => {
+          this.showMessage('Facturacion del mes reconstruida, favor recalcule a los operadores');
+        })
+      }
+  
     },
 
     getCuratorsCommision()
@@ -230,17 +264,19 @@ export default {
     },
 
     getTotalsCommisions(agency){
-
-      if(key > this.agencies.length) return
        
       let key = this.progress.length
 
+      if(key > this.agencies.length) return
+
       this.$set(this.progress, key, { 
+                                     key: key,
                                      id: agency.id, 
                                      name: agency.name, 
                                      token: agency.token, 
                                      amolatina_id: agency.amolatina_id,
-                                     agency_goal: agency.agency_goal,
+                                     goal_day: agency.goal_day,
+                                     goal_month: agency.goal_month,
                                      day: {points: 0}, 
                                      month: {points: 0} })
       
@@ -298,6 +334,11 @@ export default {
       this.agencyGoalDialog = true
     },
 
+    showAgenciesGoal()
+    {
+      this.agenciesGoalDialog = true
+    },
+
     rebuildPrecense(){
       this.rebuildPresenceDialog = true
     },
@@ -307,6 +348,8 @@ export default {
       this.tableDetailDialog     = false
       this.rebuildPresenceDialog = false
       this.agencyGoalDialog      = false
+      this.agenciesGoalDialog    = false
+      this.agency = this.agencies[0]
     },
 
     

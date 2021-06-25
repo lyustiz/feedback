@@ -15,6 +15,7 @@ export default
 			menu:       	[],
 			agency:     	null,
 			agencyManage:   null,
+			goalType:       []
 		}
 	},
 
@@ -34,6 +35,7 @@ export default
 		getMenu:   	    	state => state.menu,
 		getAgency:   	    state => state.agency,
 		getAgencyManage:   	state => state.agencyManage,
+		getGoalType:   	    state => state.goalType,
 		
 	},
 
@@ -103,16 +105,32 @@ export default
 			localStorage.setItem("agencyManage", (agency)  ? JSON.stringify(agency): [])
 		},
 
+		setGoalType( state, goalType )
+		{
+			state.goalType	= goalType
+			localStorage.setItem("goalType", (goalType)  ? JSON.stringify(goalType): [])
+		},
+
 		updateAgencyManage( state, agency )
 		{
 			for (const [key, _agency] of state.agencyManage.entries()) {
-				console.log(_agency, agency, key)
-				if(_agency.id = agency.id)
+				if(_agency.id == agency.id)
 				{
 					state.agencyManage[key] = agency
 				}
 			}
 			localStorage.setItem("agencyManage", (state.agencyManage)  ? JSON.stringify(state.agencyManage): [])
+		},
+
+		updateGoalType( state, goalType )
+		{
+			for (const [key, _goalType] of state.goalType.entries()) {
+				if(_goalType.id == goalType.id)
+				{
+					state.goalType[key] = goalType
+				}
+			}
+			localStorage.setItem("goalType", (state.goalType)  ? JSON.stringify(state.goalType): [])
 		}
 
     },
@@ -136,7 +154,8 @@ export default
 										role: response.data.role,
 										menu: response.data.menu,
 										agency: response.data.user.agency,
-										agencyManage: response.data.user.agency_manage
+										agencyManage: response.data.user.agency_manage,
+										goalType: response.data.user.goal_type
 									};
 	
 									dispatch('autenticate', data)
@@ -272,6 +291,7 @@ export default
 			commit('setMenu'  	 		, data.menu);
 			commit('setAgency'   		, data.agency);
 			commit('setAgencyManage'    , data.agencyManage);
+			commit('setGoalType'        , data.goalType);
 			
 			commit('setAmolatinaToken'  , data.agency[0].token);
 			commit('setAuth'  	 		, true);

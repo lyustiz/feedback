@@ -19,6 +19,11 @@ class GoalTypeController extends Controller
                     ->get();
     }
 
+    public function goalTypeUser($userId)
+    {
+        return GoalType::where('user_id', $userId)->get();
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -64,19 +69,13 @@ class GoalTypeController extends Controller
     public function update(Request $request, GoalType $goalType)
     {
         $validate = request()->validate([
-            'name'              => 	'required|string|max:60',
-			'group'             => 	'nullable|string|max:30',
-			'amount'            => 	'required|numeric|max:9',
-			'icon'              => 	'nullable|string|max:50',
-			'color'             => 	'nullable|string|max:50',
-			'comments'          => 	'nullable|string|max:100',
-			'status_id'         => 	'required|integer|max:999999999',
+			'amount'            => 	'required|numeric|max:999999999',
 			'user_id'           => 	'required|integer|max:999999999',
         ]);
 
-        $goalType = $goalType->update($request->all());
+        $goalType = $goalType->update($validate);
 
-        return [ 'msj' => 'GoalType Editado' , compact('goalType')];
+        return [ 'msj' => 'Meta Editada' , compact('goalType')];
     }
 
     /**

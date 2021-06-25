@@ -156,6 +156,8 @@ Route::get('/tableTurn/combo/{table}',         'TableTurnController@combo');
 Route::apiResource('/tableTurn',               'TableTurnController');
 Route::apiResource('/horary',                  'HoraryController');
 Route::apiResource('/service',                 'ServiceController');
+
+Route::get('/goalType/user/{user}',     'GoalTypeController@goalTypeUser');
 Route::apiResource('/goalType',     'GoalTypeController');
 
 
