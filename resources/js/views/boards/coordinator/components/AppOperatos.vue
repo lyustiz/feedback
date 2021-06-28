@@ -29,7 +29,7 @@
         </v-col>
       </v-row>
 
-    <v-card-text class="pt-0 accounts-container custom-scroll">
+    <v-card-text class="pt-0 operators-table-container custom-scroll">
       <v-list subheader dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
         <v-list-item v-for="operator in operatos" :key="operator.id" class="px-2" > 
           <v-list-item-avatar color="blue" size="50" class="elevation-2">
@@ -189,7 +189,7 @@ export default {
         tableTotal.bonus_day   += operator.presence_day_sum_bonus ? parseFloat(operator.presence_day_sum_bonus) : 0
         tableTotal.bonus_month += operator.presence_month_sum_bonus ? parseFloat(operator.presence_month_sum_bonus) : 0
         tableTotal.goal_day    += operator.goal_day ? parseFloat(operator.goal_day) : 0
-        tableTotal.goal_month    += operator.goal_month ? parseFloat(operator.goal_month) : 0
+        tableTotal.goal_month  += operator.goal_month ? parseFloat(operator.goal_month) : 0
       }
       return tableTotal
     }
@@ -281,8 +281,8 @@ export default {
 </script>
 
 <style>
-.accounts-container{
-  height: 83vh;
+.operators-table-container{
+  height: 75.5vh;
   overflow-y: auto;
 }
 </style>

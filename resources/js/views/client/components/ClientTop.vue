@@ -65,7 +65,7 @@ export default {
     computed: {
         agencies()
         {
-            return this.$store.getters['getAgencyManage']
+            return this.$store.getters['getAgency']
         },
     },
 

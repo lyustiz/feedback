@@ -250,11 +250,8 @@ class User extends Authenticatable
 
     public function goalType()
 	{
-		return $this->HasMany('App\Models\GoalType');
+		return $this->HasMany('App\Models\GoalType', 'user_id', 'status_id');
 	}
-
-
-
 
     public function presence()
     {

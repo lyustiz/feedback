@@ -12,6 +12,11 @@
                 <AppUser></AppUser>
               </v-col>
             </v-row>
+            <v-row dense>
+              <v-col>
+                <AppAgencyTotals></AppAgencyTotals>
+              </v-col>
+            </v-row>
             <v-row>
               <v-col>
                 <AppDashBoard></AppDashBoard>
@@ -47,6 +52,7 @@ import AppDashBoard from './components/AppDashBoard'
 import AppOperatos  from './components/AppOperatos'
 import ListProfiles from './components/ListProfiles'
 import AppProfile   from './components/AppProfile'
+import AppAgencyTotals   from '@views/agency/AppAgencyTotals.vue'
 
 export default {
   
@@ -57,7 +63,8 @@ export default {
     AppDashBoard,
     AppOperatos,
     AppProfile,
-    ListProfiles
+    ListProfiles,
+    AppAgencyTotals
   },
   
   data: () => ({
