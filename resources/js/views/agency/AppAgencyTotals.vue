@@ -58,7 +58,7 @@
                 :color="goal.color" 
                 class="pa-0 ma-0" 
                 width="4">
-                <v-icon color="success" v-if="getPercent(totals.month.points, goal.amount)" size="15">mdi-check-circle-outline</v-icon>
+                <v-icon color="success" v-if="getPercent(totals.month.points, goal.amount) >= 100" size="15">mdi-check-circle-outline</v-icon>
               </v-progress-circular>
             </template>
               <span class="indigo--text font-weight-bold">{{goal.name}} {{formatNumber(totals.month.points)}} / {{formatNumber(goal.amount)}} ({{formatNumber(getPercent(totals.month.points, goal.amount))}}%)</span>
