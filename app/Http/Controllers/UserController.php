@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Table;
+use App\Models\Agency;
+use App\Models\GoalType;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\UserTrait;
@@ -12,10 +14,11 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 use Carbon\Carbon;
+use App\Http\Controllers\Traits\AmolatinaDataTrait as Amolatina;
 
 class UserController extends Controller
 {
-    use UserTrait;
+    use UserTrait, Amolatina;
    
     /**
      * Display a listing of the resource.
@@ -140,8 +143,6 @@ class UserController extends Controller
         return [ 'presence' => $profilePresence, 'sumBonus' => $sumBonus, 'countWriteoff' =>  $countWriteoff];
     }
 
-
-
     public function userWiths($request)
     {
         $withs = [];
@@ -158,6 +159,99 @@ class UserController extends Controller
         }
         return $withs;
     }
+
+    /*************** NOMINA *******************/
+
+    public function payOperators($date)
+    {
+       
+        $startMonth =  Carbon::parse($date)->startOfMonth(); 
+        $endMonth   =  Carbon::parse($date)->endOfMonth(); 
+        $fortnight  =  Carbon::parse($date)->startOfMonth()->addDays(15);
+
+        $from = $startMonth->toDateString();
+        $to   = $endMonth->toDateString();
+        $date = $startMonth->format('Y-m');
+
+        $agencies = Agency::with([ 'goalType' ])->select('amolatina_id', 'token', 'status_id')->get();
+
+        $totalAgencies = 0;
+
+        foreach ($agencies as $agency) {
+            $response = $this->getTotalsAgency($agency->token, $agency->amolatina_id, $from, $to, $date);
+            if($response['ok'])
+            {
+                $values = $response['body']['items']['0'];
+                $totalAgencies += $values['positive'];
+            } 
+        }
+
+        $goalName    = 'feddback';
+        $agencyBonus = 15;
+
+        foreach ($agencies[0]->goalType as $goalType) {
+            if($totalAgencies < $goalType->amount) break;
+            $agencyBonus = $goalType->bonus;
+            $goalName    = $goalType->name;
+        }
+
+        $operatos = \DB::select( \DB::raw("SELECT u1.name, u1.surname apellido, ta.name mesa, tu.name turno, u1.goal_month meta_mes,
+                                            (SELECT IFNULL(SUM(bonus), 0.00) 
+                                               FROM user_presence 
+                                              WHERE user_id = u1.id 
+                                                AND start_at  >= '$startMonth' 
+                                                AND end_at < '$fortnight') puntos_quincena,
+                                            (SELECT IFNULL(SUM(bonus), 0.00) 
+                                               FROM user_presence 
+                                              WHERE user_id = u1.id 
+                                                AND start_at  >= '$fortnight' 
+                                                AND end_at < '$endMonth') puntos_ultimo,
+                                            (SELECT IFNULL(SUM(bonus), 0.00) 
+                                               FROM user_presence 
+                                              WHERE user_id = u1.id 
+                                                AND start_at  >= '$startMonth' 
+                                                AND end_at <= '$endMonth') puntos_mes,
+                                            (SELECT CASE 
+                                                    WHEN SUM(bonus) <  750 THEN 0.02
+                                                    WHEN SUM(bonus) >= 750 AND SUM(bonus) <= 3000 THEN 0.03
+                                                    WHEN SUM(bonus) > 3000 THEN 0.04 END AS porc_bonus
+                                                FROM user_presence 
+                                               WHERE user_id = u1.id 
+                                                 AND start_at  >= '$startMonth' 
+                                                 AND end_at <= '$endMonth') bonus_puntos,
+                                            '$goalName' tipo_meta,
+                                            $agencyBonus  agency_bonus,
+                                        (SELECT COUNT(id) FROM penalty WHERE user_id = u1.id AND day  >= '2021-06-01' AND day < '2021-06-30') penalty
+                                    FROM user u1
+                                    JOIN table_turn tt on tt.id = u1.table_turn_id 
+                                    JOIN `table` ta on ta.id = tt.table_id
+                                    JOIN turn tu on tu.id = tt.turn_id
+                                   WHERE role_id = 4
+                                     AND u1.id in (select user_id from user_presence)
+                                ORDER BY ta.name, tu.name"), []);
+
+
+
+        foreach ($operatos as $key => $operator) {
+            $operatos[$key]->total_bonus_puntos = round($operator->puntos_mes * $operator->bonus_puntos, 2);
+        }        
+
+        return  $operatos;
+
+    }
+
+    public function getTotalsAgency($token, $amolatinaId, $from, $to, $date)
+    {       
+        $setup          = Amolatina::getSetup('total-agency');
+        $url            = $setup->url . '/' . $amolatinaId;
+        $params         = $setup->params;
+        $params['date'] = Amolatina::formatDateTime($date);
+        $params['from'] = Amolatina::formatDateTime($from);
+        $params['to']   = Amolatina::formatDateTime($to);
+        return   Amolatina::getDataUrl( $token, $url, $params, []);
+    }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -206,7 +300,7 @@ class UserController extends Controller
             $this->setTableCoordinator($user);
         }
 
-        return [ 'msj' => ucfirst($request->rolename) . " Agregado Correctamente", compact('user') ];
+        return [ 'msj' => "Usuario Agregado Correctamente", compact('user') ];
     }
 
     public function setTableCoordinator($user)
@@ -289,7 +383,7 @@ class UserController extends Controller
 
         $update = $user->update($request->all());
 
-        return [ 'msj' => ucfirst($request->rolename)." Actualizado Correctamente", compact('update') ];
+        return [ 'msj' => "Usuario Actualizado Correctamente", compact('update') ];
     }
 
     public function goals(Request $request, User $user)

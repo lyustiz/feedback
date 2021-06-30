@@ -29,7 +29,9 @@ class User extends Authenticatable
                             'table_id',
                             'turn_id',
                             'table_turn_id',
+                            'work_time',
                             'goal_day',
+                            'in_house',
                             'goal_month',
 	 	 	 	 	 	 	'photo',
 	 	 	 	 	 	 	'email',
@@ -169,6 +171,8 @@ class User extends Authenticatable
                                                                             ]);
     }
 
+
+
     public function profile()
 	{
 		return $this->hasManyThrough(
@@ -220,6 +224,36 @@ class User extends Authenticatable
 			'profile_id' // fk en intermedia
 		)->whereBetween('start_at', [
             Carbon::now()->startOfMonth(), 
+            Carbon::now()->endOfMonth()
+        ]);
+	}
+
+    public function profilePresenceFirstFortnight()
+	{
+		return $this->hasManyThrough(
+			'App\Models\Profile', //final
+            'App\Models\UserPresence', //intermedia
+            'user_id', // fk en intermedia
+            'id', // laocal en origen
+            'id', // local en final
+			'profile_id' // fk en intermedia
+		)->whereBetween('start_at', [
+            Carbon::now()->startOfMonth(), 
+            Carbon::now()->startOfMonth()->addDays(16)
+        ])->distinct();
+	}
+
+    public function profilePresenceSecondFortnight()
+	{
+		return $this->hasManyThrough(
+			'App\Models\Profile', //final
+            'App\Models\UserPresence', //intermedia
+            'user_id', // fk en intermedia
+            'id', // laocal en origen
+            'id', // local en final
+			'profile_id' // fk en intermedia
+		)->whereBetween('start_at', [
+            Carbon::now()->startOfMonth()->addDays(16), 
             Carbon::now()->endOfMonth()
         ]);
 	}

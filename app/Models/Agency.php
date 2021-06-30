@@ -66,6 +66,11 @@ class Agency extends Model
         return $this->hasMany('App\Models\AgencyGoal');
     }
 
+    public function goalType()
+	{
+		return $this->HasMany('App\Models\GoalType', 'status_id', 'status_id');
+	}
+
     public function clients()
     {
         return $this->hasMany('App\Models\Client');

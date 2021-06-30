@@ -10,7 +10,7 @@
             <v-card-text>
               <v-row dense>
                 <v-col cols="auto">
-                  <v-icon size="34">mdi-account-cash</v-icon>
+                  <v-icon size="20">mdi-account-cash</v-icon>
                 </v-col>
                 <v-col >Clientes</v-col>
               </v-row>
@@ -22,7 +22,7 @@
             <v-card-text>
               <v-row dense>
                 <v-col cols="auto">
-                  <v-icon size="34">mdi-sack</v-icon>
+                  <v-icon size="20">mdi-sack</v-icon>
                 </v-col>
                 <v-col>Bonus</v-col>
               </v-row>

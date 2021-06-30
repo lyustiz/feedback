@@ -112,7 +112,7 @@
                                 item-text="name"
                                 append-icon="mdi-table-furniture"
                                 hide-details
-                                @change="getTurns($event)"
+                                @change="editTurns($event)"
                             ></v-select>
                         </v-col>
 
@@ -127,7 +127,7 @@
                                 :rules="[rules.required]"
                                 item-value="id"
                                 item-text="name"
-                                append-icon="mdi-clock"
+                                append-icon="mdi-calendar-clock"
                                 hide-details
                             ></v-select>
                         </v-col>
@@ -148,17 +148,29 @@
                             ></v-select>
                         </v-col>
 
-                         <v-col cols="12">
-                            <v-text-field
-                                :rules="[rules.max(80)]"
-                                v-model="form.comments"
-                                label="Comments"
-                                placeholder="Indique Comments"
+                        <v-col cols="12" md="6">
+                            <v-select
                                 dense
-                                filled
                                 outlined
+                                filled
+                                label="Jornada"
+                                v-model="form.work_time"    
+                                :items="workTime"
+                                :rules="[rules.required]"
+                                append-icon="mdi-clock"
                                 hide-details
-                            ></v-text-field>
+                            ></v-select>
+                        </v-col>
+
+                         <v-col cols="12" md="6">
+                            <v-checkbox
+                                v-model="form.in_house"
+                                :label="`In House`"
+                                prepend-icon="mdi-home"
+                                hide-details
+                                class="shrink mr-2 mt-0"
+                                color="amber"
+                            ></v-checkbox>
                         </v-col>
 
                     
@@ -231,6 +243,8 @@ export default {
                 table_id:      null,
                 turn_id:       null,
                 table_turn_id: null,
+                work_time:     null,
+                in_house:      null,
 				photo: 	       null,
 				email: 	       null,
 				comments: 	   null,
@@ -247,7 +261,11 @@ export default {
                 status_id:   1,
                 turn_id:     1,
             },
-            turns: []
+            defaultForm: {
+                in_house: 0
+            },
+            turns: [],
+            workTime: [ { text: '8H', value: 8 }, { text: '12H', value: 12 }]
         }
     },
 
@@ -257,7 +275,14 @@ export default {
             this.form.photo = photoSrc
         },
 
+        editTurns(tableId)
+        {
+            this.form.table_turn_id = null
+            this.getTurns(tableId)
+        },
+
         getTurns(tableId){
+            
             this.getResource(`tableTurn/combo/${tableId}`).then( data =>{
                 this.turns = data
             })
@@ -267,6 +292,8 @@ export default {
         {
             let role = this.selects.role.find( role => role.id = this.form.role_id)
             this.form.rolename = role.path
+
+            this.form.in_house  = (this.form.in_house) ? this.form.in_house : 0
             
             if(role.id == 3) //coordinator
             {

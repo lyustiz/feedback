@@ -11,6 +11,25 @@
         </v-col>
       </v-row>
       </v-subheader>
+      <v-row no-gutters class="mx-5 my-2 subtitle-2">
+        <v-col cols="6">
+          Total Dia
+        </v-col>
+        <v-col cols="6">
+           <v-progress-linear color="blue darken-1" height="15" :value="getPercent(totals.bonus_day/totals.goal_day)" :indeterminate="loading">
+           {{formatNumber(totals.bonus_day)}}
+          </v-progress-linear>
+        </v-col>
+
+        <v-col cols="6">
+          Total Mes
+        </v-col>
+        <v-col cols="6">
+          <v-progress-linear color="green darken-1" height="15" :value="getPercent(totals.bonus_day/totals.goal_month)" :indeterminate="loading">
+           {{ formatNumber(totals.bonus_month)}}
+          </v-progress-linear>
+        </v-col>
+      </v-row>
     <v-card-text class="pt-0 accounts-container custom-scroll">
       <v-list subheader two-line dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
         <v-list-item v-for="operator in operatos" :key="operator.id" > 
@@ -172,6 +191,21 @@ export default {
 
   created() {
     this.list()
+  },
+
+  computed:{
+    totals()
+    {
+      let tableTotal = { bonus_day: 0, bonus_month: 0, goal_day: 1, goal_month: 1 }
+      
+      for (const operator of this.operatos) {
+        tableTotal.bonus_day   += operator.presence_day_sum_bonus ? parseFloat(operator.presence_day_sum_bonus) : 0
+        tableTotal.bonus_month += operator.presence_month_sum_bonus ? parseFloat(operator.presence_month_sum_bonus) : 0
+        tableTotal.goal_day    += operator.goal_day ? parseFloat(operator.goal_day) : 0
+        tableTotal.goal_month  += operator.goal_month ? parseFloat(operator.goal_month) : 0
+      }
+      return tableTotal
+    }
   },
 
   data: () => ({

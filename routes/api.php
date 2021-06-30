@@ -84,8 +84,9 @@ Route::apiResource('/absence',         'AbsenceController');
 Route::apiResource('/absenceType',     'AbsenceTypeController');
 
 // user
-Route::put('/user/{user}/goals',                'UserController@goals');
+Route::put('/user/{user}/goals',               'UserController@goals');
 
+Route::get('/user/pay/operator/{date}',        'UserController@payOperators');
 Route::get('/user/list',                        'UserController@list');
 Route::get('/user/list/table',                  'UserController@listTable');
 Route::get('/user/statistics/{table}',          'UserController@statistics');

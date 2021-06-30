@@ -54,6 +54,7 @@
     <v-subheader>
       <v-row>
         <v-col>Ganancias</v-col>
+        <v-col cols="auto"><v-icon color="info" small @click="payOperator($event)">mdi-clipboard-text-outline</v-icon></v-col>
         <v-col cols="auto"><v-icon color="red" small @click="rebuilMonth($event)">mdi-calendar-refresh</v-icon></v-col>
         <v-col cols="auto"><v-icon  small @click="updateCommision($event)">mdi-home-search-outline</v-icon></v-col>
         
@@ -351,6 +352,13 @@ export default {
       this.agenciesGoalDialog    = false
       this.agency = this.agencies[0]
     },
+
+    payOperator(){
+      let date = '2021-06-01';
+      this.getResource(`user/pay/operator/${date}`).then( data => {
+        console.log(data)
+      })
+    }
 
     
   }

@@ -12,6 +12,7 @@ class GoalType extends Model
                             'name',
 	 	 	 	 	 	 	'group',
 	 	 	 	 	 	 	'amount',
+                            'bonus',
 	 	 	 	 	 	 	'icon',
 	 	 	 	 	 	 	'color',
 	 	 	 	 	 	 	'comments',
