@@ -54,8 +54,8 @@
     <v-subheader>
       <v-row>
         <v-col>Ganancias</v-col>
-        <v-col cols="auto"><v-icon color="info" small @click="payOperator($event)">mdi-clipboard-text-outline</v-icon></v-col>
-        <v-col cols="auto"><v-icon color="red" small @click="rebuilMonth($event)">mdi-calendar-refresh</v-icon></v-col>
+       <!--  <v-col cols="auto"><v-icon color="info" small @click="showPayReport($event)">mdi-clipboard-text-outline</v-icon></v-col> -->
+       <!--  <v-col cols="auto"><v-icon color="red" small @click="rebuilMonth($event)">mdi-calendar-refresh</v-icon></v-col> -->
         <v-col cols="auto"><v-icon  small @click="updateCommision($event)">mdi-home-search-outline</v-icon></v-col>
         
 <!--         <v-col cols="auto"><v-icon  small @click="getCuratorsCommision($event)">mdi-home-search-outline</v-icon></v-col>
@@ -149,6 +149,10 @@
       <AppGoalType v-if="agenciesGoalDialog" @closeDialog="closeDialog($event)" />
     </v-dialog> 
 
+    <v-dialog v-model="reportPayDialog" scrollable persistent fullscreen>
+      <AppReportPay v-if="reportPayDialog" @closeDialog="closeDialog($event)" />
+    </v-dialog> 
+
     
 
   </v-card> 
@@ -158,9 +162,10 @@
 <script>
 import AppData from '@mixins/AppData'
 import TableDetail from '@views/table/TableDetail'
-import Rebuilpresence from '@views/userPresence/components/RebuildPresence.vue'
-import AgencyGoal from '@views/agency/AgencyGoal.vue'
-import AppGoalType from '@views/goalType/AppGoalType.vue'
+import Rebuilpresence from '@views/userPresence/components/RebuildPresence'
+import AgencyGoal from '@views/agency/AgencyGoal'
+import AppGoalType from '@views/goalType/AppGoalType'
+import AppReportPay from '@views/reports/AppReportPay'
 export default {
 
   mixins: [AppData],
@@ -169,7 +174,8 @@ export default {
     TableDetail,
     Rebuilpresence,
     AgencyGoal,
-    AppGoalType
+    AppGoalType,
+    AppReportPay
   },
 
   mounted()
@@ -224,6 +230,7 @@ export default {
     rebuildPresenceDialog: false,
     agencyGoalDialog: false,
     agenciesGoalDialog: false,
+    reportPayDialog: false,
     agencyMenu: [
       { action: 'showAgencyGoal', icon: 'mdi-flag', label: 'Metas Agencia', iconColor: 'amber' },
       { action: 'showAgenciesGoal', icon: 'mdi-flag-checkered', label: 'Metas Agencias', iconColor: 'orange' },
@@ -231,8 +238,12 @@ export default {
       { action: 'importProfilePhoto', icon: 'mdi-camera-account', label: 'Importar Fotos Perfiles', iconColor: 'green' },
     ],
     gralMenu: [
+      { action: 'showPayReport', icon: 'mdi-clipboard-text-outline', label: 'Reporte Pago', iconColor: 'info' },
       { action: 'showTablesDetail', icon: 'mdi-sitemap', label: 'Organigrama', iconColor: 'blue' },
       { action: 'rebuildPrecense', icon: 'mdi-calendar-sync', label: 'Recalcular Progreso', iconColor: 'amber' },
+      { action: 'rebuilMonth', icon: 'mdi-calendar-refresh', label: 'Recalcular Factutacion!!', iconColor: 'red', class: 'red' },
+
+      
     ],
   }),
 
@@ -344,12 +355,17 @@ export default {
       this.rebuildPresenceDialog = true
     },
 
+    showPayReport(){
+      this.reportPayDialog = true
+    },
+
     closeDialog(reload)
     {
       this.tableDetailDialog     = false
       this.rebuildPresenceDialog = false
       this.agencyGoalDialog      = false
       this.agenciesGoalDialog    = false
+      this.reportPayDialog       = false
       this.agency = this.agencies[0]
     },
 

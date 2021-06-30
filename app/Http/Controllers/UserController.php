@@ -195,7 +195,7 @@ class UserController extends Controller
             $goalName    = $goalType->name;
         }
 
-        $operatos = \DB::select( \DB::raw("SELECT u1.name, u1.surname apellido, ta.name mesa, tu.name turno, u1.goal_month meta_mes,
+        $operatos = \DB::select( \DB::raw("SELECT u1.name nombre, u1.surname apellido, ta.name mesa, tu.name turno, u1.goal_month meta_mes, u1.in_house, u1.work_time,
                                             (SELECT IFNULL(SUM(bonus), 0.00) 
                                                FROM user_presence 
                                               WHERE user_id = u1.id 
@@ -220,7 +220,7 @@ class UserController extends Controller
                                                  AND start_at  >= '$startMonth' 
                                                  AND end_at <= '$endMonth') bonus_puntos,
                                             '$goalName' tipo_meta,
-                                            $agencyBonus  agency_bonus,
+                                            $agencyBonus  bonus_agencia,
                                         (SELECT COUNT(id) FROM penalty WHERE user_id = u1.id AND day  >= '2021-06-01' AND day < '2021-06-30') penalty
                                     FROM user u1
                                     JOIN table_turn tt on tt.id = u1.table_turn_id 
@@ -228,16 +228,30 @@ class UserController extends Controller
                                     JOIN turn tu on tu.id = tt.turn_id
                                    WHERE role_id = 4
                                      AND u1.id in (select user_id from user_presence)
-                                ORDER BY ta.name, tu.name"), []);
+                                ORDER BY ta.name, tu.name, u1.name"), []);
 
 
 
         foreach ($operatos as $key => $operator) {
             $operatos[$key]->total_bonus_puntos = round($operator->puntos_mes * $operator->bonus_puntos, 2);
+            $operatos[$key]->bonus_in_house = $this->getBonusInHouse($operator->in_house, $operator->work_time);
+            $operatos[$key]->bonus_total = round($operatos[$key]->total_bonus_puntos + $operatos[$key]->bonus_in_house + $operatos[$key]->bonus_agencia, 2);
         }        
 
         return  $operatos;
 
+    }
+
+    public function getBonusInHouse($inHouse, $workTime)
+    {
+        switch (true) {
+            case ($inHouse == 1 and $workTime == 8) : 
+                return 20;
+            case ($inHouse == 1 and $workTime == 12):
+                return 25;
+            default:
+                return 0;
+        }
     }
 
     public function getTotalsAgency($token, $amolatinaId, $from, $to, $date)
@@ -245,9 +259,9 @@ class UserController extends Controller
         $setup          = Amolatina::getSetup('total-agency');
         $url            = $setup->url . '/' . $amolatinaId;
         $params         = $setup->params;
-        $params['date'] = Amolatina::formatDateTime($date);
-        $params['from'] = Amolatina::formatDateTime($from);
-        $params['to']   = Amolatina::formatDateTime($to);
+        $params['date'] = $date;
+        $params['from'] = $from;
+        $params['to']   = $to;
         return   Amolatina::getDataUrl( $token, $url, $params, []);
     }
 
