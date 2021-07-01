@@ -177,8 +177,11 @@ class UserController extends Controller
 
         $totalAgencies = 0;
 
+        $totals = [];
+
         foreach ($agencies as $agency) {
             $response = $this->getTotalsAgency($agency->token, $agency->amolatina_id, $from, $to, $date);
+            $total[] = $response;
             if($response['ok'])
             {
                 $values = $response['body']['items']['0'];
@@ -187,7 +190,7 @@ class UserController extends Controller
                 return $response;
             }
         }
-
+        return $total;
         $goalName    = 'feddback';
         $agencyBonus = 15;
 
