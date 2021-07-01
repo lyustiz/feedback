@@ -99,8 +99,10 @@
                     <tr>
                         <td class="text-xs-left">{{ item.nombre }}</td>
 						<td class="text-xs-left">{{ item.apellido }}</td>
-						<td class="text-xs-left">{{ item.mesa }}</td>
-						<td class="text-xs-left">{{ item.turno }}</td>
+						<td class="text-xs-left">{{ item.mesa }} {{ (item.is_alternate == 1) ? '*': null}}</td>
+						<td class="text-xs-left">{{ item.turno }}({{item.work_time}}H)</td>
+                        <td class="text-xs-left">{{ item.salary_fortnight }}</td>
+                        <td class="text-xs-left">{{ item.salary_fortnight }}</td>
 						<td class="text-right">{{ item.puntos_mes }}</td>
 						<td class="text-right">{{ item.total_bonus_puntos }}</td>
 						<td class="text-right">{{ item.bonus_agencia }}</td>
@@ -144,6 +146,8 @@ export default {
                 { text: 'Apellido',   value: 'apellido' },
                 { text: 'Mesa',       value: 'mesa' },
                 { text: 'Turno',      value: 'turno' },
+                { text: 'Quincena', value: 'salary_fortnight' },
+                { text: 'Ultimo',   value: 'salary_fortnight' },
                 { text: 'Puntos',     value: 'puntos_mes' },
                 { text: 'B. Puntos',  value: 'total_bonus_puntos' },
                 { text: 'B. Agencia', value: 'bonus_agencia' },

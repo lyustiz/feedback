@@ -195,7 +195,9 @@ class UserController extends Controller
             $goalName    = $goalType->name;
         }
 
-        $operatos = \DB::select( \DB::raw("SELECT u1.name nombre, u1.surname apellido, ta.name mesa, tu.name turno, u1.goal_month meta_mes, u1.in_house, u1.work_time,
+        
+
+        $operatos = \DB::select( \DB::raw("SELECT u1.name nombre, u1.surname apellido, ta.name mesa, tu.name turno, tu.id turn_id, u1.goal_month meta_mes, u1.in_house, u1.is_alternate, u1.work_time,
                                             (SELECT IFNULL(SUM(bonus), 0.00) 
                                                FROM user_presence 
                                               WHERE user_id = u1.id 
@@ -227,19 +229,39 @@ class UserController extends Controller
                                     JOIN `table` ta on ta.id = tt.table_id
                                     JOIN turn tu on tu.id = tt.turn_id
                                    WHERE role_id = 4
+                                     AND u1.deleted_at IS NULL
                                      AND u1.id in (select user_id from user_presence)
                                 ORDER BY ta.name, tu.name, u1.name"), []);
 
-
-
         foreach ($operatos as $key => $operator) {
+            $operatos[$key]->salary_month = $this->getSalaryMonth($operator->turn_id, $operator->work_time,  $operator->is_alternate);
+            $operatos[$key]->salary_fortnight = round($operatos[$key]->salary_month/2, 2);
             $operatos[$key]->total_bonus_puntos = round($operator->puntos_mes * $operator->bonus_puntos, 2);
             $operatos[$key]->bonus_in_house = $this->getBonusInHouse($operator->in_house, $operator->work_time);
-            $operatos[$key]->bonus_total = round($operatos[$key]->total_bonus_puntos + $operatos[$key]->bonus_in_house + $operatos[$key]->bonus_agencia, 2);
+            $operatos[$key]->bonus_total = round($operatos[$key]->salary_month + $operatos[$key]->total_bonus_puntos + $operatos[$key]->bonus_in_house + $operatos[$key]->bonus_agencia, 2);
         }        
 
         return  $operatos;
 
+    }
+
+    public function getSalaryMonth($turnId, $workTime, $isAlternate)
+    {
+        $salaryMonth = ($isAlternate == 1) ? 40 : 0;
+        switch (true) {
+            case $turnId == 1 and $workTime = 8:
+                return $salaryMonth + 95;
+            case $turnId == 1 and $workTime = 12:
+                return $salaryMonth + 140;
+            case $turnId == 2 and $workTime = 8:
+                return $salaryMonth + 100;
+            case $turnId == 3 and $workTime = 8:
+                return $salaryMonth + 110;
+            case $turnId == 3 and $workTime = 12:
+                return $salaryMonth + 160;
+            default:
+                return $salaryMonth;
+        }
     }
 
     public function payCoordinators($date)
@@ -274,7 +296,7 @@ class UserController extends Controller
             $goalName    = $goalType->name;
         }
 
-        $operatos = \DB::select( \DB::raw("SELECT u1.name nombre, u1.surname apellido, ta.name mesa, tu.name turno, u1.goal_month meta_mes, u1.in_house, u1.work_time,
+        $operatos = \DB::select( \DB::raw("SELECT u1.name nombre, u1.surname apellido, ta.name mesa, tu.name turno, tu.id turn_id, u1.goal_month meta_mes, u1.in_house, u1.is_alternate, u1.work_time,
                                                 (SELECT SUM(bonus) 
                                                     FROM user_presence 
                                                 WHERE start_at  >= '$startMonth' 
@@ -290,14 +312,17 @@ class UserController extends Controller
                                             JOIN `table` ta on ta.id = tt.table_id
                                             JOIN turn tu on tu.id = tt.turn_id
                                            WHERE role_id = 3
+                                             AND u1.deleted_at IS NULL
                                              AND u1.id in (SELECT user_id FROM user_presence)
                                         ORDER BY ta.name, tu.name"), []);
 
         foreach ($operatos as $key => $operator) {
+            $operatos[$key]->salary_month = $this->getSalaryMonth($operator->turn_id, $operator->work_time,  $operator->is_alternate);
+            $operatos[$key]->salary_fortnight = round($operatos[$key]->salary_month/2, 2);
             $operatos[$key]->bonus_puntos  = 0.04;
             $operatos[$key]->total_bonus_puntos = round($operator->puntos_mes * $operatos[$key]->bonus_puntos, 2);
             $operatos[$key]->bonus_in_house = $this->getBonusInHouse($operator->in_house, $operator->work_time);
-            $operatos[$key]->bonus_total = round($operatos[$key]->total_bonus_puntos + $operatos[$key]->bonus_in_house + $operatos[$key]->bonus_agencia, 2);
+            $operatos[$key]->bonus_total = round($operatos[$key]->salary_month + $operatos[$key]->total_bonus_puntos + $operatos[$key]->bonus_in_house + $operatos[$key]->bonus_agencia, 2);
         }        
 
         return  $operatos;

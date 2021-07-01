@@ -129,12 +129,12 @@
                                 :rules="[rules.required]"
                                 item-value="id"
                                 item-text="name"
-                                append-icon="mdi-account-switch-outline"
+                                append-icon="mdi-shield-account"
                                 hide-details
                             ></v-select>
                         </v-col>
 
-                        <v-col cols="6">
+                        <v-col cols="6" md="4">
                             <v-select
                                 dense
                                 outlined
@@ -148,7 +148,7 @@
                             ></v-select>
                         </v-col>
 
-                        <v-col cols="6">
+                        <v-col cols="6" md="4">
                             <v-checkbox
                                 v-model="form.in_house"
                                 :label="`In House`"
@@ -159,11 +159,18 @@
                             ></v-checkbox>
                         </v-col>
 
-             
+                        <v-col cols="6" md="4">
+                            <v-checkbox
+                                v-model="form.is_alternate"
+                                :label="`Suplente`"
+                                prepend-icon="mdi-account-switch-outline"
+                                hide-details
+                                class="shrink mr-2 mt-0"
+                                color="green"
+                            ></v-checkbox>
+                        </v-col>
 
-                    
                     </v-row>
-
                     
                 </v-col>
                       
@@ -226,6 +233,7 @@ export default {
                 table_turn_id:  null,
                 work_time:      null,
                 in_house:       null,
+                is_alternate:   null,
 				photo: 	        null,
 				email: 	        null,
 				comments: 	    null,
@@ -265,6 +273,7 @@ export default {
             let role = this.selects.role.find( role => role.id = this.form.role_id)
             this.form.rolename = role.path
             this.form.in_house  = (this.form.in_house) ? this.form.in_house : 0
+            this.form.is_alternate  = (this.form.is_alternate) ? this.form.is_alternate : 0
             
             if(role.id == 3) //coordinator
             {

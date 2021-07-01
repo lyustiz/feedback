@@ -32,6 +32,7 @@ class User extends Authenticatable
                             'work_time',
                             'goal_day',
                             'in_house',
+                            'is_alternate',
                             'goal_month',
 	 	 	 	 	 	 	'photo',
 	 	 	 	 	 	 	'email',
