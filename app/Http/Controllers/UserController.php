@@ -249,15 +249,15 @@ class UserController extends Controller
     {
         $salaryMonth = ($isAlternate == 1) ? 40 : 0;
         switch (true) {
-            case $turnId == 1 and $workTime = 8:
+            case $turnId == 1 and $workTime == 8:
                 return $salaryMonth + 95;
-            case $turnId == 1 and $workTime = 12:
+            case $turnId == 1 and $workTime == 12:
                 return $salaryMonth + 140;
-            case $turnId == 2 and $workTime = 8:
+            case $turnId == 2 and $workTime == 8:
                 return $salaryMonth + 100;
-            case $turnId == 3 and $workTime = 8:
+            case $turnId == 3 and $workTime == 8:
                 return $salaryMonth + 110;
-            case $turnId == 3 and $workTime = 12:
+            case $turnId == 3 and $workTime == 12:
                 return $salaryMonth + 160;
             default:
                 return $salaryMonth;
