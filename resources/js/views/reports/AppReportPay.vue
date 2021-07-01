@@ -11,7 +11,7 @@
 
         <v-card-text>
        
-         <v-form ref="form" v-model="valid" lazy-validation class="row">
+         <v-form ref="form" v-model="valid" lazy-validation class="row mt-1">
             <!-- <v-row> -->
                 <v-col cols="12" md="6">
                     <v-select
@@ -23,6 +23,7 @@
                         :items="reports"
                         :rules="[rules.required]"
                         hide-details
+                        return-object
                     ></v-select>
                 </v-col>
 
@@ -135,8 +136,8 @@ export default {
                 isDdetail:  null
             },
             reports: [
-                { value: 'operator', text: 'Reporte Operadores',  path: 'user/pay/operator/'  },
-                { value: 'coordinator', text: 'Reporte Corrdinador',  path: 'user/pay/coordinator/' }
+                { value: 'operator', text: 'Reporte Operadores',  url: 'user/pay/operator/'  },
+                { value: 'coordinator', text: 'Reporte Coordinador',  url: 'user/pay/coordinator/' }
             ],
             headers: [
                 { text: 'Nombre',     value: 'nombre' },
@@ -158,7 +159,7 @@ export default {
       getReport()
       {
         if (!this.$refs.form.validate())  return 
-        this.getResource(`user/pay/operator/${this.form.date}`).then( data => {
+        this.getResource(`${this.form.reportType.url}${this.form.date}`).then( data => {
             this.items = data
         })
       }
