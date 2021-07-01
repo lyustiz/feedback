@@ -183,7 +183,9 @@ class UserController extends Controller
             {
                 $values = $response['body']['items']['0'];
                 $totalAgencies += $values['positive'];
-            } 
+            } else {
+                return $response;
+            }
         }
 
         $goalName    = 'feddback';
