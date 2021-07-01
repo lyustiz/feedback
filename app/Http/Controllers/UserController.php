@@ -190,10 +190,10 @@ class UserController extends Controller
                 return $response;
             }
         }
-        return $total;
+        
         $goalName    = 'feddback';
         $agencyBonus = 15;
-
+        return $agencies[0];
         foreach ($agencies[0]->goalType as $goalType) {
             if($totalAgencies < $goalType->amount) break;
             $agencyBonus = $goalType->bonus;
