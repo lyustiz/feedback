@@ -243,7 +243,7 @@ class UserController extends Controller
             $operatos[$key]->salary_fortnight = round($operatos[$key]->salary_month/2, 2);
             $operatos[$key]->total_bonus_puntos = round($operator->puntos_mes * $operator->bonus_puntos, 2);
             $operatos[$key]->bonus_in_house = $this->getBonusInHouse($operator->in_house, $operator->work_time);
-            $operatos[$key]->bonus_total = round($operatos[$key]->salary_month + $operatos[$key]->total_bonus_puntos + $operatos[$key]->bonus_in_house + $operatos[$key]->bonus_agencia, 2);
+            $operatos[$key]->bonus_total = round($operatos[$key]->salary_fortnight + $operatos[$key]->total_bonus_puntos + $operatos[$key]->bonus_in_house + $operatos[$key]->bonus_agencia, 2);
         }        
 
         return  $operatos;
@@ -327,7 +327,7 @@ class UserController extends Controller
             $operatos[$key]->bonus_puntos  = 0.04;
             $operatos[$key]->total_bonus_puntos = round($operator->puntos_mes * $operatos[$key]->bonus_puntos, 2);
             $operatos[$key]->bonus_in_house = $this->getBonusInHouse($operator->in_house, $operator->work_time);
-            $operatos[$key]->bonus_total = round($operatos[$key]->salary_month + $operatos[$key]->total_bonus_puntos + $operatos[$key]->bonus_in_house + $operatos[$key]->bonus_agencia, 2);
+            $operatos[$key]->bonus_total = round($operatos[$key]->salary_fortnight + $operatos[$key]->total_bonus_puntos + $operatos[$key]->bonus_in_house + $operatos[$key]->bonus_agencia, 2);
         }        
 
         return  $operatos;
