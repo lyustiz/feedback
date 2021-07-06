@@ -231,7 +231,7 @@ export default {
     methods:
     {
       getTable() {
-        this.getResource(`table/list`).then(data =>{
+        this.getResource(`table/list/user/${this.userId}`).then(data =>{
           this.tables = data
         })
       },

@@ -7,6 +7,7 @@ use App\Models\Turn;
 use App\Models\TableTurn;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
 
 class TableController extends Controller
 {
@@ -26,6 +27,27 @@ class TableController extends Controller
         return Table::with([ 'manager', 'turn:turn.id,turn.name', 'coordinator' ])
                     ->active(true)
                     ->get();
+    }
+
+    public function listUser($userId)
+    {
+        $user    = \Auth::user();
+
+        if($user->role_id == 1 ) // administrador
+        {
+            return Table::with([ 'manager', 'turn:turn.id,turn.name', 'coordinator' ])
+                    ->active(true)
+                    ->get();
+        } else {               // coordinador
+
+            return Table::with([ 'manager', 'turn:turn.id,turn.name', 'coordinator' ])
+                    ->active(true)
+                    ->whereHas('tableTurn', function (Builder $query) use($user) {
+                        $query->where('id', $user->table_turn_id);
+                    })
+                    ->get();
+
+        }
     }
 
     public function tablesDetails()

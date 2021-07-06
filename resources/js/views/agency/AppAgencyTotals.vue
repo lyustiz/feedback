@@ -1,6 +1,6 @@
 <template>
- <v-card class="rounded-lg px-1 py-2" color="rgba(0,0,0,0.4)" dark>
-  <v-row v-for="progres in progress" :key="progres.id" no-gutters>
+ <v-card class="rounded-lg px-3 py-3" color="rgba(0,0,0,0.4)" dark>
+  <v-row v-for="progres in progress" :key="progres.id" dense>
         <v-col class="sm-text">
           {{progres.name}}
         </v-col>
@@ -26,27 +26,29 @@
           </v-tooltip>
 
         </v-col>
-        <v-col cols="auto" class="pa-0">
-          <div class="fill-agency-total"></div>
-        </v-col>
+
       </v-row>
 
-      <v-row  no-gutters>
-        <v-col class="caption pt-1">
+      <v-row  dense>
+        <v-col class="caption">
          Total
         </v-col>
-       <v-col class="pt-1">
+       <v-col class="">
           <v-progress-linear height="15" color="blue darken-1" class="caption" :value="getPercent(totals.day.points, 2000)" :indeterminate="loading">
             {{ formatNumber(totals.day.points) || 0}}
           </v-progress-linear>
         </v-col>
-        <v-col class="pt-1">
+        <v-col class="">
           <v-progress-linear color="green darken-1" class="caption" height="15" :value="getPercent(totals.month.points, 60000)" :indeterminate="loading">
             {{ formatNumber(totals.month.points) || 0}}
           </v-progress-linear>
         </v-col>
-
-        <v-col cols="auto" class="pa-0">
+      </v-row>
+      <v-row no-gutters>
+        <v-col cols="4"></v-col>
+        <v-col cols="4"></v-col>
+        
+         <v-col cols="4" class="pt-n1">
           
             <v-tooltip bottom :color="goal.color" v-for="goal in goalType" :key="goal.id">
             <template v-slot:activator="{ on, attrs }">
@@ -56,7 +58,7 @@
                 :value="getPercent(totals.month.points, goal.amount)" 
                 :size="13" 
                 :color="goal.color" 
-                class="pa-0 ma-0" 
+                class="pa-0 my-0 mx-1" 
                 width="4">
                 <v-icon color="success" v-if="getPercent(totals.month.points, goal.amount) >= 100" size="15">mdi-check-circle-outline</v-icon>
               </v-progress-circular>
@@ -150,7 +152,7 @@ export default {
   width: 2.42rem;
 }
 .sm-text{
-  font-size: .60rem!important;
+  font-size: .70rem!important;
   letter-spacing: .0333333333em!important;
   line-height: 1.25rem;
 }

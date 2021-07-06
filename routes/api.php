@@ -133,6 +133,7 @@ Route::apiResource('/comission',                'ComissionController');
 
 Route::get('/table/detail',                     'TableController@tablesDetails');
 
+Route::get('/table/list/user/{user}',           'TableController@listUser');
 Route::get('/table/list',                       'TableController@list');
 Route::apiResource('/table',                    'TableController');
 

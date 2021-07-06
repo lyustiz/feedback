@@ -9,7 +9,7 @@
             </v-row>
         </v-card-title>
 
-        <v-card-text>
+        <v-card-text class="custom-scroll">
        
          <v-form ref="form" v-model="valid" lazy-validation class="row mt-1">
             <!-- <v-row> -->

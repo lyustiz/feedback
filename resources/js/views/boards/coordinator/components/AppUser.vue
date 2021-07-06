@@ -35,7 +35,7 @@
                     <v-subheader>Meta Dia</v-subheader>
                     <v-progress-circular
                         :rotate="-90"
-                        :size="80"
+                        :size="75"
                         :width="8"
                         :value="user.presence_day_sum_bonus * 100 / user.goal_day "
                         color="blue">
@@ -53,7 +53,7 @@
                     </v-subheader>
                     <v-progress-circular
                         :rotate="-90"
-                        :size="80"
+                        :size="75"
                         :width="8"
                         :value=" (user.presence_month_sum_writeoff)"
                         color="red">
@@ -85,7 +85,7 @@
                     </v-subheader>
                     <v-progress-circular
                         :rotate="-90"
-                        :size="80"
+                        :size="75"
                         :width="8"
                         :value="user.presence_month_sum_bonus * 100 / user.goal_month "
                         color="green">

@@ -10,28 +10,58 @@
       </v-row>
 
        <v-row no-gutters class="mx-5 my-2 subtitle-2">
-        <v-col cols="6">
-          Mesa Total Dia
+        <v-col cols="4">
+           Dia/Mes
         </v-col>
-        <v-col cols="6">
-           <v-progress-linear color="blue darken-1" height="15" :value="getPercent(tableTotals.bonus_day/tableTotals.goal_day)" :indeterminate="loading">
-           {{formatNumber(tableTotals.bonus_day)}}
-          </v-progress-linear>
+        <v-col cols="4">
+          <v-tooltip bottom color="blue">
+            <template v-slot:activator="{ on, attrs }">
+              <v-progress-linear v-on="on" v-bind="attrs" color="blue darken-1" height="15" :value="getPercent(tableTotals.bonus_day/tableTotals.goal_day)" :indeterminate="loading">
+              {{formatNumber(tableTotals.bonus_day)}}
+              </v-progress-linear>
+            </template>
+            <span>Total Bonus Mesa Dia</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="4">
+          <v-tooltip bottom color="green">
+            <template v-slot:activator="{ on, attrs }">
+              <v-progress-linear v-on="on" v-bind="attrs" color="green darken-1" height="15" :value="getPercent(tableTotals.bonus_day/tableTotals.goal_month)" :indeterminate="loading">
+              {{ formatNumber(tableTotals.bonus_month)}}
+              </v-progress-linear>
+          </template>
+            <span>Total Bonus Mesa Mes</span>
+          </v-tooltip>
         </v-col>
 
-        <v-col cols="6">
-          Mesa Total Mes
+        <v-col cols="4">
+          WriteOff
         </v-col>
-        <v-col cols="6">
-          <v-progress-linear color="green darken-1" height="15" :value="getPercent(tableTotals.bonus_day/tableTotals.goal_month)" :indeterminate="loading">
-           {{ formatNumber(tableTotals.bonus_month)}}
-          </v-progress-linear>
+        <v-col cols="4">
+          <v-tooltip bottom color="orange">
+            <template v-slot:activator="{ on, attrs }">
+              <v-progress-linear v-on="on" v-bind="attrs" color="orange darken-1" height="15" :value="tableTotals.writeoff_day" :indeterminate="loading">
+              {{ parseInt(tableTotals.writeoff_day)}}
+              </v-progress-linear>
+            </template>
+            <span>Total Writeoff Mesa Dia</span>
+          </v-tooltip>
+        </v-col>
+        <v-col cols="4">
+          <v-tooltip bottom color="red">
+            <template v-slot:activator="{ on, attrs }">
+              <v-progress-linear v-on="on" v-bind="attrs" color="red darken-1" height="15" :value="getPercent(tableTotals.writeoff_month)" :indeterminate="loading">
+              {{ parseInt(tableTotals.writeoff_month)}}
+              </v-progress-linear>
+            </template>
+            <span>Total Writeoff Mesa Mes</span>
+          </v-tooltip>
         </v-col>
       </v-row>
 
     <v-card-text class="pt-0 operators-table-container custom-scroll">
       <v-list subheader dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
-        <v-list-item v-for="operator in operatos" :key="operator.id" class="px-2" > 
+        <v-list-item v-for="operator in tableOperators" :key="operator.id" class="px-2" > 
           <v-list-item-avatar color="blue" size="50" class="elevation-2">
               <v-img :src="`/storage/photo/operator/${operator.photo || 'nophoto.png'}`" ></v-img>
           </v-list-item-avatar>
@@ -183,15 +213,21 @@ export default {
   computed: {
     tableTotals()
     {
-      let tableTotal = { bonus_day: 0, bonus_month: 0, goal_day: 1, goal_month: 1 }
+      let tableTotal = { bonus_day: 0, bonus_month: 0, writeoff_day: 0, writeoff_month: 0,  goal_day: 1, goal_month: 1 }
       
       for (const operator of this.operatos) {
-        tableTotal.bonus_day   += operator.presence_day_sum_bonus ? parseFloat(operator.presence_day_sum_bonus) : 0
-        tableTotal.bonus_month += operator.presence_month_sum_bonus ? parseFloat(operator.presence_month_sum_bonus) : 0
-        tableTotal.goal_day    += operator.goal_day ? parseFloat(operator.goal_day) : 0
-        tableTotal.goal_month  += operator.goal_month ? parseFloat(operator.goal_month) : 0
+        tableTotal.bonus_day      += operator.presence_day_sum_bonus ? parseFloat(operator.presence_day_sum_bonus) : 0
+        tableTotal.bonus_month    += operator.presence_month_sum_bonus ? parseFloat(operator.presence_month_sum_bonus) : 0
+        tableTotal.writeoff_day   += operator.presence_day_sum_writeoff ? parseFloat(operator.presence_day_sum_writeoff) : 0
+        tableTotal.writeoff_month += operator.presence_month_sum_writeoff ? parseFloat(operator.presence_month_sum_writeoff) : 0
+        tableTotal.goal_day       += operator.goal_day ? parseFloat(operator.goal_day) : 0
+        tableTotal.goal_month     += operator.goal_month ? parseFloat(operator.goal_month) : 0
       }
       return tableTotal
+    },
+    tableOperators()
+    {
+      return this.operatos.filter( (op) => op.id != this.userId)
     }
   },
 

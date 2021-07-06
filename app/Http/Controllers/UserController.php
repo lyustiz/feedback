@@ -34,7 +34,6 @@ class UserController extends Controller
     public function show(Request $request, User $user)
     {
        return $user->load([ 'group', 'profile', 'role', 'table', 'table.manager', 'coordinator', 'tableTurn.turn' ])
-                   ->loadSum(['presenceDay', 'presenceMonth' ], 'profit')
                    ->loadSum(['presenceDay', 'presenceMonth' ], 'bonus')
                    ->loadSum(['presenceDay', 'presenceMonth' ], 'writeoff');
     }
@@ -44,7 +43,6 @@ class UserController extends Controller
         $roles = ($request->filled('role')) ? $request->role : [];
         
         return  User::with(['group', 'table.manager', 'profile', 'role', 'tableTurn.turn', 'penaltyMonth.penaltyType'])
-                    ->withSum(['presenceDay', 'presenceMonth' ], 'profit')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
                     ->operator($request->boolean('operator'))
@@ -59,13 +57,15 @@ class UserController extends Controller
     public function listTable()
     {
         $coordinator = \Auth::user();
+
+        $roles = [3, 4];
         
         return User::with('group', 'table.manager', 'table.coordinator', 'profile', 'role', 'turn:turn.id,name', 'penaltyMonth.penaltyType')
-                    ->withSum(['presenceDay', 'presenceMonth' ], 'profit')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
-                    ->operator(true)
+                    ->role($roles)
                     ->where('table_turn_id', $coordinator->table_turn_id)
+                    ->orderBy('role_id')
                     ->orderBy('name')
                     ->get(); 
     }
