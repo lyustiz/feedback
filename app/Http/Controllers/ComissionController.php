@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\AmolatinaDataTrait as Amolatina;
 use Carbon\Carbon;
+use Illuminate\Validation\ValidationException;
 
 class ComissionController extends Controller
 {
@@ -107,6 +108,12 @@ class ComissionController extends Controller
         set_time_limit ( 1900 );
         
         $agency = Agency::find($agencyID);
+
+        $commision = Comission::where(['agency_id' => $agency->amolatina_id, 'positive' => $positive ])->exists();
+
+        if ($commision) {
+            throw ValidationException::withMessages(['existRegisters' => "La agencia Posee Comisiones"]);
+        }
         
         $token        = $agency->token;
         $amolatina_id = $agency->amolatina_id;

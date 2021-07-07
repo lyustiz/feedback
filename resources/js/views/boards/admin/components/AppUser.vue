@@ -236,6 +236,7 @@ export default {
       { action: 'showAgenciesGoal', icon: 'mdi-flag-checkered', label: 'Metas Agencias', iconColor: 'orange' },
       { action: 'importProfile', icon: 'mdi-account-multiple-plus', label: 'Importar Nuevos Perfiles', iconColor: 'green' },
       { action: 'importProfilePhoto', icon: 'mdi-camera-account', label: 'Importar Fotos Perfiles', iconColor: 'green' },
+      { action: 'fillAgency', icon: 'mdi-calendar-refresh', label: 'Facturacion Nueva Agencia!!', iconColor: 'red', class: 'red' },
     ],
     gralMenu: [
       { action: 'showPayReport', icon: 'mdi-clipboard-text-outline', label: 'Reporte Pago', iconColor: 'info' },
@@ -374,6 +375,18 @@ export default {
       this.getResource(`user/pay/operator/${date}`).then( data => {
         console.log(data)
       })
+    },
+
+    fillAgency(agency)
+    {
+      confirm('Optener toda la facturacion de la agencia! Esto requiere de apoyo del personal de Soporte')
+      {
+        let positive = confirm('Positive') ? 1 : 0;
+        this.getResource(`comission/fill/agency/${agency.id}/${positive}`).then( data => {
+            this.showMessage(data)
+        }) 
+      }
+
     }
 
     

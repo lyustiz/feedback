@@ -124,9 +124,11 @@ Route::apiResource('/turn',                     'TurnController');
 Route::apiResource('/curator',                  'CuratorController');
 Route::apiResource('/spending',                 'SpendingController');
 
+
 Route::get('/comission/list',                   'ComissionController@list');
 Route::get('/comission/month',                  'ComissionController@fillComissionMonth');
 Route::get('/comission/detail',                 'ComissionController@comissionDetail');
+Route::get('/comission/fill/agency/{agency}/{positive}',   'ComissionController@fillComissionDetail');
 Route::get('/comission/presence/{presence}',    'ComissionController@comissionPresence');
 Route::apiResource('/comission',                'ComissionController');
 
