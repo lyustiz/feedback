@@ -5,7 +5,8 @@
 <script>
 import AdminBoard from '@views/boards/admin/AdminBoard.vue'
 import OperatorBoard from '@views/boards/operator/OperatorBoard.vue'
-import CoordinatorBoard from '@views/boards/coordinator/CoordinatorBoard'
+import CoordinatorBoard from '@views/boards/coordinator/CoordinatorBoard.vue'
+import ManagerBoard from '@views/boards/manager/ManagerBoard.vue'
 export default {
  
   name: 'Home',
@@ -13,7 +14,8 @@ export default {
   components:{
     AdminBoard,
     OperatorBoard,
-    CoordinatorBoard
+    CoordinatorBoard,
+    ManagerBoard
   },
 
   computed: 
@@ -40,6 +42,11 @@ export default {
           if(this.role.name == 'Coordinador')
           {
             return 'coordinator-board'
+          }
+
+          if(this.role.name == 'Gerente')
+          {
+            return 'manager-board'
           }
 
           return false

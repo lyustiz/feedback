@@ -289,11 +289,11 @@ export default
 			commit('setUser'  	 		, data.user);
 			commit('setRole'  	 		, data.role);
 			commit('setMenu'  	 		, data.menu);
-			commit('setAgency'   		, data.agency);
+			commit('setAgency'   		, (data.agency.length > 0) ? data.agency : data.agencyManage);
 			commit('setAgencyManage'    , data.agencyManage);
 			commit('setGoalType'        , data.goalType);
 			
-			commit('setAmolatinaToken'  , data.agency[0].token);
+			commit('setAmolatinaToken'  , (data.agency.length > 0) ? data.agency[0].token : data.agencyManage[0].token)
 			commit('setAuth'  	 		, true);
 		},
 

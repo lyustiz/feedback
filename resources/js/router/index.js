@@ -10,6 +10,7 @@ import Home            from '@views/home/Home';
 import AdminBoard       from '@views/boards/admin/AdminBoard.vue'
 import OperatorBoard    from '@views/boards/operator/OperatorBoard.vue'
 import CoordinatorBoard from '@views/boards/coordinator/CoordinatorBoard.vue'
+import ManagerBoard     from '@views/boards/manager/ManagerBoard.vue'
 
 import TableDetail      from '@views/table/TableDetail';
 
@@ -123,6 +124,18 @@ export default new Router({
             visible: true,
             component: CoordinatorBoard,
         },
+
+        {
+            path:  '/manager',
+            name:  'manager',
+            label: 'Manager',
+            icon:  'mdi-home',
+            profile: 'manager',
+            visible: true,
+            component: ManagerBoard,
+        },
+
+        
 
         
 

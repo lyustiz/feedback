@@ -89,6 +89,7 @@ Route::put('/user/{user}/goals',               'UserController@goals');
 Route::get('/user/pay/operator/{date}',         'UserController@payOperators');
 Route::get('/user/pay/coordinator/{date}',      'UserController@payCoordinators');
 Route::get('/user/list',                        'UserController@list');
+Route::get('/user/list/turn',                   'UserController@listTurn');
 Route::get('/user/list/table',                  'UserController@listTable');
 Route::get('/user/statistics/{table}',          'UserController@statistics');
 Route::apiResource('/user',                     'UserController');

@@ -26,22 +26,27 @@ Route::post('/login', function(Request $request ){
         {
             $request->session()->regenerate();
             
-            $user->load(['agency:agency.id,name,amolatina_id,token,agency.goal_day,agency.goal_month', 'goalType:id,name,amount,icon,color,user_id' ]);
+            $user->load(['agency:agency.id,name,amolatina_id,token,agency.goal_day,agency.goal_month', 'goalType:id,name,amount,icon,color,user_id', 'turn:turn.id,turn.name' ]);
             
             if( in_array($user->role_id, [1,2])) // administrador - Gerente
             {
                 $user->load([ 'agencyManage:agency.id,name,amolatina_id,token,agency.goal_day,agency.goal_month']);
+
+                if($user->agencyManage->count() == 0)
+                {
+                    throw ValidationException::withMessages(['userInactive' => "Sin Agencias Asignadas"]);
+                }
             
             } else {  // coordinador - operador
 
                 $user->load(['table:id,name','group:id,name' ]);
+
+                if($user->agency->count() == 0)
+                {
+                    throw ValidationException::withMessages(['userInactive' => "Sin perfiles asignados contacte con el administrador"]);
+                }
             }
             
-            if($user->agency->count() == 0)
-            {
-                throw ValidationException::withMessages(['userInactive' => "Sin perfiles asignados contacte con el administrador"]);
-            }
-
             $role  = $user->role; 
             $menu  = $role->menu; 
 

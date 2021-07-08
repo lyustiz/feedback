@@ -6,8 +6,7 @@
           Usuarios
         </v-col>
         <v-col cols="auto">
-          <v-btn icon><v-icon size="33" @click="addOperator()">mdi-account-plus</v-icon></v-btn>
-          <v-btn icon @click="list()" :loading="loading"><v-icon size="32">mdi-reload</v-icon></v-btn>
+          <v-btn small icon @click="list()" :loading="loading"><v-icon size="26">mdi-reload</v-icon></v-btn>
         </v-col>
       </v-row>
       </v-subheader>
@@ -177,14 +176,6 @@
       <AppUserProfile v-if="addProfileDialog" :user="user" @closeDialog="closeDialog($event)" @onUpdateData="list()" />
     </v-dialog>
 
-     <v-dialog v-model="addOperatorDialog" scrollable  width="600">
-      <NewOperator v-if="addOperatorDialog" :user="user" @closeModal="closeDialog($event)" @onUpdateData="list()" />
-    </v-dialog>
-
-    <v-dialog v-model="editOperatorDialog" scrollable  width="600">
-      <EditOperator v-if="editOperatorDialog" action="upd" :item="user" @closeModal="closeDialog($event)" @onUpdateData="list()" />
-    </v-dialog>
-
     <v-dialog v-model="addGoalsDialog" scrollable  width="300">
       <UserGoals v-if="addGoalsDialog" action="upd" :item="user" @closeModal="closeDialog($event)" @onUpdateData="list()" />
     </v-dialog>
@@ -203,8 +194,6 @@
 <script>
 import AppData from '@mixins/AppData';
 import AppUserProfile from '@views/userProfile/AppUserProfile'
-import NewOperator from '@views/user/NewOperator'
-import EditOperator from '@views/user/EditOperator'
 import UserGoals from '@views/user/UserGoals'
 import UserPenalty from '@views/penalty/UserPenalty'
 import UserAbsence from '@views/absence/UserAbsence'
@@ -214,8 +203,6 @@ export default {
 
   components:{
     AppUserProfile,
-    NewOperator,
-    EditOperator,
     UserGoals,
     UserPenalty,
     UserAbsence
@@ -245,12 +232,10 @@ export default {
   data: () => ({
     operatos: [],
     itemsMenu: [
-      { action: 'editOperator', icon: 'mdi-account-edit-outline', label: 'Editar Usuario', iconColor: 'orange' },
       { action: 'addGoals',     icon: 'mdi-flag-checkered', label: 'Definir Metas', iconColor: 'green' },
       { action: 'addProfiles',  icon: 'mdi-account-multiple-outline', label: 'Agregar Perfiles', iconColor: 'green' },
       { action: 'addPenalty',   icon: 'mdi-account-cancel-outline', label: 'Multas', iconColor: 'red' },
       { action: 'addAbcense',   icon: 'mdi-account-arrow-right-outline', label: 'Ausencias/permisos', iconColor: 'red' },
-      { action: 'delOperator',  icon: 'mdi-account-off',   label: 'Eliminar Operador', iconColor: 'red', class: 'red' },
     ],
     addOperatorDialog:  false,
     addProfileDialog:   false,
@@ -264,7 +249,7 @@ export default {
   methods: {
 
     list() {
-        this.getResource('user/list?role[]=2&role[]=3&role[]=4').then( data => {
+        this.getResource('user/list/turn').then( data => {
           this.operatos = data
         })
     },
@@ -322,41 +307,6 @@ export default {
       this.addGoalsDialog     = false
       this.addAbsenceDialog   = false
     },
-
-     getIcon(operator)
-    {
-      switch (operator.turn_id) {
-        case 1:
-          return 'mdi-weather-sunny'
-
-        case 2:
-          return 'mdi-white-balance-sunny'
-
-        case 3:
-          return 'mdi-weather-night'
-
-        default:
-          return 'mdi-close'
-      }
-    },
-
-    getColor(operator)
-    {
-      switch (operator.turn_id) {
-        case 1:
-          return 'yellow'
-
-        case 2:
-          return 'orange'
-
-        case 3:
-          return 'blue'
-
-        default:
-          return 'mdi-close'
-      }
-    }
-
    
 
   }

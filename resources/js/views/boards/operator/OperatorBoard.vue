@@ -21,7 +21,6 @@ import AppData from '@mixins/AppData'
 import Userboard from './components/UserBoard'
 import ListProfiles from './components/ListProfiles'
 import TableProfile from './components/TableProfile'
-/* import ClientManager from './components/ClientManager' */
 export default {
 
     name: 'operator-board',

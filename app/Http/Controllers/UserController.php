@@ -33,7 +33,7 @@ class UserController extends Controller
 
     public function show(Request $request, User $user)
     {
-       return $user->load([ 'group', 'profile', 'role', 'table', 'table.manager', 'coordinator', 'tableTurn.turn' ])
+       return $user->load([ 'group', 'profile', 'role', 'table', 'table.manager', 'coordinator', 'tableTurn', 'turn:turn.id,name,icon,turn.color' ])
                    ->loadSum(['presenceDay', 'presenceMonth' ], 'bonus')
                    ->loadSum(['presenceDay', 'presenceMonth' ], 'writeoff');
     }
@@ -42,12 +42,9 @@ class UserController extends Controller
     {
         $roles = ($request->filled('role')) ? $request->role : [];
         
-        return  User::with(['group', 'table.manager', 'profile', 'role', 'tableTurn.turn', 'penaltyMonth.penaltyType'])
+        return  User::with(['group', 'table.manager', 'profile', 'role', 'tableTurn', 'penaltyMonth.penaltyType', 'turn:turn.id,name,icon,turn.color'])
                     ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
-                    ->operator($request->boolean('operator'))
-                    ->coordinator($request->boolean('coordinator'))
-                    ->manager($request->boolean('manager'))
                     ->role($roles)
                     ->orderBy('role_id')
                     ->orderBy('name')
@@ -60,11 +57,29 @@ class UserController extends Controller
 
         $roles = [3, 4];
         
-        return User::with('group', 'table.manager', 'table.coordinator', 'profile', 'role', 'turn:turn.id,name', 'penaltyMonth.penaltyType')
+        return User::with('group', 'table.manager', 'table.coordinator', 'profile', 'role', 'turn:turn.id,name,icon,turn.color', 'penaltyMonth.penaltyType', 'tableTurn')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
                     ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
                     ->role($roles)
                     ->where('table_turn_id', $coordinator->table_turn_id)
+                    ->orderBy('role_id')
+                    ->orderBy('name')
+                    ->get(); 
+    }
+
+    public function listTurn()
+    {
+        $manager = \Auth::user()->load('turn:turn.id');
+
+        $roles = [3, 4];
+        
+        return User::with('group', 'table.manager', 'table.coordinator', 'profile', 'role', 'turn:turn.id,name,icon,turn.color', 'penaltyMonth.penaltyType', 'tableTurn')
+                    ->withSum(['presenceDay', 'presenceMonth' ], 'bonus')
+                    ->withSum(['presenceDay', 'presenceMonth' ], 'writeoff')
+                    ->role($roles)
+                    ->whereHas('turn', function (Builder $query) use($manager) {
+                        $query->where('turn.id', $manager->turn->id);
+                    })
                     ->orderBy('role_id')
                     ->orderBy('name')
                     ->get(); 
@@ -463,13 +478,7 @@ class UserController extends Controller
         if($user->id == 1)
         {
             throw ValidationException::withMessages(['adminedit' => "No es posible actualizar al Administrador"]);
-        }
-
-        if($user->role_id == 2)
-        {
-            throw ValidationException::withMessages(['manageredit' => "No es posible actualizar al Gerente"]);
-        }
-        
+        }     
 
 
         if ($request->filled('password')) {
