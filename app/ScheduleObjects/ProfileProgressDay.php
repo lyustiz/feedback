@@ -16,6 +16,8 @@ class ProfileProgressDay
 
         $this->setProfiles();
 
+        $profiles = [];
+
         foreach ($agencies as $agency) {
             
             $token        = $agency->token;
@@ -28,8 +30,12 @@ class ProfileProgressDay
             {
                 $commissions = $response['body']['commissions'];
 
-                 $this->setProfileProgress($commissions, 'day');
+                $profiles[] = $this->setProfileProgress($commissions, 'day');
             }
+        }
+
+        if( count($profiles) > 1 ) {
+            ProfileProgress::whereNotIn('amolatina_id',  array_keys($profiles) )->update( ['profit_day' => 0, 'writeoff_day' => 0] );
         }
     }
 
@@ -63,6 +69,7 @@ class ProfileProgressDay
 
     public function setProfileProgress($commissions, $type)
     {
+        $profile = [];
         foreach ($commissions as $commission) {
 
             if(isset($commission['user-id']))
@@ -81,7 +88,11 @@ class ProfileProgressDay
                 }
 
                 ProfileProgress::where('amolatina_id',  $commission['user-id'] )->update($totals);
+
+                $profile[$commission['user-id']] = $commission['user-id'];
             }
         }
+
+        return $profile;
     }
 }

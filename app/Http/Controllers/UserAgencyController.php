@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserAgency;
+use App\Models\Agency;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -17,6 +18,40 @@ class UserAgencyController extends Controller
     {
         return UserAgency::with([])
                     ->get();
+    }
+
+    public function assing($userId, $agencyId)
+    {
+        $userAgency = UserAgency::with(['agency:id,name'])
+                                    ->select('id','user_id','agency_id')
+                                    ->where('user_id', $userId)
+                                    ->get();
+
+        $agency     = Agency::select('id','name', 'amolatina_id')
+                                ->whereNotIn('agency.id', $userAgency->pluck('agency_id'))
+                                ->orderBy('agency.name', 'asc')
+                                ->get();
+
+        $userAgency = $this->formatData($userAgency);
+
+        return [ 'userAgency' => $userAgency, 'agency' => $agency] ;
+    }
+
+
+    function formatData($data)
+    {
+        $userAgency = [];
+        
+        foreach ($data as $key => $row) {
+            $userAgency[] = [
+                'id'           => $row->id,
+                'user_id'      => $row->user_id,
+                'agency_id'    => $row->agency_id,
+                'name'         => $row->agency->name,
+            ];
+        }
+
+        return $userAgency;
     }
 
     /**
@@ -37,7 +72,7 @@ class UserAgencyController extends Controller
 
         $userAgency = userAgency::create($request->all());
 
-        return [ 'msj' => 'UserAgency Agregado Correctamente', compact('userAgency') ];
+        return [ 'msj' => 'UserAgency Agregado Correctamente', 'userAgency' =>  $userAgency ];
     }
 
     /**

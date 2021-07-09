@@ -130,6 +130,12 @@
                   </v-col>
 
                   <v-col cols="auto" class="pr-1">
+                    <v-badge v-if="operator.role_id == 2" offset-x="16" offset-y="12" color="rgba(0,0,0,0.15)" :content="operator.penalty_month.length">  
+                      <list-simple-icon icon="mdi-home-circle-outline" label="Asignar Agencias" color="amber" @click="addAgency(operator)" ></list-simple-icon>
+                    </v-badge> 
+                  </v-col>
+
+                  <v-col cols="auto" class="pr-1">
                     <v-badge v-if="operator.work_time" offset-x="15" offset-y="12" color="rgba(0,0,0,0.15)" :content="operator.work_time"> 
                       <list-simple-icon  v-if="operator.turn" :icon="operator.turn.icon" :label="`${operator.turn.name} ${operator.work_time} H`" :color="operator.turn.color"></list-simple-icon>
                     </v-badge>
@@ -197,17 +203,24 @@
       <UserAbsence v-if="addAbsenceDialog" :user="user" @closeModal="closeDialog($event)" @onUpdateData="list()" />
     </v-dialog> 
 
+    <v-dialog v-model="addAgencyDialog" scrollable  width="600">
+      <UserAgency v-if="addAgencyDialog" :user="user" @closeDialog="closeDialog($event)" @onUpdateData="list()" />
+    </v-dialog>
+
+    
+
   </v-card>
 </template>
 
 <script>
 import AppData from '@mixins/AppData';
-import AppUserProfile from '@views/userProfile/AppUserProfile'
-import NewOperator from '@views/user/NewOperator'
-import EditOperator from '@views/user/EditOperator'
-import UserGoals from '@views/user/UserGoals'
-import UserPenalty from '@views/penalty/UserPenalty'
-import UserAbsence from '@views/absence/UserAbsence'
+import AppUserProfile from '@views/userProfile/AppUserProfile.vue'
+import NewOperator from '@views/user/NewOperator.vue'
+import EditOperator from '@views/user/EditOperator.vue'
+import UserGoals from '@views/user/UserGoals.vue'
+import UserPenalty from '@views/penalty/UserPenalty.vue'
+import UserAbsence from '@views/absence/UserAbsence.vue'
+import UserAgency from '~/views/userAgency/AppUserAgency.vue'
 export default {
 
   mixins: [AppData],
@@ -218,7 +231,8 @@ export default {
     EditOperator,
     UserGoals,
     UserPenalty,
-    UserAbsence
+    UserAbsence,
+    UserAgency
   },
 
   created() {
@@ -258,6 +272,7 @@ export default {
     addGoalsDialog:     false,
     addPenaltyDialog:   false,
     addAbsenceDialog:   false,
+    addAgencyDialog:   false,
     user: null
   }),
 
@@ -278,6 +293,12 @@ export default {
     addOperator()
     {
       this.addOperatorDialog = true
+    },
+
+    addAgency(user)
+    {
+      this.user = user
+      this.addAgencyDialog = true
     },
 
     editOperator(user)
@@ -321,41 +342,9 @@ export default {
       this.editOperatorDialog = false
       this.addGoalsDialog     = false
       this.addAbsenceDialog   = false
+      this.addAgencyDialog    = false
     },
 
-     getIcon(operator)
-    {
-      switch (operator.turn_id) {
-        case 1:
-          return 'mdi-weather-sunny'
-
-        case 2:
-          return 'mdi-white-balance-sunny'
-
-        case 3:
-          return 'mdi-weather-night'
-
-        default:
-          return 'mdi-close'
-      }
-    },
-
-    getColor(operator)
-    {
-      switch (operator.turn_id) {
-        case 1:
-          return 'yellow'
-
-        case 2:
-          return 'orange'
-
-        case 3:
-          return 'blue'
-
-        default:
-          return 'mdi-close'
-      }
-    }
 
    
 

@@ -25,11 +25,11 @@ class ProfileProgressController extends Controller
     public function getProgress()
     {
         
-        $agencies = Agency::select('id', 'amolatina_id', 'token')->get();  //TODO ALL AGENCIES
+        $agencies = Agency::select('id', 'name', 'amolatina_id', 'token')->get();  //TODO ALL AGENCIES
 
         $this->setProfiles();
 
-        $updates = [];
+        $profiles = [ 'month' => [], 'day' => [] ];
 
         foreach ($agencies as $agency) {
             
@@ -37,27 +37,30 @@ class ProfileProgressController extends Controller
 
             $amolatina_id = $agency->amolatina_id;
 
-            $response = $this->getProfileCommisions($token, $amolatina_id, 'month');
+            $response     = $this->getProfileCommisions($token, $amolatina_id, 'month');
 
             if($response['ok'])
             {
                 $commissions = $response['body']['commissions'];
 
-                $updates[] = $this->setProfileProgress($commissions, 'month');
+                $profiles['month'] = array_merge( $profiles['month'],  $this->setProfileProgress($commissions, 'month'));
             }
 
             $response = $this->getProfileCommisions($token, $amolatina_id, 'day');
 
             if($response['ok'])
             {
-                
                 $commissions = $response['body']['commissions'];
 
-                $updates[] = $this->setProfileProgress($commissions, 'day');
+                $profiles['day'] = array_merge( $profiles['day'], $this->setProfileProgress($commissions, 'day'));
             }
         }
 
-        return $updates;
+        if( count($profiles['day']) > 1 ) {
+            ProfileProgress::whereNotIn('amolatina_id',  array_keys($profiles['day']) )->update( ['profit_day' => 0, 'writeoff_day' => 0] );
+        }
+
+        return $profiles;
     }
 
     public function setProfiles()
@@ -90,12 +93,12 @@ class ProfileProgressController extends Controller
 
     public function setProfileProgress($commissions, $type)
     {
-        foreach ($commissions as $commission) {
+        $profile = [];
 
-            $updates = [];
+        foreach ($commissions as $commission) {
+            
             if(isset($commission['user-id']))
             {
-                
                 if($type == 'month')
                 {
                     $totals = ( $commission['positive'] == 'true' ) 
@@ -108,10 +111,13 @@ class ProfileProgressController extends Controller
                           : ['writeoff_day' => $commission['points']];
                 }
 
-                $updates[]  = ProfileProgress::where('amolatina_id',  $commission['user-id'] )->update($totals);
+                ProfileProgress::where('amolatina_id',  $commission['user-id'] )->update($totals);
+
+                $profile[$commission['user-id']] = $commission['user-id'];
             }
         }
-        return $updates;
+        
+        return $profile;
     }
 
     /**

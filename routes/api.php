@@ -98,6 +98,9 @@ Route::apiResource('/userProgress',             'UserProgressController');
 Route::get('/userProfile/assing/{user}/{agency}',  'UserProfileController@assing');
 Route::apiResource('/userProfile',              'UserProfileController');
 
+Route::get('/userAgency/assing/{user}/{agency}',  'UserAgencyController@assing');
+Route::apiResource('/userAgency',               'UserAgencyController');
+
 Route::get('/profile/import/photo',             'ProfileController@importProfilePhoto');
 Route::get('/profile/import/agency/{agency}',   'ProfileController@profileImport');
 Route::get('/profile/table/{table}',            'ProfileController@profileTable');
@@ -142,7 +145,9 @@ Route::apiResource('/table',                    'TableController');
 
 Route::apiResource('/group',                    'GroupController');
 Route::apiResource('/country',                  'CountryController');
-Route::apiResource('/userAgency',               'UserAgencyController');
+
+
+
 
 Route::put('/userPresence/rebuild',             'UserPresenceController@rebuild');
 Route::get('/userPresence/estimate',            'UserPresenceController@presenceEstimate');
