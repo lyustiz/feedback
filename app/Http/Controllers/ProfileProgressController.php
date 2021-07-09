@@ -31,6 +31,8 @@ class ProfileProgressController extends Controller
 
         $profiles = [ 'month' => [], 'day' => [] ];
 
+        $updates = [ 'month' => [], 'day' => [] ];
+
         foreach ($agencies as $agency) {
             
             $token        = $agency->token;
@@ -44,6 +46,8 @@ class ProfileProgressController extends Controller
                 $commissions = $response['body']['commissions'];
 
                 $profiles['month'] = array_merge( $profiles['month'],  $this->setProfileProgress($commissions, 'month'));
+
+                $updates['month'] = array_merge( $updates['month'],  $commissions);
             }
 
             $response = $this->getProfileCommisions($token, $amolatina_id, 'day');
@@ -53,14 +57,16 @@ class ProfileProgressController extends Controller
                 $commissions = $response['body']['commissions'];
 
                 $profiles['day'] = array_merge( $profiles['day'], $this->setProfileProgress($commissions, 'day'));
+
+                $updates['day'] = array_merge( $updates['month'],  $commissions);
             }
         }
 
         if( count($profiles['day']) > 1 ) {
-            ProfileProgress::whereNotIn('amolatina_id',  array_keys($profiles['day']) )->update( ['profit_day' => 0, 'writeoff_day' => 0] );
+           $update = ProfileProgress::whereNotIn('amolatina_id',  $profiles['day'] )->update( ['profit_day' => 0, 'writeoff_day' => 0] );
         }
 
-        return $profiles;
+        return [$updates, $update, $profiles['day']];
     }
 
     public function setProfiles()
