@@ -63,7 +63,7 @@ class ProfileProgressController extends Controller
         }
 
         if( count($profiles['day']) > 1 ) {
-           $update = ProfileProgress::whereNotIn('amolatina_id',  $profiles['day'] )->update( ['point_day' => 0, 'writeoff_day' => 0] );
+           $update = ProfileProgress::whereNotIn('amolatina_id',  $profiles['day'] )->update( ['points_day' => 0, 'writeoff_day' => 0] );
         }
         $update = ProfileProgress::whereNotIn('amolatina_id',  $profiles['day'] );
 

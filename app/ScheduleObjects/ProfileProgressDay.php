@@ -35,7 +35,7 @@ class ProfileProgressDay
         }
 
         if( count($profiles) > 1 ) {
-            ProfileProgress::whereNotIn('amolatina_id',  $profiles )->update( ['point_day' => 0, 'writeoff_day' => 0] );
+            ProfileProgress::whereNotIn('amolatina_id',  $profiles )->update( ['points_day' => 0, 'writeoff_day' => 0] );
         }
     }
 
