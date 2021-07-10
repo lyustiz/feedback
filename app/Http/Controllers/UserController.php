@@ -142,6 +142,63 @@ class UserController extends Controller
         return $users;
     }
 
+    public function statisticsTurn(Request $request, $turnId)
+    {
+        $validate = request()->validate([
+			'start_at'          => 	'required|date',
+			'end_at'            => 	'required|date',
+        ]);
+
+        $start_at = Carbon::parse($request->start_at)->startOfDay();
+        $end_at   = Carbon::parse($request->end_at)->endOfDay();
+
+        if($start_at->greaterThan($end_at))
+        {
+            $tmp      = $start_at;   
+            $start_at = $end_at;
+            $end_at   = $tmp;
+        } 
+
+        $users =  User::with([ 'role', 'turn:turn.id,name', 'profile',
+                        'presence' => function($query) use ( $start_at, $end_at ) {
+                            $query->whereBetween('start_at', [ $start_at, $end_at ]);
+                        },
+                        'profilePrecense' => function($query) use ( $start_at, $end_at ) {
+                            $query->whereBetween('start_at', [ $start_at, $end_at ]);
+                        },
+                    ])
+                    ->withSum([ 'presence' => function (Builder $query) use ( $start_at, $end_at ) {
+                                    $query->whereBetween('start_at', [ $start_at, $end_at ]);
+                                },
+                              ], 'bonus')
+                    ->withSum([ 'presence' => function (Builder $query) use ( $start_at, $end_at ) {
+                                    $query->whereBetween('start_at', [ $start_at, $end_at ]);
+                                },
+                              ], 'writeoff')
+                    ->role([3,4])
+                    ->whereHas('tableTurn', function (Builder $query) use($turnId) {
+                        $query->where('turn_id', $turnId);
+                    })
+                    ->orderBy('name')
+                    ->get()
+                    ->toArray(); 
+
+        foreach ($users as $keyu => $user ) {
+            if(isset($user['profile_precense']))
+            {
+                foreach ($user['profile_precense'] AS $keyp => $profile)
+                {
+                    $profilePresence = $this->getProfilePresence($profile, $user['presence']);
+                    $users[$keyu]['profile_precense'][$keyp]['presence'] = $profilePresence['presence'];
+                    $users[$keyu]['profile_precense'][$keyp]['sumBonus'] = $profilePresence['sumBonus'];
+                    $users[$keyu]['profile_precense'][$keyp]['countWriteoff'] = $profilePresence['countWriteoff'];
+                }
+            }
+        }
+
+        return $users;
+    }
+
     public function getProfilePresence($profile, $presences)
     {
         $profilePresence = [];

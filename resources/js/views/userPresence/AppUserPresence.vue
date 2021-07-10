@@ -21,6 +21,8 @@
 
                 <v-row dense>
                     <v-col>
+                        <v-btn small v-if="isManager" block color="success"  :loading="loading" @click="list()"> Datos Turno </v-btn>
+
                         <v-select
                           v-model="table"
                           prepend-inner-icon="mdi-table-furniture"
@@ -36,6 +38,7 @@
                           @change="list()"
                           autofocus
                           :rules="[rules.required]"
+                          v-else
                         ></v-select>
                     </v-col>
 
@@ -52,8 +55,11 @@
                 <v-card color="rgba(0,0,0,0.4)" class="pa-2" max-height="92vh" mix-height="88vh">
                     <v-card-title class="pa-1">
                         <v-row no-gutters>
-                          <v-col>{{(table) ? table.name : 'Seleccione Mesa' }}</v-col>
                           <v-col>
+                            <span v-if="isManager">Turno {{user.turn.name}}</span>
+                            <span v-else>{{ (table) ? table.name : 'Seleccione Mesa' }}</span>
+                          </v-col> 
+                          <v-col v-if="!isManager">
                             <v-radio-group v-model="turn" row  dense hide-details class="mt-0" prepend-icon="mdi-close" @click:prepend="turn=null">
                               <v-radio label="Mañana" value="1" color="yellow" ></v-radio>
                               <v-radio label="Tarde" value="2" color="orange"></v-radio>
@@ -211,6 +217,16 @@ export default {
     computed:{
       precense() {
         return (this.turn) ? this.users.filter( user => ((user.turn) ? user.turn.id : 0) == this.turn ) : this.users
+      },
+
+      isManager()
+      {
+        return this.user.role_id == 2
+      },
+
+      user()
+      {
+        return this.$store.getters['getUser']  
       }
     },
 
@@ -238,6 +254,16 @@ export default {
 
       list()
       {
+        if(this.isManager)
+        {
+          let filters = this.setFilters()
+          this.getResource(`user/statistics/turn/${this.user.turn.id}${filters}`).then(data =>{
+              this.users = data
+          })
+          return this.isManager;
+        }
+        
+        
         if(this.table){
             let filters = this.setFilters()
             this.getResource(`user/statistics/${this.table.id}${filters}`).then(data =>{
