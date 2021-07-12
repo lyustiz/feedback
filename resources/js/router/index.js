@@ -12,6 +12,8 @@ import OperatorBoard    from '@views/boards/operator/OperatorBoard.vue'
 import CoordinatorBoard from '@views/boards/coordinator/CoordinatorBoard.vue'
 import ManagerBoard     from '@views/boards/manager/ManagerBoard.vue'
 
+import AppProfilePresence     from '@views/profile/AppProfilePresence'
+
 import TableDetail      from '@views/table/TableDetail';
 
 import Login           from '@views/login/login';
@@ -27,48 +29,48 @@ import UserPresence    from '@views/userPresence/AppUserPresence.vue';
 
 
 //data
-import Agency          from '@views/agency/agency.vue';
+// import Agency          from '@views/agency/agency.vue';
 import AgencyProgress  from '@views/agencyProgress/agencyProgress.vue';
-import Bonus           from '@views/bonus/bonus.vue';
+// import Bonus           from '@views/bonus/bonus.vue';
 import BonusType       from '@views/bonusType/bonusType.vue';
-import Config          from '@views/config/config.vue';
-import FailedJobs      from '@views/failedJobs/failedJobs.vue';
-import FreeDay         from '@views/freeDay/freeDay.vue';
-import MissedDay       from '@views/missedDay/missedDay.vue';
-import Payment         from '@views/payment/payment.vue';
-import PaymentClass    from '@views/paymentClass/paymentClass.vue';
-import PaymentType     from '@views/paymentType/paymentType.vue';
+// import Config          from '@views/config/config.vue';
+// import FailedJobs      from '@views/failedJobs/failedJobs.vue';
+// import FreeDay         from '@views/freeDay/freeDay.vue';
+// import MissedDay       from '@views/missedDay/missedDay.vue';
+// import Payment         from '@views/payment/payment.vue';
+// import PaymentClass    from '@views/paymentClass/paymentClass.vue';
+// import PaymentType     from '@views/paymentType/paymentType.vue';
 import Penalty         from '@views/penalty/penalty.vue';
 import PenaltyType     from '@views/penaltyType/penaltyType.vue';
-import Profile         from '@views/profile/profile.vue';
+//  import Profile         from '@views/profile/profile.vue';
 import ProfileProgress from '@views/profileProgress/profileProgress.vue';
-import Role            from '@views/role/role.vue';
-import Status          from '@views/status/status.vue';
-import User            from '@views/user/user.vue';
+// import Role            from '@views/role/role.vue';
+// import Status          from '@views/status/status.vue';
+// import User            from '@views/user/user.vue';
 import UserProgress    from '@views/userProgress/userProgress.vue';
 import WriteoffType    from '@views/writeoffType/writeoffType.vue';
-import Spending        from '@views/spending/spending.vue';
-import Present         from '@views/present/present.vue';
+// import Spending        from '@views/spending/spending.vue';
+// import Present         from '@views/present/present.vue';
 import Turn            from '@views/turn/turn.vue';
 import Table           from '@views/table/table.vue';
-import Curator         from '@views/curator/curator.vue';
+// import Curator         from '@views/curator/curator.vue';
 import Comission       from '@views/comission/AppComission.vue';
 
-import Menu         from '@views/menu/menu.vue';
-import Permission   from '@views/permission/permission.vue';
-import UserProfile  from '@views/userProfile/userProfile.vue';
+// import Menu         from '@views/menu/menu.vue';
+// import Permission   from '@views/permission/permission.vue';
+// import UserProfile  from '@views/userProfile/userProfile.vue';
 import Group        from '@views/group/group.vue';
 import Country      from '@views/country/country.vue';
-import UserAgency   from '@views/userAgency/userAgency.vue';
+// import UserAgency   from '@views/userAgency/userAgency.vue';
 
 import Absence      from '@views/absence/absence.vue';
 import AbsenceType  from '@views/absenceType/absenceType.vue';
 import Client       from '@views/client/AppClient';
 import TableTurn  from '@views/tableTurn/tableTurn.vue';
-import Horary  from '@views/horary/horary.vue';
-import Service  from '@views/service/service.vue';
-import GoalType  from '@views/goalType/goalType.vue';
-import AgencyGoal  from '@views/agencyGoal/agencyGoal.vue';
+// import Horary  from '@views/horary/horary.vue';
+// import Service  from '@views/service/service.vue';
+// import GoalType  from '@views/goalType/goalType.vue';
+// import AgencyGoal  from '@views/agencyGoal/agencyGoal.vue';
 //newImport
 
 let isAuthenticated = true;
@@ -135,6 +137,16 @@ export default new Router({
             component: ManagerBoard,
         },
 
+        {
+            path:  '/profile-presence',
+            name:  'profile-presence',
+            label: 'profile-presence',
+            icon:  'mdi-home',
+            profile: 'manager',
+            visible: true,
+            component: AppProfilePresence,
+        },
+
         
 
         
@@ -180,48 +192,48 @@ export default new Router({
             visible: false,
             component: PageNotFound 
         } ,
-        {
+      /*   {
             path: '/agency',
             name: 'agency',
             icon: 'bubble_chart',
             component: Agency,
-        },
+        }, */
         {
             path: '/agencyProgress',
             name: 'agencyProgress',
             icon: 'bubble_chart',
             component: AgencyProgress,
         },
-        {
+        /* {
             path: '/bonus',
             name: 'bonus',
             icon: 'bubble_chart',
             component: Bonus,
-        },
+        }, */
         {
             path: '/bonusType',
             name: 'bonusType',
             icon: 'bubble_chart',
             component: BonusType,
         },
-        {
+        /* {
             path: '/config',
             name: 'config',
             icon: 'bubble_chart',
             component: Config,
-        },
-        {
+        }, */
+        /* {
             path: '/failedJobs',
             name: 'failedJobs',
             icon: 'bubble_chart',
             component: FailedJobs,
-        },
-        {
+        }, */
+       /*  {
             path: '/freeDay',
             name: 'freeDay',
             icon: 'bubble_chart',
             component: FreeDay,
-        },
+        }, 
         {
             path: '/missedDay',
             name: 'missedDay',
@@ -245,7 +257,7 @@ export default new Router({
             name: 'paymentType',
             icon: 'bubble_chart',
             component: PaymentType,
-        },
+        },*/
         {
             path: '/penalty',
             name: 'penalty',
@@ -258,19 +270,19 @@ export default new Router({
             icon: 'bubble_chart',
             component: PenaltyType,
         },
-        {
+       /*  {
             path: '/profile',
             name: 'profile',
             icon: 'bubble_chart',
             component: Profile,
-        },
+        }, */
         {
             path: '/profileProgress',
             name: 'profileProgress',
             icon: 'bubble_chart',
             component: ProfileProgress,
         },
-        {
+      /*   {
             path: '/role',
             name: 'role',
             icon: 'bubble_chart',
@@ -287,7 +299,7 @@ export default new Router({
             name: 'user',
             icon: 'bubble_chart',
             component: User,
-        },
+        }, */
         {
             path: '/userProgress',
             name: 'userProgress',
@@ -300,7 +312,7 @@ export default new Router({
             icon: 'bubble_chart',
             component: WriteoffType,
         },
-        {
+      /*   {
             path: '/spending',
             name: 'spending',
             icon: 'bubble_chart',
@@ -311,7 +323,7 @@ export default new Router({
             name: 'present',
             icon: 'bubble_chart',
             component: Present,
-        },
+        }, */
         {
             path: '/turn',
             name: 'turn',
@@ -332,19 +344,19 @@ export default new Router({
             component: TableDetail,
         },
 
-        {
+       /*  {
             path: '/curator',
             name: 'curator',
             icon: 'bubble_chart',
             component: Curator,
-        },
+        }, */
         {
             path: '/comission',
             name: 'comission',
             icon: 'bubble_chart',
             component: Comission,
         },
-        {
+      /*   {
             path: '/menu',
             name: 'menu',
             icon: 'bubble_chart',
@@ -362,7 +374,7 @@ export default new Router({
             name: 'userProfile',
             icon: 'bubble_chart',
             component: UserProfile,
-        },
+        }, */
 
 {
     path: '/group',
@@ -376,12 +388,12 @@ export default new Router({
     icon: 'bubble_chart',
     component: Country,
 },
-{
+/* {
     path: '/userAgency',
     name: 'userAgency',
     icon: 'bubble_chart',
     component: UserAgency,
-},
+}, */
 
 {
     path: '/userPresence',
@@ -413,7 +425,7 @@ export default new Router({
     icon: 'bubble_chart',
     component: TableTurn,
 },
-{
+/* {
     path: '/horary',
     name: 'horary',
     icon: 'bubble_chart',
@@ -436,7 +448,7 @@ export default new Router({
     name: 'agencyGoal',
     icon: 'bubble_chart',
     component: AgencyGoal,
-},
+}, */
 //newRoutes
 
 
