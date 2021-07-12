@@ -36,7 +36,7 @@ class ProfileController extends Controller
     public function profileAll()
     {
         return Profile::with([  'presence:id,start_at,user_id,profile_id', 'presence.user:id,name,surname', 'agency:agency.id,amolatina_id', 
-                                'userProfileAssigned'
+                                'userProfileAssigned', 'presenceDay'
                             ])
                         ->withSum(['presenceDay'], 'bonus')
                         ->withSum(['presenceDay'], 'writeoff')
