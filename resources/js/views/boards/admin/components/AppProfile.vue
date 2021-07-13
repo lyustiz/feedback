@@ -2,7 +2,9 @@
   <v-card dark class="rounded-lg " color="rgba(0,0,0,0.4)">
     <v-subheader class="title">
       <v-row no-gutters>
-       <v-col>Perfiles</v-col>
+       <v-col class="subtitle-2">Perfiles
+          <v-btn icon color="success" @click="navigateToName('profile-presence')" :loading="loading"><v-icon>mdi-account-supervisor-outline</v-icon></v-btn>
+       </v-col>
        <v-col>
          <v-select
           v-model="agency"

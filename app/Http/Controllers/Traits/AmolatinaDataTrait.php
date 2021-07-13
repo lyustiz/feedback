@@ -95,7 +95,7 @@ trait AmolatinaDataTrait
     {
         //TODO STORE DATABASE and Cache
         $setup  = new \stdClass();
-        $setup->setParams = function(Array $params) { return array_merge($setup->params, $params);  };
+        $setup->setParams = function(Array $params) use ($setup) { return array_merge($setup->params, $params);  };
 
         switch ($type) {
 
@@ -168,6 +168,17 @@ trait AmolatinaDataTrait
                 $setup->url      = 'users';
                 $setup->urlParam = ['amolatinaid'];
                 $setup->comments = 'optiene informacion detallada de un perfil' ;
+                return $setup;
+                break;
+
+            case 'profile-events':
+    
+                $setup->url      = 'users/';
+                $setup->urlParam = ['amolatinaid'];
+                $setup->urlAdd   = '/wards/events';
+                $setup->header   = [ 'accept' => 'application/json+vnd.sdv.numeric' ];
+                $setup->params   = ['fresh' => 'true', 'omit' => '0', 'order'=>'fresh', 'select'=> '50', 'types'=>'+introductory+letter'];
+                $setup->comments = 'eventos de profiles segun agencia' ;
                 return $setup;
                 break;
 

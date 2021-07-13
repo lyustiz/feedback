@@ -66,6 +66,11 @@ class Profile extends Model
         return $this->HasOne('App\Models\UserProfile');
     }
 
+    public function usersProfileAssigned()
+    {
+        return $this->HasMany('App\Models\UserProfile');
+    }
+
     public function agency()
 	{
 		return $this->BelongsTo('App\Models\Agency');
@@ -92,6 +97,22 @@ class Profile extends Model
             'user_id' // fk en intermedia
 		);
 	}
+
+    public function userHasPresenceDay()
+    {
+        return $this->hasManyThrough(
+			'App\Models\User', //final
+            'App\Models\UserPresence', //intermedia
+            'profile_id', // fk en intermedia
+            'id', // laocal en origen
+            'id', // local en final
+            'user_id' // fk en intermedia
+		)->whereBetween('user_presence.start_at', [
+            Carbon::now()->startOfDay(), 
+            Carbon::now()->endOfDay()
+            ])
+        ->distinct();
+    }
 
     public function presenceDay()
     {

@@ -108,6 +108,7 @@ Route::get('/profile/table/{table}',            'ProfileController@profileTable'
 Route::get('/profile/user/{user}',              'ProfileController@profileUser');
 Route::get('/profile/coordinator',              'ProfileController@profileCoordinator');
 Route::get('/profile/all',                      'ProfileController@profileAll');
+Route::get('/profile/events',                   'ProfileController@profilesEvents');
 Route::get('/profile/list',                    'ProfileController@list');
 Route::apiResource('/profile',                  'ProfileController');
 

@@ -35,13 +35,57 @@ class ProfileController extends Controller
 
     public function profileAll()
     {
-        return Profile::with([  'presence:id,start_at,user_id,profile_id', 'presence.user:id,name,surname', 'agency:agency.id,amolatina_id', 
-                                'userProfileAssigned', 'presenceDay'
+        $profiles = Profile::with([  'presence:id,start_at,user_id,profile_id', 'presence', 'agency:agency.id,amolatina_id', 
+                                'usersProfileAssigned', 'presenceDay', 'userHasPresenceDay'
                             ])
-                        ->withSum(['presenceDay'], 'bonus')
-                        ->withSum(['presenceDay'], 'writeoff')
+                        ->withSum(['presenceDay', 'presenceMonth'], 'bonus')
+                        ->withSum(['presenceDay', 'presenceMonth'], 'writeoff')
                         ->get();
+
+        foreach ($profiles as $key => $profile) {
+            $profiles[$key]['events'] = [ 'introductory' => 0, 'letter'=> 0, 'online' => 0 ];
+        }
+
+        return $profiles;
     }
+
+    public function profilesEvents(Request $request)
+    {
+        $user   = \Auth::user()->load([ 'agencyManage:agency.id,name,amolatina_id,token,agency.goal_day,agency.goal_month']);
+        $events = [];
+
+        foreach ($user->agencyManage as $agency) {
+            $setup  = Amolatina::getSetup('profile-events');
+            $url    = $setup->url . '/' . $agency->amolatina_id . $setup->urlAdd;
+            $response = Amolatina::getDataUrl( $agency->token, $url,  $setup->params, $setup->header);
+
+            if($response['ok']) {
+                $events[$agency->name] = $response['body'];
+            } 
+        }
+        return $this->formatEvents($events);
+    }
+
+    public function formatEvents($agencyEvents = [])
+    {
+        $totalEvents = ['letter' => 0, 'introductory' => 0, 'online' => 0,];
+        $profileEvents = [];    
+        foreach ($agencyEvents as $dataEvents) {
+            
+            for ($i=0; $i < count($dataEvents['users']); $i++) { 
+               $id     = $dataEvents['users-details'][$i]['id'];
+               $online = $dataEvents['users-details'][$i]['presence'];   
+               $event  = $dataEvents['users'][$i]['events'];  
+               $event['online'] = $online;
+               $totalEvents['letter']       += (isset($event['letter'])) ? $event['letter']['fresh'] : 0;
+               $totalEvents['introductory'] += (isset($event['introductory'])) ? $event['introductory']['fresh'] : 0;
+               $totalEvents['online']       += (isset($event['online'])) ? $event['online'] : 0;      
+               $profileEvents[$id] =  $event; 
+            }
+        }
+        return ['totalEvents'=> $totalEvents, 'profileEvents' => $profileEvents];
+    }
+
 
     public function profileUser($userId)
     {
