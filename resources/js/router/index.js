@@ -146,15 +146,6 @@ export default new Router({
             visible: true,
             component: AppProfilePresence,
         },
-
-        
-
-        
-
-
-
-        
-
        /*  {
           path:  '/suscripcion',
           name:  'suscripcion',
@@ -336,14 +327,12 @@ export default new Router({
             icon: 'bubble_chart',
             component: Table,
         },
-
         {
             path: '/tableDetail',
             name: 'table-detail',
             icon: 'bubble_chart',
             component: TableDetail,
         },
-
        /*  {
             path: '/curator',
             name: 'curator',
@@ -368,87 +357,84 @@ export default new Router({
             icon: 'bubble_chart',
             component: Permission,
         },
-
         {
             path: '/userProfile',
             name: 'userProfile',
             icon: 'bubble_chart',
             component: UserProfile,
         }, */
-
-{
-    path: '/group',
-    name: 'group',
-    icon: 'bubble_chart',
-    component: Group,
-},
-{
-    path: '/country',
-    name: 'country',
-    icon: 'bubble_chart',
-    component: Country,
-},
-/* {
-    path: '/userAgency',
-    name: 'userAgency',
-    icon: 'bubble_chart',
-    component: UserAgency,
-}, */
-
-{
-    path: '/userPresence',
-    name: 'user-presence',
-    icon: 'bubble_chart',
-    component: UserPresence,
-},
-{
-    path: '/absence',
-    name: 'absence',
-    icon: 'bubble_chart',
-    component: Absence,
-},
-{
-    path: '/absenceType',
-    name: 'absenceType',
-    icon: 'bubble_chart',
-    component: AbsenceType,
-},
-{
-    path: '/client',
-    name: 'client',
-    icon: 'bubble_chart',
-    component: Client,
-},
-{
-    path: '/tableTurn',
-    name: 'tableTurn',
-    icon: 'bubble_chart',
-    component: TableTurn,
-},
-/* {
-    path: '/horary',
-    name: 'horary',
-    icon: 'bubble_chart',
-    component: Horary,
-},
-{
-    path: '/service',
-    name: 'service',
-    icon: 'bubble_chart',
-    component: Service,
-},
-{
-    path: '/goalType',
-    name: 'goalType',
-    icon: 'bubble_chart',
-    component: GoalType,
-},
-{
-    path: '/agencyGoal',
-    name: 'agencyGoal',
-    icon: 'bubble_chart',
-    component: AgencyGoal,
-}, */
+        {
+            path: '/group',
+            name: 'group',
+            icon: 'bubble_chart',
+            component: Group,
+        },
+        {
+            path: '/country',
+            name: 'country',
+            icon: 'bubble_chart',
+            component: Country,
+        },
+        /* {
+            path: '/userAgency',
+            name: 'userAgency',
+            icon: 'bubble_chart',
+            component: UserAgency,
+        }, */
+        {
+            path: '/userPresence',
+            name: 'user-presence',
+            icon: 'bubble_chart',
+            component: UserPresence,
+        },
+        {
+            path: '/absence',
+            name: 'absence',
+            icon: 'bubble_chart',
+            component: Absence,
+        },
+        {
+            path: '/absenceType',
+            name: 'absenceType',
+            icon: 'bubble_chart',
+            component: AbsenceType,
+        },
+        {
+            path: '/client',
+            name: 'client',
+            icon: 'bubble_chart',
+            component: Client,
+        },
+        {
+            path: '/tableTurn',
+            name: 'tableTurn',
+            icon: 'bubble_chart',
+            component: TableTurn,
+        },
+        /* {
+            path: '/horary',
+            name: 'horary',
+            icon: 'bubble_chart',
+            component: Horary,
+        },
+        {
+            path: '/service',
+            name: 'service',
+            icon: 'bubble_chart',
+            component: Service,
+        },
+        {
+            path: '/goalType',
+            name: 'goalType',
+            icon: 'bubble_chart',
+            component: GoalType,
+        },
+        {
+            path: '/agencyGoal',
+            name: 'agencyGoal',
+            icon: 'bubble_chart',
+            component: AgencyGoal,
+        }, */
 //newRoutes
 
 

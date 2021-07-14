@@ -113,12 +113,12 @@
                   <v-col cols="6" class="pa-0"> 
                     <v-row no-gutters>
                       <v-col>
-                        <v-badge color="red" left :value="profile.events.introductory > 0" :content="profile.events.introductory">
+                        <v-badge color="red" overlap offset-x="-3" left :value="profile.events.introductory > 0" :content="profile.events.introductory">
                           <list-simple-icon label="Chat" icon="mdi-comment-text-outline" color="orange" :size="18"></list-simple-icon>
                         </v-badge>
                       </v-col>
                       <v-col>
-                        <v-badge color="red" left :value="profile.events.letter > 0" :content="profile.events.letter">
+                        <v-badge color="red" overlap offset-x="-3" left :value="profile.events.letter > 0" :content="profile.events.letter">
                           <list-simple-icon label="Carta" icon="mdi-email-outline" color="amber" :size="18"></list-simple-icon>
                         </v-badge>
                       </v-col>

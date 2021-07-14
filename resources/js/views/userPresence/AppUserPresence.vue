@@ -21,7 +21,24 @@
 
                 <v-row dense>
                     <v-col>
-                        <v-btn small v-if="isManager" block color="success"  :loading="loading" @click="list()"> Datos Turno </v-btn>
+
+                        <v-select
+                          v-model="turn"
+                          prepend-inner-icon="mdi-table-furniture"
+                          label="Turno"
+                          item-text="name"
+                          :items="turns"
+                          :loading="loading"
+                          hide-details
+                          outlined
+                          filled
+                          dense
+                          return-object
+                          @change="list()"
+                          autofocus
+                          :rules="[rules.required]"
+                          v-if="isManager"
+                        ></v-select>
 
                         <v-select
                           v-model="table"
@@ -56,11 +73,11 @@
                     <v-card-title class="pa-1">
                         <v-row no-gutters>
                           <v-col>
-                            <span v-if="isManager">Turno {{user.turn.name}}</span>
+                            <span v-if="isManager">Turno {{ (turn) ?  turn.name : 'Seleccione Turno'}}</span>
                             <span v-else>{{ (table) ? table.name : 'Seleccione Mesa' }}</span>
                           </v-col> 
                           <v-col v-if="!isManager">
-                            <v-radio-group v-model="turn" row  dense hide-details class="mt-0" prepend-icon="mdi-close" @click:prepend="turn=null">
+                            <v-radio-group v-model="turnFilter" row  dense hide-details class="mt-0" prepend-icon="mdi-close" @click:prepend="turn=null">
                               <v-radio label="Mañana" value="1" color="yellow" ></v-radio>
                               <v-radio label="Tarde" value="2" color="orange"></v-radio>
                               <v-radio label="Noche" value="3" color="purple"></v-radio>
@@ -87,16 +104,31 @@
                                     <v-img :src="`/storage/photo/operator/${user.photo || 'nophoto'}`" ></v-img>
                                   </v-avatar>
                                 </v-col>
-                                <v-col>
+                                <v-col cols="4">
                                   {{user.full_name}}
                                 </v-col>
+                                  
+                                <v-col cols="auto" class="pr-1">
+                                  <v-badge v-if="user.work_time" offset-x="15" offset-y="12" color="rgba(0,0,0,0.15)" :content="user.work_time"> 
+                                    <list-simple-icon  v-if="user.turn" :icon="user.turn.icon" :label="`${user.turn.name} ${user.work_time} H`" :color="user.turn.color"></list-simple-icon>
+                                  </v-badge>
+                                </v-col>
+
+                                <v-col cols="auto" class="pr-1">
+                                  <v-badge v-if="user.table" offset-x="10" offset-y="12" color="rgba(0,0,0,0.15)" :content="user.table.id">  
+                                    <list-simple-icon  v-if="user.table" icon="mdi-table-furniture" :label="user.table.name" color="amber"></list-simple-icon>
+                                  </v-badge> 
+                                </v-col>
+
+                                <v-spacer></v-spacer>
+
                                 <v-col cols="auto">
-                                    <v-icon size="20" color="green" left>mdi-cash-plus</v-icon>
-                                    {{formatNumber(user.presence_sum_bonus || 0.00)}}
+                                  <v-icon size="20" color="green" left>mdi-cash-plus</v-icon>
+                                  {{formatNumber(user.presence_sum_bonus || 0.00)}}
                                 </v-col>
                                 <v-col cols="auto">
-                                    <v-icon size="20" color="red" class="ml-2" left>mdi-cash-remove</v-icon>
-                                    {{parseInt(user.presence_sum_writeoff || 0)}}
+                                  <v-icon size="20" color="red" class="ml-2" left>mdi-cash-remove</v-icon>
+                                  {{parseInt(user.presence_sum_writeoff || 0)}}
                                 </v-col>
                             </v-row>
                             </v-expansion-panel-header>
@@ -211,12 +243,15 @@ export default {
     },
 
     created(){
-      this.getTable()
+      if(!this.isManager)
+      {
+        this.getTable()
+      }
     },
 
     computed:{
       precense() {
-        return (this.turn) ? this.users.filter( user => ((user.turn) ? user.turn.id : 0) == this.turn ) : this.users
+        return (this.turnFilter) ? this.users.filter( user => ((user.turn) ? user.turn.id : 0) == this.turnFilter ) : this.users
       },
 
       isManager()
@@ -239,13 +274,20 @@ export default {
         end_at:  new Date().toISOString().substr(0, 10),
         profile: null,
         filter:[],
-        turns: [],
-        turn: null
+        turns: [{ id: 1, name: 'Dia'}, { id: 3, name: 'Noche'}],
+        turn: null,
+        turnFilter: null
 
     }),
 
     methods:
     {
+      getTurn() {
+        this.getResource(`turn`).then(data =>{
+          this.turns = data
+        })
+      },
+      
       getTable() {
         this.getResource(`table/list/user/${this.userId}`).then(data =>{
           this.tables = data
@@ -254,15 +296,14 @@ export default {
 
       list()
       {
-        if(this.isManager)
+        if(this.isManager && this.turn)
         {
           let filters = this.setFilters()
-          this.getResource(`user/statistics/turn/${this.user.turn.id}${filters}`).then(data =>{
+          this.getResource(`user/statistics/turn/${this.turn.id}${filters}`).then(data =>{
               this.users = data
           })
           return this.isManager;
         }
-        
         
         if(this.table){
             let filters = this.setFilters()
