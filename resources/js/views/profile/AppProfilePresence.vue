@@ -4,7 +4,7 @@
   <v-card-title class="py-0">
     <v-row no-gutters>
       <v-col>
-        <span >Online: {{ totalEvents.online }} / {{profiles.length}}</span><span > - Cards: {{ totalEvents.letter }}</span><span > - Dialogs: {{ totalEvents.introductory }}</span>
+        <span >Online: {{ totalEvents.online }} / {{profiles.length}}</span><span > - Pendiente: Cartas {{ totalEvents.letter }}</span><span > - Mensajes {{ totalEvents.introductory }}</span>
       </v-col>
       <v-col cols="auto">
         <v-btn small icon color="success" :loading="loading" @click="list()"><v-icon>mdi-reload</v-icon></v-btn>
@@ -174,15 +174,11 @@ export default {
         let profileId = profile.amolatina_id
         if(profileEvents[profileId])
         {
-          
           this.profiles[idx]['events']['introductory'] =  (profileEvents[profileId].introductory) ? profileEvents[profileId].introductory.fresh : 0
           this.profiles[idx]['events']['letter'] =  (profileEvents[profileId].letter) ? profileEvents[profileId].letter.fresh : 0
           this.profiles[idx]['events']['online'] =  profileEvents[profileId].online
-
-          console.log(this.profiles[idx], profileEvents[profileId], (profileEvents[profileId].letter) ? profileEvents[profileId].letter.fresh : 0)
         } 
       }
-      //console.log(this.profiles, profileEvents)
     },
 
     isUserPresence(profile, userId)
