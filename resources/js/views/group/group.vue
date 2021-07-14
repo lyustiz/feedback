@@ -29,7 +29,7 @@
                 <template v-slot:item="{ item }">
                     <tr>
                         <td>{{ item.name }}</td>
-                        <td>{{ item.manager.full_name }}</td>
+                        <td>{{ (item.manager)? item.manager.full_name : 'sin asignar' }}</td>
 						<td><list-simple-icon icon="mdi-text" color="orange" :label="item.comments"></list-simple-icon></td>
 						<td>
                             <status-switch 
