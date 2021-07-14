@@ -78,7 +78,7 @@
                           </v-col> 
                           <v-col v-if="!isManager">
                             <v-radio-group v-model="turnFilter" row  dense hide-details class="mt-0" prepend-icon="mdi-close" @click:prepend="turn=null">
-                              <v-radio label="Mañana" value="1" color="yellow" ></v-radio>
+                              <v-radio label="Dia" value="1" color="yellow" ></v-radio>
                               <v-radio label="Tarde" value="2" color="orange"></v-radio>
                               <v-radio label="Noche" value="3" color="purple"></v-radio>
                             </v-radio-group>
