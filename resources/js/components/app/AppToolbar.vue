@@ -9,7 +9,7 @@
       height="45"
       hide-on-scroll
     >
-      <v-avatar size="35" color="white" class="mr-2 pointer" @click="navigateToName('home')">
+      <v-avatar size="35" color="rgba(0,0,0,0.6)" class="mr-2 pointer" @click="navigateToName('home')">
         <img src="/images/logo.jpg" alt="criptoWeb">
       </v-avatar>
 

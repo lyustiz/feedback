@@ -8,7 +8,7 @@
             <v-card-title >
               <v-row>
                 <v-col cols="12"> 
-                  <v-avatar class="pointer" size="120" color="red" @click="navigateToName('login')">
+                  <v-avatar class="pointer" size="150" color="rgba(0,0,0,0.8)" @click="navigateToName('login')">
                     <img src="/images/logo.jpg" alt="criptoWeb">
                   </v-avatar>
                 </v-col>

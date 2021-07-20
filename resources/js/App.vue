@@ -8,7 +8,6 @@
 export default {
     created()
     {
-        console.log(this.$route.name)
         
         let auth            = localStorage.getItem('auth');
         let user            = localStorage.getItem('user');

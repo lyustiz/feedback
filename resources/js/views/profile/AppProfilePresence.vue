@@ -12,11 +12,17 @@
       </v-col>
     </v-row>
   </v-card-title>
-  <v-card-text>
+  <v-card-text class="pt-2">
     <v-row dense>
       <v-col v-for="profile in profiles" :key="profile.id" cols="12" lg="3" md="4" sm="6">
         <v-card color="rgba(0,0,0,0.4)" min-height="7.9rem">
-          <v-card-text>
+          <v-card-text >
+            <v-tooltip bottom color="rgba(0,0,0,0.8)">
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn x-small v-on="on" v-bind="attrs" fab color="rgba(0,0,0,0.4)" class="mt-4 ml-n4" absolute top left>{{profile.agency.name.substr(0,2)}}</v-btn>
+              </template>
+                    <span>{{profile.agency.name}}</span>
+              </v-tooltip>
             <v-row dense> 
               <v-col cols="auto">
                 <v-col cols="12" class="pa-0 ma-0 text-center">{{profile.name}}</v-col> 
@@ -92,7 +98,7 @@
                 </v-row>
                 <v-row>
                   <v-col> 
-                    <v-tooltip bottom color="blue" v-for="user in profile.user_has_presence_day" :key="user.id">
+                    <v-tooltip bottom color="rgba(0,0,0,0.6)" v-for="user in profile.user_has_presence_day" :key="user.id">
                       <template v-slot:activator="{ on, attrs }">
                         <v-badge offset-x="9" offset-y="7" overlap :color="colorAssignedPresence(profile, user.id)" :value="isUserPresence(profile, user.id)" dot>
                           <v-avatar v-on="on" v-bind="attrs" size="40" color="rgba(0,0,0,0.4)" class="mx-1" >
@@ -100,7 +106,15 @@
                           </v-avatar>
                         </v-badge>
                       </template>
-                      <span>{{user.full_name}}</span>
+                      <v-col>
+                        {{user.full_name}} 
+                        <v-badge v-if="user.turn" offset-x="15" offset-y="12" color="rgba(0,0,0,0.15)" :content="user.work_time"> 
+                          <list-simple-icon  :icon="user.turn.icon" :label="` ${user.turn.name} ${user.work_time} H`" :color="user.turn.color"></list-simple-icon>
+                        </v-badge>
+                        <v-badge v-if="user.table" offset-x="10" offset-y="12" color="rgba(0,0,0,0.15)" :content="user.table.value">  
+                          <list-simple-icon icon="mdi-table-furniture" :label="user.table.name" color="amber"></list-simple-icon>
+                        </v-badge> 
+                      </v-col>
                     </v-tooltip>
 
                     <v-avatar v-if="profile.user_has_presence_day<1" size="30" color="transparent" class="mx-1" >

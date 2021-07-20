@@ -143,10 +143,10 @@ export default
 			{
 				document.cookie = "XSRF-TOKEN= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
 				axios.get('/sanctum/csrf-cookie').then((tokenresp) => {
-					console.log('sactum', tokenresp)
+					/* console.log('sactum', tokenresp) */
 						axios.post('/' + 'login', credentials).then(response => 
 							{
-								console.log('login',response)
+								/* console.log('login',response) */
 								if (response.status == 200)
 								{
 									const data = {

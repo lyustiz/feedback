@@ -35,11 +35,13 @@ class ProfileController extends Controller
 
     public function profileAll()
     {
-        $profiles = Profile::with([  'presence:id,start_at,user_id,profile_id', 'presence', 'agency:agency.id,amolatina_id', 
-                                'usersProfileAssigned', 'presenceDay', 'userHasPresenceDay'
+        $profiles = Profile::with([  'presence:id,start_at,user_id,profile_id', 'presence', 'agency:agency.id,amolatina_id,name', 
+                                'usersProfileAssigned', 'presenceDay', 'userHasPresenceDay.table:table.id,name,value', 'userHasPresenceDay.turn:turn.id,name,turn.color,turn.icon'
                             ])
                         ->withSum(['presenceDay', 'presenceMonth'], 'bonus')
                         ->withSum(['presenceDay', 'presenceMonth'], 'writeoff')
+                        ->orderBy('profile.agency_id', 'asc' )
+                        ->orderBy('profile.name', 'asc' )
                         ->get();
 
         foreach ($profiles as $key => $profile) {
