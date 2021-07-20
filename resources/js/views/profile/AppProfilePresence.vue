@@ -74,7 +74,7 @@
                           height="14"
                           class="mb-2 mt-1"
                           >
-                            <span>{{formatNumber(profile.presence_day_sum_writeoff)}}</span>
+                            <span>{{parseInt(profile.presence_day_sum_writeoff || 0)}}</span>
                           </v-progress-linear>
                         </template>
                         <span>DIA</span>

@@ -52,7 +52,7 @@
         <v-col cols="4">
           <v-tooltip bottom color="red">
             <template v-slot:activator="{ on, attrs }">
-              <v-progress-linear v-on="on" v-bind="attrs" color="red darken-1" height="15" :value="getPercent(totals.writeoff_month)" :indeterminate="loading">
+              <v-progress-linear v-on="on" v-bind="attrs" color="red darken-1" height="15" :value="totals.writeoff_month" :indeterminate="loading">
               {{ parseInt(totals.writeoff_month)}}
               </v-progress-linear>
             </template>
