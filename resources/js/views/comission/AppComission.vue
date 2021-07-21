@@ -245,9 +245,14 @@ export default {
             return this.services.filter(service => service.type == this.serviceType )
         },
 
+        role()
+        {
+            return this.$store.getters['getRole']
+        },
+
         agencies()
         {
-            return this.$store.getters['getAgency']
+            return  ([1,2].includes(this.role.id)) ? this.$store.getters['getAgencyManage'] : this.$store.getters['getAgency']
         },
 
         profilesAgency()
