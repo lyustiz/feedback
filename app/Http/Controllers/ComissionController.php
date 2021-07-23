@@ -118,7 +118,7 @@ class ComissionController extends Controller
         $token        = $agency->token;
         $amolatina_id = $agency->amolatina_id;
         $day          = Carbon::parse($agency->register_at);
-        $days         = $day->diffInDays(Carbon::now());
+        $days         = $day->diffInDays(Carbon::now()) + 1;
 
         $stored = [];
 
