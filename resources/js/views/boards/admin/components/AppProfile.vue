@@ -130,6 +130,7 @@ export default {
 
   created() {
     this.list()
+    this.reload()
   },
 
   computed: {
@@ -145,7 +146,8 @@ export default {
 
   data: () => ({
     agency: null,
-    profiles: []
+    profiles: [],
+    isReload: null,
   }),
 
   methods: {
@@ -154,6 +156,14 @@ export default {
       this.getResource('profile').then( data => {
         this.profiles = data
       })
+    },
+
+    reload()
+    {
+      clearInterval(this.isReload)
+      this.isReload = setInterval( () => {
+          this.list();
+      }, 30000 )
     },
 
     getProgress()
