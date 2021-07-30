@@ -7,6 +7,7 @@ import AdminBoard from '@views/boards/admin/AdminBoard.vue'
 import OperatorBoard from '@views/boards/operator/OperatorBoard.vue'
 import CoordinatorBoard from '@views/boards/coordinator/CoordinatorBoard.vue'
 import ManagerBoard from '@views/boards/manager/ManagerBoard.vue'
+import AccountManagerBoard from '@views/boards/accountManager/AccountManagerBoard.vue'
 export default {
  
   name: 'Home',
@@ -15,7 +16,8 @@ export default {
     AdminBoard,
     OperatorBoard,
     CoordinatorBoard,
-    ManagerBoard
+    ManagerBoard,
+    AccountManagerBoard
   },
 
   computed: 
@@ -47,6 +49,11 @@ export default {
           if(this.role.name == 'Gerente')
           {
             return 'manager-board'
+          }
+
+          if(this.role.name == 'Admin Cuentas')
+          {
+            return 'account-manager-board'  
           }
 
           return false

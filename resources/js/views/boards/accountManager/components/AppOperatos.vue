@@ -11,59 +11,11 @@
         </v-col>
       </v-row>
       </v-subheader>
-      <v-row no-gutters class="mx-5 my-2 subtitle-2">
-        <v-col cols="4">
-           Dia/Mes
-        </v-col>
-        <v-col cols="4">
-          <v-tooltip bottom color="blue">
-            <template v-slot:activator="{ on, attrs }">
-              <v-progress-linear v-on="on" v-bind="attrs" color="blue darken-1" height="15" :value="getPercent(totals.bonus_day/totals.goal_day)" :indeterminate="loading">
-              {{formatNumber(totals.bonus_day)}}
-              </v-progress-linear>
-            </template>
-            <span>Total Bonus Dia</span>
-          </v-tooltip>
-        </v-col>
-        <v-col cols="4">
-          <v-tooltip bottom color="green">
-            <template v-slot:activator="{ on, attrs }">
-              <v-progress-linear v-on="on" v-bind="attrs" color="green darken-1" height="15" :value="getPercent(totals.bonus_day/totals.goal_month)" :indeterminate="loading">
-              {{ formatNumber(totals.bonus_month)}}
-              </v-progress-linear>
-          </template>
-            <span>Total Bonus Mes</span>
-          </v-tooltip>
-        </v-col>
-
-        <v-col cols="4">
-          WriteOff
-        </v-col>
-        <v-col cols="4">
-          <v-tooltip bottom color="orange">
-            <template v-slot:activator="{ on, attrs }">
-              <v-progress-linear v-on="on" v-bind="attrs" color="orange darken-1" height="15" :value="totals.writeoff_day" :indeterminate="loading">
-              {{ parseInt(totals.writeoff_day)}}
-              </v-progress-linear>
-            </template>
-            <span>Total Writeoff Dia</span>
-          </v-tooltip>
-        </v-col>
-        <v-col cols="4">
-          <v-tooltip bottom color="red">
-            <template v-slot:activator="{ on, attrs }">
-              <v-progress-linear v-on="on" v-bind="attrs" color="red darken-1" height="15" :value="totals.writeoff_month" :indeterminate="loading">
-              {{ parseInt(totals.writeoff_month)}}
-              </v-progress-linear>
-            </template>
-            <span>Total Writeoff Mes</span>
-          </v-tooltip>
-        </v-col>
-      </v-row>
+     
     <v-card-text class="pt-0 accounts-container custom-scroll">
       <v-list subheader two-line dense color="rgba(0,0,0,0.4)" class="rounded-lg"> 
         <v-list-item v-for="operator in operatos" :key="operator.id" > 
-          <v-badge offset-x="25" offset-y="25" overlap :color="([2,5].includes(operator.role_id)) ? 'rgba(255,10,0,0.6)': 'rgba(0,255,0,0.6)'" :value="[2,3,5].includes(operator.role_id)" icon="mdi-shield-account">
+          <v-badge offset-x="25" offset-y="25" overlap :color="(operator.role_id == 2) ? 'rgba(255,10,0,0.6)': 'rgba(0,255,0,0.6)'" :value="[2,3].includes(operator.role_id)" icon="mdi-shield-account">
             <v-list-item-avatar color="blue" size="60" class="elevation-2">
                 <v-img :src="`/storage/photo/operator/${operator.photo || 'nophoto.png'}`" ></v-img>
             </v-list-item-avatar>
@@ -239,23 +191,6 @@ export default {
     this.list()
   },
 
-  computed:{
-    totals()
-    {
-      let tableTotal = { bonus_day: 0, bonus_month: 0, writeoff_day: 0, writeoff_month: 0,  goal_day: 1, goal_month: 1 }
-      
-      for (const operator of this.operatos) {
-        tableTotal.bonus_day      += operator.presence_day_sum_bonus ? parseFloat(operator.presence_day_sum_bonus) : 0
-        tableTotal.bonus_month    += operator.presence_month_sum_bonus ? parseFloat(operator.presence_month_sum_bonus) : 0
-        tableTotal.writeoff_day   += operator.presence_day_sum_writeoff ? parseFloat(operator.presence_day_sum_writeoff) : 0
-        tableTotal.writeoff_month += operator.presence_month_sum_writeoff ? parseFloat(operator.presence_month_sum_writeoff) : 0
-        tableTotal.goal_day       += operator.goal_day ? parseFloat(operator.goal_day) : 0
-        tableTotal.goal_month     += operator.goal_month ? parseFloat(operator.goal_month) : 0
-      }
-      return tableTotal
-    }
-  },
-
   data: () => ({
     operatos: [],
     itemsMenu: [
@@ -264,7 +199,7 @@ export default {
       { action: 'addProfiles',  icon: 'mdi-account-multiple-outline', label: 'Agregar Perfiles', iconColor: 'green' },
       { action: 'addPenalty',   icon: 'mdi-account-cancel-outline', label: 'Multas', iconColor: 'red' },
       { action: 'addAbcense',   icon: 'mdi-account-arrow-right-outline', label: 'Ausencias/permisos', iconColor: 'red' },
-      { action: 'delOperator',  icon: 'mdi-account-off',   label: 'Eliminar Operador', iconColor: 'red', class: 'red' },
+      { action: 'delOperator',  icon: 'mdi-account-off',   label: 'Eliminar Usuario', iconColor: 'red', class: 'red' },
     ],
     addOperatorDialog:  false,
     addProfileDialog:   false,
@@ -279,7 +214,7 @@ export default {
   methods: {
 
     list() {
-        this.getResource('user/list?role[]=2&role[]=3&role[]=4&role[]=5').then( data => {
+        this.getResource('user/list?role[]=2&role[]=3&role[]=4').then( data => {
           this.operatos = data
         })
     },
@@ -344,10 +279,6 @@ export default {
       this.addAbsenceDialog   = false
       this.addAgencyDialog    = false
     },
-
-
-   
-
   }
 
 }

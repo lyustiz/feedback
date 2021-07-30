@@ -36,6 +36,10 @@ Route::post('/login', function(Request $request ){
                 {
                     throw ValidationException::withMessages(['userInactive' => "Sin Agencias Asignadas"]);
                 }
+
+            } elseif($user->role_id == 5) {  // account manager
+
+                $user->load(['table:id,name','group:id,name' ]);
             
             } else {  // coordinador - operador
 

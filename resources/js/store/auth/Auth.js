@@ -293,7 +293,7 @@ export default
 			commit('setAgencyManage'    , data.agencyManage);
 			commit('setGoalType'        , data.goalType);
 			
-			commit('setAmolatinaToken'  , (data.agency.length > 0) ? data.agency[0].token : data.agencyManage[0].token)
+			commit('setAmolatinaToken'  , (data.agency.length > 0) ? data.agency[0].token : (data.agencyManage) ? data.agencyManage[0].token: null)
 			commit('setAuth'  	 		, true);
 		},
 

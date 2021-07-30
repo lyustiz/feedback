@@ -80,6 +80,7 @@ class ComissionController extends Controller
     public function comissionDetail()
     {
         set_time_limit ( 330 );
+        ini_set('memory_limit', '-1');
         
         $currents = Comission::with(['agency:id,amolatina_id,name,token'])
                              ->groupBy('agency_id', 'positive')
