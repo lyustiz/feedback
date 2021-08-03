@@ -81,7 +81,7 @@ class ClientController extends Controller
     {
         set_time_limit ( 300 );
 
-        $clients = Client::with(['agency:id,amolatina_id,token'])->whereIn('status_id',[ 6, 7 ])->whereNull('name')->limit(300)->get();
+        $clients = Client::with(['agency:id,amolatina_id,token'])->whereIn('status_id',[ 6, 7 ])->whereNull('name')->limit(1000)->get();
         
         $storeClients = [];
         $errorClients = [];

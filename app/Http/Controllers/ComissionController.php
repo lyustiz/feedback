@@ -49,10 +49,10 @@ class ComissionController extends Controller
             $commision->where('agency_id',$request->agency);
         }
 
-        if($request->filled('day'))   
+        if($request->filled('start_at'))   
         {
-            $start_at = Carbon::parse($request->day);
-            $end_at   = Carbon::parse($request->day)->addDay();
+            $start_at = Carbon::parse($request->start_at)->startOfDay();
+            $end_at   = Carbon::parse($request->end_at)->endOfDay();
             $commision->whereBetween('comission_at', [ $start_at, $end_at ]);
         }
         

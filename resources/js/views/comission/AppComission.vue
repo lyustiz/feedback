@@ -9,7 +9,7 @@
 
                     <v-subheader>Comisiones</v-subheader>
 
-                <v-row dense>
+                <v-row no-gutters>
                     <v-col>
                         <v-select
                             v-model="agency"
@@ -24,6 +24,7 @@
                             return-object
                             @change="list()"
                             autofocus
+                            class="mb-1"
                             :rules="[rules.required]"
                         ></v-select>
                     </v-col>
@@ -56,7 +57,8 @@
                             chips
                             deletable-chips
                             single-line
-                            class="ma-0"
+                            hide-details
+                            class="mt-0 ml-0 mr-0 mb-1"
                             color="blue"
                             @change="list()"
                         >
@@ -270,7 +272,9 @@ export default {
         serviceType:     'bonus',
         services:        [ ],
         agency:          null,
-        day:             new Date().toISOString().substr(0, 10),
+        //day:             new Date().toISOString().substr(0, 10),
+        start_at:        new Date().toISOString().substr(0, 10),
+        end_at:          new Date().toISOString().substr(0, 10),
         serviceSelected: [],
         profile:         null,
         filter:          []
@@ -290,22 +294,31 @@ export default {
             }
         },
 
-        setDay(day)
+        setDay(days)
         {
-            this.day = day
+            if(Array.isArray(days))
+            {
+                this.start_at = days[0]
+                this.end_at   = days[1]
+            } else {
+                this.start_at = days
+                this.end_at   = days
+            }
             this.list()
         },
 
         setFilters()
         {   
             this.filter['agency']   = this.agency.amolatina_id 
-            this.filter['day']      = this.day 
+            // this.filter['day']      = this.day 
+            this.filter['start_at']  = this.start_at 
+            this.filter['end_at']    = this.end_at 
             this.filter['service']  = this.serviceSelected 
             this.filter['profile']  = (this.profile) ? this.profile.amolatina_id : null
             this.filter['positive'] = (this.serviceType == 'bonus') ? 1 : 0;
             return this.buildQuery(this.filter);
         },
-
+ 
         buildQuery(filter)
         {
            let query = this.url.includes('?') ? '&' : '';

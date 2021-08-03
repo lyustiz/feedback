@@ -1,81 +1,42 @@
 <template>
 
+    <v-card>
+
         <v-date-picker 
             no-title
             scrollable
             full-width
             v-model="today"
-            :events="events"
             color="indigo"
             class="rounded-lg"
             elevation="3"
+            :range="range"
             @change="$emit('onUpdateDate', $event)"
             :first-day-of-week="1"
             :max="maxDay"
             light
         ></v-date-picker>
+        <v-row no-gutters justify="center">
+            <v-col cols="auto">
+                <v-switch color="blue" dense hide-details label="Seleccionar Rango" v-model="range" @change="days = null"></v-switch>
+            </v-col>
+        </v-row>
+    </v-card>
 
 </template>
 
 <script>
 export default {
 
-    props:
-    {
-        month: {
-            type:     Array,
-            default: () => [] 
-        },
-    },
-
-    /*created()
-    {
-         if(this.clases)
-        {
-            this.setEvents()
-        } 
-    },*/
-
-    /*watch:
-    { 
-        clases()
-        {
-            if(this.clases)
-            {
-                this.setEvents()
-            }
-        }
-    }, */
-
     data()
     {
         return {
-            today:      new Date().toISOString().substr(0, 10),
-            events:     [],
-            maxDay:     new Date().toISOString().substr(0, 10),
+            today:  new Date().toISOString().substr(0, 10),
+            days:   null,
+            range: false,
+            maxDay: new Date().toISOString().substr(0, 10),
         }
     },
-
-     /*methods: 
-    {
-        setEvents()
-        {
-            for (const clase of this.clases) {
-
-                this.events.push(clase.fe_clase.substr(0, 10)
-
-                  /*   {
-                        id:    clase.id,
-                        name:  `${clase.materia.nb_materia} - ${clase.grupo.nb_grupo}`,
-                        date:  clase.fe_clase.substr(0, 10),
-                        color: clase.materia.area_estudio.tx_color,
-                    }  
-                )
-            }
-        } 
-          
-            
-    } */ 
 
 }
 </script>

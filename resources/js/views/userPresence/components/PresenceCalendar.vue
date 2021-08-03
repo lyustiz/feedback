@@ -26,18 +26,11 @@
 
 <script>
 export default {
-
-    props:
-    {
-        month: {
-            type:     Array,
-            default: () => [] 
-        },
-    },
-
+    
     data()
     {
         return {
+            today:  new Date().toISOString().substr(0, 10),
             days:   null,
             range: false,
             maxDay: new Date().toISOString().substr(0, 10),

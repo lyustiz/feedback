@@ -31,9 +31,9 @@
                   <v-col cols="6"> <v-icon small left color="amber">mdi-account</v-icon>   {{operator.full_name}}</v-col>
                   <v-col cols="6">Perfiles {{operator.profile.length}}</v-col>
                   <v-col cols="auto" v-for="profile in operator.profile" :key="profile.id" class="">
-                      <v-chip color="primary" small draggable>
+                      <v-chip color="primary" x-small draggable="true">
                         <v-avatar>
-                          <v-icon>mdi-account-outline</v-icon>
+                          <v-icon size="18">mdi-account-outline</v-icon>
                         </v-avatar>
                         {{profile.name}}
                       </v-chip>  
