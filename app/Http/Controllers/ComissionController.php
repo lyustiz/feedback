@@ -51,10 +51,23 @@ class ComissionController extends Controller
 
         if($request->filled('start_at'))   
         {
-            $start_at = Carbon::parse($request->start_at)->startOfDay();
-            $end_at   = Carbon::parse($request->end_at)->endOfDay();
+            $start_at = Carbon::parse($request->start_at);
+            $end_at   = Carbon::parse($request->end_at);
+
+            if($start_at->greaterThan($end_at))
+            {
+                $pivot    = $start_at;   
+                $start_at = $end_at;
+                $end_at   = $pivot;
+            } 
+
+            $start_at = $start_at->startOfDay();
+            $end_at   = $end_at ->endOfDay();
+
             $commision->whereBetween('comission_at', [ $start_at, $end_at ]);
         }
+
+        
         
         if($request->filled('positive'))   
         {
