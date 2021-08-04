@@ -111,6 +111,10 @@ export default {
     .pointer{
         cursor: pointer;
     }
+
+    .move{
+        cursor: move;
+    }
     
     .no-drop {cursor: no-drop;}
 

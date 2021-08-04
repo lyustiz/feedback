@@ -30,13 +30,15 @@
                 <v-row dense>
                   <v-col cols="6"> <v-icon small left color="amber">mdi-account</v-icon>   {{operator.full_name}}</v-col>
                   <v-col cols="6">Perfiles {{operator.profile.length}}</v-col>
-                  <v-col cols="auto" v-for="profile in operator.profile" :key="profile.id" class="">
-                      <v-chip color="primary" x-small draggable="true">
-                        <v-avatar>
-                          <v-icon size="18">mdi-account-outline</v-icon>
-                        </v-avatar>
-                        {{profile.name}}
-                      </v-chip>  
+                  <v-col cols="auto" v-for="profile in operator.profile" :key="profile.id" :class="(active) ? 'green': ''">
+                      <draggable class="list-group move" group="people" @change="log" @start="enableLanding" @end="disableLanding">        
+                        <v-chip color="primary" x-small >
+                          <v-avatar>
+                            <v-icon size="18">mdi-account-outline</v-icon>
+                          </v-avatar>
+                          {{profile.name}}
+                        </v-chip>  
+                      </draggable> 
                   </v-col>
                 </v-row>
               </v-col>
@@ -56,18 +58,24 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable'
 import AppData from '@mixins/AppData';
 
 export default {
 
   mixins: [AppData],
 
+  components: {
+    draggable,
+  },
+
   created() {
     this.list()
   },
 
   data: () =>({
-    tables: []
+    tables: [],
+    active: false
   }),
 
   methods:{
@@ -76,6 +84,32 @@ export default {
       this.getResource('table/detail').then(data =>{
         this.tables = data;
       })
+    },
+
+    enableLanding()
+    {
+      this.active = true
+      console.log('active')
+    },
+
+    disableLanding()
+    {
+      this.active = false
+      console.log('inactive')
+    },
+     add: function() {
+      this.list.push({ name: "Juan" });
+    },
+    replace: function() {
+      this.list = [{ name: "Edgard" }];
+    },
+    clone: function(el) {
+      return {
+        name: el.name + " cloned"
+      };
+    },
+    log: function(evt) {
+      window.console.log(evt);
     }
   }
 }
